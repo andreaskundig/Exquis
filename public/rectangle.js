@@ -32,13 +32,4 @@ Blockly.JavaScript['rectangle'] = function(block) {
   return code;
 };
 
-function makeRectangle (){
-    return function (context){
-        context.rotate(this.rotation* this.toRadians);
-        context.fillStyle = "rgb(__COLOR__,20,"+Math.floor(Math.random()*255)+")";
-        var x = Math.floor(Math.random()*context.canvas.width);
-        var y = Math.floor(Math.random()*context.canvas.height);
-        context.fillRect(x, y, 50, 50);
-    };
-}
 
