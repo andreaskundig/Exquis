@@ -1,1 +1,3 @@
-[["copieBordSud","F","carreVoisin"],["copieBordSudEst","Favg","accel"],["paper","carreQuiTourne","copieBordNordOuest"]]
+[["copieBordSud","fondColore","vortex2"],
+ ["fondColore","vortex3","fondColore"],
+ ["vortex4","fondColore","fondColore"]]
