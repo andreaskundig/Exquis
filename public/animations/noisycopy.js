@@ -3,7 +3,7 @@ return {draw: function (context, borders){
             // paste current image one pixel down
             //context.clearRect(0, 0, 150, 150);
             // east
-            var scale = 10;
+            var scale = 50;
 
             for (var x = 0; x < context.canvas.width / scale; x++) {
                 for (var y = 0; y < context.canvas.height / scale; y++) {
@@ -13,8 +13,6 @@ return {draw: function (context, borders){
                     var horizontal = value < -0.5 || value > 0.5; 
                     var direction = value < 0 ? -1 : 1;
                     idu.pushLine(context, borders, rec, horizontal, 7*direction);
-                    
-                    
                 }
             }
 
