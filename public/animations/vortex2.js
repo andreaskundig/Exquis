@@ -2,7 +2,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
     setup: function(context){
         this.toRadians =  Math.PI / 180; 
         
-        this.rotation = 90 ;
+        this.rotation = 0 ;
         this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
                                               context.canvas.height);
         this.delta = 0.5;                                      
@@ -17,17 +17,17 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         context.putImageData(borders.south, 0, context.canvas.height -1 );
         
         this.buffer.copyToBuffer(context, {x:0, y:0});
+        
+
+        var axis = this.rotation % 360 < 180 ? [150,0] : [0,150];
+
         context.save();
-        context.translate(150, 150);
+        context.translate(axis[0], axis[1]);
         context.rotate(this.rotation* this.toRadians);
         this.buffer.copyFromBuffer(context);
         context.restore();
 
         this.rotation += this.delta;
-        
-        if(this.rotation > 180 || this.rotation < 90){
-            this.delta *= -1;
-        }
 
     }
 };});

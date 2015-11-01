@@ -18,11 +18,12 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         
         this.buffer.copyToBuffer(context, {x:0, y:0});
         context.save();
-        context.translate(5, 85);
+        context.translate(25, 85);
         for(var i = 0; i<4 ; i++){
 
             context.save();
             context.rotate(this.rotation* this.toRadians + Math.PI*i/2);
+        context.translate(0, 3);
             this.buffer.copyFromBuffer(context);
             context.restore();
         }
