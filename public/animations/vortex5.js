@@ -7,7 +7,7 @@ function(canvasBuffer,wp){ return {
         this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
                                               context.canvas.height);
         var limit = [10 , 140];
-        this.w = wp.makeWanderer([limit, limit]);
+        this.w = wp.makeWanderer([limit, limit],[-10 , 2]);
                                               
                                    
     },
