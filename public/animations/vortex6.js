@@ -3,7 +3,7 @@ function(canvasBuffer,wp){ return {
     setup: function(context){
         this.toRadians =  Math.PI / 180; 
         
-        this.rotation = 40 ;
+        this.rotation = 0 ;
         this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
                                               context.canvas.height);
         var limit = [10 , 140];
@@ -38,7 +38,5 @@ function(canvasBuffer,wp){ return {
         }
         context.restore();
         
-
-
     }
 };});
