@@ -2,6 +2,8 @@
 
 Blockly.Blocks['rectangle'] = {
   init: function() {
+    this.appendDummyInput()
+        .appendField("Rectangle");
     this.appendValueInput("x")
         .setCheck("Number")
         .appendField("x");
@@ -28,7 +30,7 @@ Blockly.JavaScript['rectangle'] = function(block) {
   var value_width = Blockly.JavaScript.valueToCode(block, 'width', Blockly.JavaScript.ORDER_ATOMIC);
   var value_height = Blockly.JavaScript.valueToCode(block, 'height', Blockly.JavaScript.ORDER_ATOMIC);
 
-  var code = "ctx.fillRect(" + value_x + "," + value_y + "," + value_width + "," + value_height + ");"; 
+  var code = "ctx.fillRect(" + value_x + "," + value_y + "," + value_width + "," + value_height + ");\n"; 
   return code;
 };
 

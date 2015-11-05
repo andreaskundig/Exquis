@@ -22,6 +22,7 @@ function loadBlockly(){
     window.load = function () {
         if(localStorage.data!=null){
             var xml = Blockly.Xml.textToDom(localStorage.data);
+            Blockly.mainWorkspace.clear();
             Blockly.Xml.domToWorkspace( Blockly.mainWorkspace, xml );
             console.log("restored");
         }

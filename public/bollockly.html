@@ -6,11 +6,13 @@
     <script src="lib/blockly/javascript_compressed.js"></script>
     <script src="rectangle.js"></script>
     <script src="square.js"></script>
+    <script src="rotate.js"></script>
     <script src="bollockly.js"></script>
+    <script src="transformationSandbox.js"></script>
 
   </head>
   <body >
-    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    <div id="blocklyDiv" style="height: 480px; width: 600px;position:absolute; top: 0px; left:0px"></div>
     <xml id="toolbox" style="display: none">
       <block type="controls_if"></block>
       <block type="controls_repeat_ext"></block>
@@ -21,11 +23,16 @@
       <block type="text_print"></block>
       <block type="square"></block>
       <block type="rectangle"></block>
+      <block type="rotate"></block>
+      <block type="transformation_sandbox"></block>
     </xml>
-    <textarea id="textarea"></textarea>
-<button onclick="execute()">exec</button>
-<button onclick="save()">save</button>
-<button onclick="load()">load</button>
-    <canvas width="400" height="400" id="canvas"></canvas>
+    <div style="position: absolute; top:0px; left: 610px">
+      <textarea id="textarea" style="width:400px; height:480px"></textarea>
+      <canvas width="350" height="480" id="canvas"></canvas>
+      <br>
+      <button onclick="execute()">exec</button>
+      <button onclick="save()">save</button>
+      <button onclick="load()">load</button>
+    </div>
   </body>
 </html>
