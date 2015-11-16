@@ -101,17 +101,20 @@ define({
                 pastePoint: pastePoint};
     },
     /* return average color in form [r, g, b, 1] */
-    averageColor: function(imageData){
+    averageColor: function(imageData, pixelStart, pixelEnd){
         var pixels = imageData.data,
             totals = [0,0,0],
+            start = pixelStart || 0,
+            end = pixelEnd || pixels.length,
             avgArray;
-        for(var i = 0; i < pixels.length; i += 4){
+        
+        for(var i = start; i < end; i += 4){
             for(var j = 0; j < 3; j++){
                 totals[j] += pixels[i + j];
             }
         }
         avgArray = totals.map(function(total){
-            return Math.round(total/pixels.length * 4);
+            return Math.round(total/(end - start) * 4);
         });
         avgArray[3] = 255;
         return avgArray;
