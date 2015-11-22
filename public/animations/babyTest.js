@@ -2,7 +2,6 @@ define(["bibs/babyExquis", "bibs/stepper"], function(babyExquis, stepper){
     return {
         setup: function(context){
             this.ex = babyExquis.create(context, 3, 5);
-            stepper.init();
         
             this.babyDraw =  function(context, borders, x, y){
                 var border;
@@ -19,9 +18,11 @@ define(["bibs/babyExquis", "bibs/stepper"], function(babyExquis, stepper){
                     context.putImageData(border, this.ex.width - j - 1, 0);
                 }
             }.bind(this);
+
+            this.stp = stepper();
         },
         draw: function(context, borders){
-            if(stepper.wantsPause()){
+            if(this.stp.wantsPause()){
                 return;
             }
             babyExquis.doDraw(context, this.ex, borders, this.babyDraw);

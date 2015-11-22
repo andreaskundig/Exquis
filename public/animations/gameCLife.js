@@ -1,30 +1,35 @@
-define(["bibs/gameOfLifeWithBorders", "bibs/stepper"], function(gol, stepper){
+define(["bibs/gameOfLifeWithBorders", "bibs/stepper"], function(gameOfLife, stepper){
     return {
         setup: function(context){
-            this.life = gol.create();
-            this.life.init(50, 150);
-            stepper.init();
+            //var noSquares = 25;
+            var noSquares = 27;
+            this.life = gameOfLife(noSquares, context);
+            //this.squareSize = this.life.squareSize;
+            this.squareSize = 150 / (noSquares-2);
+            this.stp = stepper();
         },
         draw: function(context, borders){
-            if(stepper.wantsPause()){
+            if(this.stp.wantsPause()){
                 return;
             }
             context.fillStyle = "rgba(255, 255, 255, 1)";
             context.fillRect(0, 0, context.canvas.width, context.canvas.height);
             this.life.evolve(borders);
-            //console.log(life.attr.cells);
-            var max = this.life.attr.cells.length - 1 ;
-            var life = this.life;
-            this.life.attr.cells.forEach(function(row,x){
-                if(x==0||x==max){ return;}
-                row.forEach(function(color,y){
-                    if(y==0||y==max){ return;}
-                    var rgb = "rgb("+color[0]+","+color[1]+","+color[2]+")";
+            var cells = this.life.cells;
+            var rows = cells.length;
+            //for(var y = 0; y < rows; y++){
+            for(var y = 1; y < rows-1; y++){
+                var row = cells[y] ;
+                //for (var x = 0; x< row.length; x++){
+                for (var x = 1; x< row.length -1; x++){
+                    var color = row[x] ,
+                        rgb = "rgb("+color[0]+","+color[1]+","+color[2]+")";
                     context.fillStyle = rgb;
-                    var s = life.attr.squareSize;
+                    var s = this.squareSize;
+                    //context.fillRect((x)*s, (y)*s, s, s);
                     context.fillRect((x-1)*s, (y-1)*s, s, s);
-                });
-            });
+                }
+            }
         }
 
     };
