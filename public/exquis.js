@@ -36,8 +36,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             borders : function(){
                return {
                     north: context.getImageData(0, 0, context.canvas.width, 1),
-                    south: context.getImageData(0, context.canvas.height - 1, context.canvas.width, 1),
-                    east: context.getImageData(context.canvas.width - 1, 0, 1 , context.canvas.height),
+                    south: context.getImageData(0, context.canvas.height - 1,
+                                                context.canvas.width, 1),
+                    east: context.getImageData(context.canvas.width - 1, 0,
+                                               1 , context.canvas.height),
                     west: context.getImageData(0, 0, 1, context.canvas.height)
                 };
             },
@@ -163,7 +165,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
     var loadIconSuffix = "-load-icon"; 
     var makeCellUi = function(row, col, height, width){
         var cellUi = createCellDiv("cellUi", row, col, height, width);
-        var loadAnimationIcon = makeIcon("fa fa-folder-open-o fa-lg", cellUi.id + loadIconSuffix);
+        var loadAnimationIcon = makeIcon("fa fa-folder-open-o fa-lg",
+                                         cellUi.id + loadIconSuffix);
         cellUi.appendChild(loadAnimationIcon);
         return cellUi;
     };
@@ -272,15 +275,21 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
                 return cell.canvasAnim.borders();
             });
             iter2d.forEach2dArray(exquis.cells,function(cell, row, col){
-                var neighbouringBorders = {},
+                var neighborBorders = {},
                     cells = exquis.cells,
                     canvasAnim = cell.canvasAnim;
                 ["north", "south", "east", "west"].forEach(function(side){
                     var offset = relativeCoordinates[side];
-                    var siderow = (row + offset.row + cells.length) % cells.length;
-                    var sidecol = (col + offset.col + cells[0].length) % cells[0].length;
-                    neighbouringBorders[side] = allBorders[siderow][sidecol][offset.opposite];
-                    
+                    var nRows = cells.length; 
+                    var siderow = (row + offset.row + nRows ) % nRows;
+                    var nCols = cells[row].length;
+                    var sidecol = (col + offset.col + nCols) % nCols;
+                    var opp = offset.opposite;
+                    if(!allBorders[siderow][sidecol]){
+                        // TODO decide what to do in case of no neighbour
+                        console.log(row, col, siderow, sidecol);
+                    }
+                    neighborBorders[side] = allBorders[siderow][sidecol][opp];
                 });
 
                 if(canvasAnim.evaluateCode){
@@ -289,7 +298,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
                 }
 
                 try{
-                    canvasAnim.draw(neighbouringBorders);
+                    canvasAnim.draw(neighborBorders);
                 }catch(e){
                     exquis.editorController.displayInvalidity(e, cell.canvasAnim);
                 }

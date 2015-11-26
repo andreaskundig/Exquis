@@ -5,7 +5,8 @@ var main = function(net, exquisInit, makeEditorView, makeEditorController, store
     var assemblageName = net.getAssemblageNameFromUrlOrDefaultWithUrlChange();
     net.loadAssemblage(assemblageName)
         .then(function(animationNames){
-            var animUris2DArray = iter2d.map2dArray(animationNames, net.makeAnimationPath);
+            var animUris2DArray = iter2d.map2dArray(animationNames,
+                                                    net.makeAnimationPath);
             var exquis =  exquisInit(assemblageName, animUris2DArray,
                                      makeEditorView, makeEditorController,
                                      store);

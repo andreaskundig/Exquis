@@ -7,9 +7,10 @@ define(["bibs/gameOfLifeWithBorders", "bibs/stepper"], function(gameOfLife, step
             //this.squareSize = this.life.squareSize;
             this.squareSize = 150 / (noSquares-2);
             this.stp = stepper();
+            this.counter = 0;
         },
         draw: function(context, borders){
-            if(this.stp.wantsPause()){
+            if(this.stp.wantsPause() ||this.counter++ % 2 != 0){
                 return;
             }
             context.fillStyle = "rgba(255, 255, 255, 1)";

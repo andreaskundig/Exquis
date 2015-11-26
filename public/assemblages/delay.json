@@ -1,1 +1,4 @@
-[["noisycopy","fondColorePartantAuHasard","carreQuiTourne"],["carreSinus","gameCLife","noisySlowCopy"],["carreSinus","fondColorePartantAuHasard","vortex9"]]
+[["noisycopy","bignoise","carreVoisin","fondColorePartantAuHasard"],
+ ["carreSinus","gameCLife","noisySlowCopy","copieBordNordOuest"],
+ ["copieBordNordOuest","fondColorePartantAuHasard","vortex9"],
+ ["noisySlowCopy","copieBordEst","noisyCopy","rot"]]

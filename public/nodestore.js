@@ -1,6 +1,7 @@
 "use strict";
 /**
-different implementations of the store would save the animation in different places.
+An implementation of the store using node as a server.
+Different implementations of the store would save the animation in different places.
 The original url of the animation is independent of the store
 because we want exquis to be able to just display animations from any url.
 The store needs to know where to save an animation based on its url.
@@ -26,6 +27,7 @@ define(["net", "evileval"], function(net, evileval){
             });
 	});
     };
+
     return {loadAnimationList: loadAnimationList,
             uriToAnimationName: uriToAnimationName,
             animationNameToUri: animationNameToUri };
