@@ -10,7 +10,7 @@ define(["bibs/gameOfLifeWithBorders", "bibs/stepper"], function(gameOfLife, step
             this.counter = 0;
         },
         draw: function(context, borders){
-            if(this.stp.wantsPause() ||this.counter++ % 2 != 0){
+            if(this.stp.wantsPause() ||this.counter++ % 1 != 0){
                 return;
             }
             context.fillStyle = "rgba(255, 255, 255, 1)";

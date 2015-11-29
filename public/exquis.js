@@ -184,10 +184,12 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
                 }else{
                     throw "no animation name";
                 }
-            }).then(function(canvasAnim){ return canvasAnim.getSourceCodeString();
+            }).then(function(canvasAnim){ 
+                return canvasAnim.getSourceCodeString();
             }).then(function(codeString){
                 if(canvasAnim.updateListener){
-                    canvasAnim.updateListener(canvasAnim.animationName, codeString);
+                    canvasAnim.updateListener(canvasAnim.animationName, 
+                                              codeString);
                 }
             }).catch(function(e){
                 console.log(e);
@@ -305,8 +307,14 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             });
         };
 
-        setInterval(draw, 50);
         addEditor(exquis, makeEditorView, makeEditorController);
+
+        var render = function(){
+            draw();
+            requestAnimationFrame(render);
+        };
+        render();
+
         return exquis;
     };
 
