@@ -1,0 +1,68 @@
+
+h2, h3 { display: inline;}
+.grid { width: 450px; max-width: 450px; position: absolute}
+#grid_hint{z-index: 1}
+#editor { position: absolute; left: 50%; }
+#dialog {  position: absolute;
+           left: 33%;
+	   top:40px;
+	   background-color: white;
+	   padding: 5px;
+           width: 400px;
+           border-radius: 4px;
+ }
+#dialog_content {
+           overflow: auto;
+           max-height: 400px;
+}
+#dialog_title { min-height: 30px;
+                font-size: 200%; }
+#dialog_footer { min-height: 30px; }
+#dialog > p { padding: 2%; margin: 0}
+#dialog > p:hover { background-color:darkgrey;}
+#modal { position: fixed;
+         top: 0;
+         right: 0;
+         bottom: 0;
+         left: 0;
+         z-index: 999;
+	 background-color: rgba(100, 100, 100, 0.5); }
+.cell { width: 150px;  height: 150px; position:absolute}
+.hint { width: 148px;  height: 148px; position:absolute;border: 1px solid rgba(0,0,0,0);}
+.visible-grid, .visible-cell{ border: 1px solid rgba(200, 200, 200, 0.5); }
+.code_invalid { border: solid rgb(255, 0, 0); }
+.code_valid { border: solid rgb(25, 125, 255); }
+.invisible { display: none;}
+
+.ace_editor { 
+    position: relative;
+    height: 600px;
+    width: 700px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #F7F7F9;
+    border: 1px solid transparent;
+    background-image: none;
+    border-radius: 4px;   
+ }
+
+.btn:hover{
+    background-color: lightgray;
+}
