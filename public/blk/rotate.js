@@ -7,7 +7,7 @@ Blockly.Blocks['rotate'] = {
     this.appendValueInput("angle")
         .setCheck("Number")
         .appendField("angle");
-    this.setInputsInline(false);
+    this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('rotate');
@@ -17,8 +17,9 @@ Blockly.Blocks['rotate'] = {
 
 Blockly.JavaScript['rotate'] = function(block) {
   var value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_ATOMIC);
+  console.log(value_angle);
 
-  var code = "ctx.rotate(" + (value_angle * Math.PI/180) + ");\n"; 
+  var code = "ctx.rotate(" + value_angle  + "* Math.PI/180);\n"; 
   return code;
 };
 
