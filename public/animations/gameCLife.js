@@ -1,36 +1,65 @@
-define(["bibs/gameOfLifeWithBorders", "bibs/stepper"], function(gameOfLife, stepper){
+define(["bibs/automaton", "bibs/stepper"], function(automaton, stepper){
+    var aut; 
+    var stp = stepper();
     return {
         setup: function(context){
-            //var noSquares = 25;
-            var noSquares = 27;
-            this.life = gameOfLife(noSquares, context);
-            //this.squareSize = this.life.squareSize;
-            this.squareSize = 150 / (noSquares-2);
-            this.stp = stepper();
-            this.counter = 0;
+            aut = automaton(75, context);
+        },
+/*
+                    var ints = aut.colorIntensity(color);
+                    extremeIntensity = extremeIntensity || color;
+                    if(nextAlive){
+                        if( ints < extremeIntensity){
+                            extremeIntensity = ints;
+                            nextColor = color;
+                        }
+                    }else{
+                        if(ints > extremeIntensity){
+                            extremeIntensity = ints;
+                            nextColor = color;
+                        }
+                    }
+                    var ints = aut.colorIntensity(color);
+                    if(!minIntensity ||!maxIntensity){
+                        minColor = color;
+                        minIntensity = ints;
+                        maxIntensity = ints;
+                    }
+                    if(ints < minIntensity){
+                        minIntensity = ints;
+                        minColor = color;
+                    }
+                    if(ints > maxIntensity){
+                        maxIntensity = ints;
+                        maxColor = color;
+                    }
+*/
+        colorGameOfLife: function(neighborColors){
+            var nextBlackOrWhiteCol = aut.gameOfLife(neighborColors); 
+            var nextAlive = aut.isColorAlive(nextBlackOrWhiteCol);
+            var maxIntensity, minIntensity, maxColor, minColor;
+            neighborColors.forEach(function(rowArray, row){
+                rowArray.forEach(function(color, col){
+                    var ints = aut.colorIntensity(color);
+                    if(!maxIntensity || ints > maxIntensity){
+                        maxIntensity = ints;
+                        maxColor = color;
+                    }
+                    if(!minIntensity || ints < minIntensity){
+                        minIntensity = ints;
+                        minColor = color;
+                    }
+                });
+            });
+            return nextAlive? minColor : maxColor;
         },
         draw: function(context, borders){
-            if(this.stp.wantsPause() ||this.counter++ % 1 != 0){
+            if(stp.wantsPause()){
                 return;
             }
             context.fillStyle = "rgba(255, 255, 255, 1)";
             context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-            this.life.evolve(borders);
-            var cells = this.life.cells;
-            var rows = cells.length;
-            //for(var y = 0; y < rows; y++){
-            for(var y = 1; y < rows-1; y++){
-                var row = cells[y] ;
-                //for (var x = 0; x< row.length; x++){
-                for (var x = 1; x< row.length -1; x++){
-                    var color = row[x] ,
-                        rgb = "rgb("+color[0]+","+color[1]+","+color[2]+")";
-                    context.fillStyle = rgb;
-                    var s = this.squareSize;
-                    //context.fillRect((x)*s, (y)*s, s, s);
-                    context.fillRect((x-1)*s, (y-1)*s, s, s);
-                }
-            }
+            aut.drawNext(borders, this.colorGameOfLife);
         }
 
     };

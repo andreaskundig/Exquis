@@ -17,11 +17,10 @@ define({
     },
 
     forEach2dArray : function(array2d, func) {
-	for (var row = 0; row < array2d.length; row++) {
-            var cols = array2d[row];
-            for (var col = 0; col < cols.length; col++) {
-		func(cols[col], row, col);
-            };
-	};
+        array2d.forEach(function(cols, row){
+            cols.forEach(function(el, col){
+                func(el, row, col);
+            });
+        });
     }
 });
