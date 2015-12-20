@@ -30,12 +30,17 @@ function loadBlockly(){
     window.execute  = function (){
         Blockly.JavaScript.addReservedWords('code');
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-        code = "var draw = function(ctx){ "+code+"};";
+        code += "\nvar anim = { setup:setup, draw:draw };";
         console.log(code);
+        var ctx = document.getElementById("canvas").getContext("2d");
         try {
             eval(code);
-            var canvas = document.getElementById("canvas");
-            draw(canvas.getContext("2d"));
+            anim.setup(ctx);
+            var render = function(){
+                anim.draw(ctx);
+                requestAnimationFrame(render);
+            };
+            render();
         } catch (e) {
             alert(e);
         }
