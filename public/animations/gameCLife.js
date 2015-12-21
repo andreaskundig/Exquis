@@ -1,4 +1,4 @@
-define(["bibs/automaton", "bibs/stepper"], function(automaton, stepper){
+define(["bibs/cellularAutomaton", "bibs/stepper"], function(automaton, stepper){
     var aut; 
     var stp = stepper();
     return {
