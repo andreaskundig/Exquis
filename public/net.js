@@ -1,35 +1,6 @@
 "use strict";
 
 define(["iter2d", "evileval"], function(iter2d, evileval){
-
-    var saveAnimation = function(canvasAnim, callback, fileName){
-        if (!canvasAnim.codeCacheUri){
-            return;
-        }
-        var JSString = evileval.dataUri2text(canvasAnim.codeCacheUri),
-            dirName = "animations",
-            name = (fileName || canvasAnim.animationName) + ".js";
-
-        saveFile(dirName, name, JSString, callback);
-    };
-
-    var saveAssemblage = function(assName, assemblage){
-        var JSONString = JSON.stringify(assemblage),
-            dirName = "assemblages",
-            name = assName + ".json";
-            
-        saveFile(dirName, name, JSONString);
-    };
-    
-    var saveFile = function(dirName, fileName, content){
-        var path = "/" + dirName + "/" + fileName,
-            params = encodeURIComponent(content), 
-            ajax = new XMLHttpRequest();
-
-        ajax.open("POST", path, true);
-        ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        ajax.send(params);
-    };
     
     var extractAnimationNameFromUri = function(uri){
         var match = uri.match(/([^\/]+)\.js/);
@@ -99,12 +70,11 @@ define(["iter2d", "evileval"], function(iter2d, evileval){
         return HTTPget(url).then(JSON.parse);
     };
 
-    return {saveAnimation: saveAnimation,
+    return {
             getAssemblageNameFromUrlOrDefaultWithUrlChange: getAssemblageNameFromUrlOrDefaultWithUrlChange,
             loadAssemblage: loadAssemblage,
             makeAnimationPath: makeAnimationPath ,
             extractAnimationNameFromUri: extractAnimationNameFromUri, 
-            saveAssemblage: saveAssemblage,
             HTTPgetJSON: HTTPgetJSON,
             HTTPget: HTTPget
            };

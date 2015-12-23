@@ -215,8 +215,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
 
 
     var currentCell;
-    var addEditor = function(exquis, makeEditorView, makeEditorController){
-        exquis.editorController = makeEditorController(exquis, makeEditorView);
+    var addEditor = function(exquis, editorController){
+        exquis.editorController = editorController;
         
         iter2d.forEach2dArray(exquis.cells, function(cell){
             var edit = function(){ 
@@ -307,7 +307,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             });
         };
 
-        addEditor(exquis, makeEditorView, makeEditorController);
+        var editorController = makeEditorController(exquis, makeEditorView, store);
+        addEditor(exquis, editorController);
 
         var render = function(){
             draw();

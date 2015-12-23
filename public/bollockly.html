@@ -1,19 +1,28 @@
 <html>
   <head>
-    <script src="../lib/blockly/blockly_compressed.js"></script>
-    <script src="../lib/blockly/blocks_compressed.js"></script>
-    <script src="../lib/blockly/msg/js/en.js"></script>
-    <script src="../lib/blockly/javascript_compressed.js"></script>
-    <script src="rectangle.js"></script>
-    <script src="square.js"></script>
-    <script src="rotate.js"></script>
-    <script src="translate.js"></script>
-    <script src="clear.js"></script>
-    <script src="bollockly.js"></script>
-    <script src="draw.js"></script>
-    <script src="setup.js"></script>
-    <script src="transformationSandbox.js"></script>
-
+    <script src="/lib/blockly/blockly_compressed.js"></script>
+    <script src="/lib/blockly/blocks_compressed.js"></script>
+    <script src="/lib/blockly/msg/js/en.js"></script>
+    <script src="/lib/blockly/javascript_compressed.js"></script>
+    <script src="blk/rectangle.js"></script>
+    <script src="blk/square.js"></script>
+    <script src="blk/rotate.js"></script>
+    <script src="blk/translate.js"></script>
+    <script src="blk/clear.js"></script>
+    <script src="blk/draw.js"></script>
+    <script src="blk/setup.js"></script>
+    <script src="blk/transformationSandbox.js"></script>
+    <script src="/lib/require.js"></script>
+<script>
+  require.config({
+    baseUrl: ".",
+    paths: {
+        "bollockly": "blk/bollockly"
+    }
+  });
+  require( ["bollockly"], function(bollo) { bollo(); }
+  );
+</script>
   </head>
   <body >
     <div id="blocklyDiv" style="height: 480px; width: 600px;position:absolute; top: 0px; left:0px"></div>

@@ -9,8 +9,6 @@
 par exemple en mettant les boutons de l'animation à coté de son nom, ou les mettre dans un bloc visuel
 ** collapsing textareas
 ** mecanisme pour signaler les animations à enregistrer
-* exquis
-** remplacer setInterval par requestAnimation
 * new animations
 * bugs
 
