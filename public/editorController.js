@@ -19,7 +19,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
             });
           },
             save: function(){
-                net.saveAssemblage(exquis.assName, exquis.assemblage());
+                _store.saveAssemblage(exquis.assName, exquis.assemblage());
             },
             saveAs: function(){
                 return ui.buildPrompt("enter file name")
@@ -27,7 +27,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
                     if(fileName == null){
                         throw "filename is null";
                     }
-                    net.saveAssemblage(fileName, exquis.assemblage());
+                    _store.saveAssemblage(fileName, exquis.assemblage());
                     exquis.assName = fileName;
                     history.pushState({},"...", fileName);
                     return exquis.assName;
