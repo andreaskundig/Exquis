@@ -18,21 +18,12 @@ define([], function(){
 
     dataUri2text = function(uri){
         return atob(uri.substr(28));
-    },
-        
-    // this is only used by the json2js script for converting legacy animations
-    stringifyJSON = function (jsonAnim){
-        var string = "define({libs:" + jsonAnim.libs + ",\n";
-        string += "setup: function(context, lib){\n"+ jsonAnim.setup +"},\n";
-        string += "draw: function(context, borders, lib){\n"+ jsonAnim.draw +"}});";
-        return string; 
     };
 	
     return {
         loadJsAnim: loadJsAnim , 
         toDataUri: toDataUri,
-        dataUri2text: dataUri2text,
-        stringifyJSON: stringifyJSON  
+        dataUri2text: dataUri2text
     };
 
 });
