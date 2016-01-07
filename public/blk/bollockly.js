@@ -17,6 +17,10 @@ define(["nodestore", "evileval"], function(store, evileval){
             var dom = Blockly.Xml.workspaceToDom(workspace);
             console.log(dom);
             console.log(Blockly.Xml.domToText(dom));
+            var animationName = prompt("enter animation name");
+            if(!animationName){
+                store
+            }
             localStorage.setItem('data',Blockly.Xml.domToText(dom));
         };
 

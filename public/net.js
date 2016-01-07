@@ -34,13 +34,18 @@ define(["iter2d", "evileval"], function(iter2d, evileval){
         history.pushState({},"...", "/assemblage/" + name);
 	return name;
     };
-    
-    var HTTPget = function(url) {
-        // Return a new promise.
+
+    var HTTPrequest = function(url, verb, headers, content){
         return new Promise(function(resolve, reject) {
             // Do the usual XHR stuff
             var req = new XMLHttpRequest();
-            req.open('GET', url);
+            req.open(verb, url);
+
+            if (headers){
+                for(var key in headers){
+                    req.setRequestHeader(key, headers[key]);
+                }
+            }
 
             req.onload = function() {
                 // This is called even on 404 etc
@@ -62,8 +67,20 @@ define(["iter2d", "evileval"], function(iter2d, evileval){
             };
 
             // Make the request
-            req.send();
+            if(content){
+                req.send(encodeURIComponent(content));
+            }else{
+                req.send();
+            }
         });
+    };
+    
+    var HTTPget = function(url, headers) {
+        return HTTPrequest(url, 'GET', headers);
+    };
+    
+    var HTTPpost = function(url, headers, content) {
+        return HTTPrequest(url, 'POST', headers, content);
     };
 
     var HTTPgetJSON = function(url) {
@@ -76,7 +93,7 @@ define(["iter2d", "evileval"], function(iter2d, evileval){
             makeAnimationPath: makeAnimationPath ,
             extractAnimationNameFromUri: extractAnimationNameFromUri, 
             HTTPgetJSON: HTTPgetJSON,
-            HTTPget: HTTPget
+            HTTPget: HTTPget,
+            HTTPpost: HTTPpost
            };
-    
 });

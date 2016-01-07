@@ -53,7 +53,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
                     if(fileName == null){
                         throw "filename is null";
                     }
-                    _store.saveAnimation(currentCanvasAnim, null, fileName);
+                    _store.saveAnimation(currentCanvasAnim, fileName);
                     currentCanvasAnim.animationName = fileName;
                     return fileName;
                 });

@@ -9,15 +9,15 @@ Currently the original url is replaced by a data uri when it is first edited,
 because it's only used to load the code. We need to keep it in order to save it.
 */
 define(["net", "evileval"], function(net, evileval){
-    var saveAnimation = function(canvasAnim, callback, fileName){
+    var saveAnimation = function(canvasAnim, fileName){
         if (!canvasAnim.codeCacheUri){
-            return;
+            // promise that always fails
+            return new Promise(function(res,rej){rej('no code to save');});
         }
         var JSString = evileval.dataUri2text(canvasAnim.codeCacheUri),
             dirName = "animations",
             name = (fileName || canvasAnim.animationName) + ".js";
-
-        saveFile(dirName, name, JSString, callback);
+        return saveFile(dirName, name, JSString);
     };
 
     var saveAssemblage = function(assName, assemblage){
@@ -25,17 +25,13 @@ define(["net", "evileval"], function(net, evileval){
             dirName = "assemblages",
             name = assName + ".json";
             
-        saveFile(dirName, name, JSONString);
+        return saveFile(dirName, name, JSONString);
     };
     
     var saveFile = function(dirName, fileName, content){
         var path = "/" + dirName + "/" + fileName,
-            params = encodeURIComponent(content), 
-            ajax = new XMLHttpRequest();
-
-        ajax.open("POST", path, true);
-        ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        ajax.send(params);
+            headers = { "Content-type": "application/x-www-form-urlencoded" };
+        return net.HTTPpost(path, headers, content);
     };
     
     var animationNameToUri = function(animationName){
