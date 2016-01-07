@@ -14,14 +14,14 @@ define(["nodestore", "evileval"], function(store, evileval){
         workspace.addChangeListener(myUpdateFunction);
 
         window.save  = function (){
-            var dom = Blockly.Xml.workspaceToDom(workspace);
-            console.log(dom);
-            console.log(Blockly.Xml.domToText(dom));
-            var animationName = prompt("enter animation name");
-            if(!animationName){
-                store
-            }
-            localStorage.setItem('data',Blockly.Xml.domToText(dom));
+            var code = extractAnimationCodeString(),
+                canvasAnim = {
+                    animationName: "blocklyAnimation",
+                    codeCacheUri: evileval.toDataUri(code)
+                };
+
+            store.saveAnimation(canvasAnim);
+            //localStorage.setItem('data',Blockly.Xml.domToText(dom));
         };
 
         window.saveToNode = function(){
@@ -31,12 +31,14 @@ define(["nodestore", "evileval"], function(store, evileval){
         };
         
         window.load = function () {
-            if(localStorage.data!=null){
-                var xml = Blockly.Xml.textToDom(localStorage.data);
+
+            var uri = '/animations/blocklyAnimation.js';
+            
+            evileval.loadJsAnim(uri).then(function(anim){
+                var xml = Blockly.Xml.textToDom(anim.source.code);
                 Blockly.mainWorkspace.clear();
-                Blockly.Xml.domToWorkspace( Blockly.mainWorkspace, xml );
-                console.log("restored");
-            }
+                Blockly.Xml.domToWorkspace( Blockly.mainWorkspace, xml);
+            });
         };
         var runAnim = function(anim){
             var ctx = document.getElementById("canvas").getContext("2d");
@@ -51,7 +53,8 @@ define(["nodestore", "evileval"], function(store, evileval){
                 alert(e);
             }
         };
-        window.execute  = function (){
+
+        var extractAnimationCodeString = function(){
             var dom = Blockly.Xml.workspaceToDom(workspace);
             Blockly.JavaScript.addReservedWords('code');
             var code = "define(function(){\n";
@@ -61,7 +64,12 @@ define(["nodestore", "evileval"], function(store, evileval){
             code += "return { setup:setup, draw:draw, source: { code: xmlSource, lang: 'blockly' } };\n";
             code += "});\n";
             console.log(code);
-            var uri = evileval.toDataUri(code);
+            return code;
+        };
+        
+        window.execute  = function (){
+            var code = extractAnimationCodeString(),
+                uri = evileval.toDataUri(code);
             evileval.loadJsAnim(uri).then(function(anim){
                 runAnim(anim);
             });
