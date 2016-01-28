@@ -12,7 +12,7 @@ define(["net", "evileval"], function(net, evileval){
     var saveAnimation = function(canvasAnim, fileName){
         if (!canvasAnim.codeCacheUri){
             // promise that always fails
-            return new Promise(function(res,rej){rej('no code to save');});
+            return Promise.reject('no code to save');
         }
         var JSString = evileval.dataUri2text(canvasAnim.codeCacheUri),
             dirName = "animations",
