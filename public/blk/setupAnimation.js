@@ -1,7 +1,7 @@
-Blockly.Blocks['setup'] = {
+Blockly.Blocks['setupAnimation'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Setup");
+        .appendField("Setup animation");
     this.appendStatementInput("code");
     this.setPreviousStatement(false);
     this.setNextStatement(false);
