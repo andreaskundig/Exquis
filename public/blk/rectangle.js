@@ -16,7 +16,7 @@ Blockly.Blocks['rectangle'] = {
     this.appendValueInput("height")
         .setCheck("Number")
         .appendField("height");
-    this.setInputsInline(false);
+    this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('draw rectangle');
