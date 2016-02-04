@@ -1,26 +1,32 @@
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#7m4636
 Blockly.Blocks['draw'] = {
-  init: function() {
-    this.appendValueInput("shape")
-        .setCheck("rectangle")
-        .appendField("Draw");
-    this.setColour(20);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
-  }
+    init: function() {
+        this.appendValueInput("shape")
+            .setCheck("rectangle")
+            .appendField("Draw");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setColour(20);
+        this.setTooltip('');
+        this.setHelpUrl('http://www.example.com/');
+    }
 };
 
 Blockly.JavaScript['draw'] = function(block) {
   var value_shape = Blockly.JavaScript.valueToCode(block, 'shape', Blockly.JavaScript.ORDER_ATOMIC);
   // TODO: Assemble JavaScript into code variable.
-  var code ="";
-  if(value_shape.type === 'rectangle'){
-      code += 'var x = value_shape.position.x;';
-      code += 'var y = value_shape.position.y;';
-      code += 'var width = value_shape.dimension.width;';
-      code += 'var height = value_shape.dimension.height;';
-      code += 'ctx.fillRect(x, y, width, height);';
-  }
+    var xVar = Blockly.JavaScript.variableDB_.getDistinctName('x', Blockly.Variables.NAME_TYPE);
+    var yVar = Blockly.JavaScript.variableDB_.getDistinctName('y', Blockly.Variables.NAME_TYPE);
+    var wVar = Blockly.JavaScript.variableDB_.getDistinctName('w', Blockly.Variables.NAME_TYPE);
+    var hVar = Blockly.JavaScript.variableDB_.getDistinctName('h', Blockly.Variables.NAME_TYPE);
+    var code = 'var shape = '+value_shape+';\n';
+    code += 'if(shape.type === "rectangle"){\n';
+    code += '  var '+xVar+' = shape.pos.x;\n';
+    code += '  var '+yVar+' = shape.pos.y;\n';
+    code += '  var '+wVar+' = shape.dim.w;\n';
+    code += '  var '+hVar+' = shape.dim.h;\n';
+    code += '  ctx.fillRect('+xVar+', '+yVar+', '+wVar+', '+hVar+');\n';
+    code += '}\n';
   return code;
 };
 
@@ -47,7 +53,7 @@ Blockly.Blocks['rectangle'] = {
 Blockly.JavaScript['rectangle'] = function(block) {
   var value_position = Blockly.JavaScript.valueToCode(block, 'position', Blockly.JavaScript.ORDER_ATOMIC);
   var value_dimension = Blockly.JavaScript.valueToCode(block, 'dimension', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = '{position: ' + value_position + ', dimension: ' + value_dimension + ', type: "rectangle" }';
+  var code = '{pos: ' + value_position + ', dim: ' + value_dimension + ', type: "rectangle" }';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -101,7 +107,7 @@ Blockly.Blocks['dimension'] = {
 Blockly.JavaScript['dimension'] = function(block) {
   var value_width = Blockly.JavaScript.valueToCode(block, 'width', Blockly.JavaScript.ORDER_ATOMIC);
   var value_height = Blockly.JavaScript.valueToCode(block, 'height', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = '{width: ' + value_width + ', height: ' + value_height + '}';
+  var code = '{w: ' + value_width + ', h: ' + value_height + '}';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };

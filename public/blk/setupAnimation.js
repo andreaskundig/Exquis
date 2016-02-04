@@ -9,7 +9,7 @@ Blockly.Blocks['setupAnimation'] = {
   }
 };
 
-Blockly.JavaScript['setup'] = function(block) {
+Blockly.JavaScript['setupAnimation'] = function(block) {
   var code = Blockly.JavaScript.statementToCode(block, 'code');
     
   code = "var setup = function(ctx){\n"+code+"};";
