@@ -12,6 +12,6 @@ Blockly.Blocks['setupAnimation'] = {
 Blockly.JavaScript['setupAnimation'] = function(block) {
   var code = Blockly.JavaScript.statementToCode(block, 'code');
     
-  code = "var setup = function(ctx){\n"+code+"};";
+  code = "var setupAnimation = function(ctx){\n"+code+"};";
   return code;
 };

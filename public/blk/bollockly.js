@@ -63,7 +63,7 @@ define(["nodestore", "evileval"], function(store, evileval){
             code += Blockly.JavaScript.workspaceToCode(workspace);
             code += "\nvar xmlSource = '";
             code += Blockly.Xml.domToText(dom) + "';\n";
-            code += "return { setup:setup, draw:draw, source: { code: xmlSource, lang: 'blockly' } };\n";
+            code += "return { setup: setupAnimation, draw: drawAnimation, source: { code: xmlSource, lang: 'blockly' } };\n";
             code += "});\n";
             console.log(code);
             return code;

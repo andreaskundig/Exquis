@@ -16,17 +16,13 @@ Blockly.JavaScript['draw'] = function(block) {
   var value_shape = Blockly.JavaScript.valueToCode(block, 'shape', Blockly.JavaScript.ORDER_ATOMIC);
   // TODO: Assemble JavaScript into code variable.
     var shVar = Blockly.JavaScript.variableDB_.getDistinctName('shape', Blockly.Variables.NAME_TYPE);
-    var xVar = Blockly.JavaScript.variableDB_.getDistinctName('x', Blockly.Variables.NAME_TYPE);
-    var yVar = Blockly.JavaScript.variableDB_.getDistinctName('y', Blockly.Variables.NAME_TYPE);
-    var wVar = Blockly.JavaScript.variableDB_.getDistinctName('w', Blockly.Variables.NAME_TYPE);
-    var hVar = Blockly.JavaScript.variableDB_.getDistinctName('h', Blockly.Variables.NAME_TYPE);
+    var pointVar = Blockly.JavaScript.variableDB_.getDistinctName('point', Blockly.Variables.NAME_TYPE);
+    var dimVar = Blockly.JavaScript.variableDB_.getDistinctName('dim', Blockly.Variables.NAME_TYPE);
     var code = 'var '+shVar+' = '+value_shape+';\n';
     code += 'if('+shVar+'.type === "rectangle"){\n';
-    code += '  var '+xVar+' = '+shVar+'.pos.x;\n';
-    code += '  var '+yVar+' = '+shVar+'.pos.y;\n';
-    code += '  var '+wVar+' = '+shVar+'.dim.w;\n';
-    code += '  var '+hVar+' = '+shVar+'.dim.h;\n';
-    code += '  ctx.fillRect('+xVar+', '+yVar+', '+wVar+', '+hVar+');\n';
+    code += '  var '+pointVar+' = '+shVar+'.pos;\n';
+    code += '  var '+dimVar+' = '+shVar+'.dim;\n';
+    code += '  ctx.fillRect('+pointVar+'.x, '+pointVar+'.y, '+dimVar+'.w, '+dimVar+'.h);\n';
     code += '}\n';
   return code;
 };
