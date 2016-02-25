@@ -47,7 +47,9 @@ define(["nodestore", "evileval"], function(store, evileval){
             try {
                 anim.setup(ctx);
                 var render = function(){
+                    ctx.save();
                     anim.draw(ctx);
+                    ctx.restore();
                     requestAnimationFrame(render);
                 };
                 render();

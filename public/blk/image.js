@@ -12,21 +12,70 @@ Blockly.Blocks['snapshot'] = {
 };
 
 Blockly.JavaScript['snapshot'] = function(block) {
-  var value_rectangle = Blockly.JavaScript.valueToCode(block, 'rectangle', Blockly.JavaScript.ORDER_ATOMIC);
-  // TODO: Assemble JavaScript into code variable.
-    var bufferVar = Blockly.JavaScript.variableDB_.getDistinctName('buffer', Blockly.Variables.NAME_TYPE);
-    var rectVar = Blockly.JavaScript.variableDB_.getDistinctName('rect', Blockly.Variables.NAME_TYPE);
-    var pointVar = Blockly.JavaScript.variableDB_.getDistinctName('point', Blockly.Variables.NAME_TYPE);
-    var dimVar = Blockly.JavaScript.variableDB_.getDistinctName('dim', Blockly.Variables.NAME_TYPE);
-    // TODO create a utility function makeBuffer, based on canvasBuffer.js (or reusing it?)
-    // https://developers.google.com/blockly/custom-blocks/caching-arguments#utility_functions
-    
+    var value_rectangle = Blockly.JavaScript.valueToCode(
+        block, 'rectangle', Blockly.JavaScript.ORDER_ATOMIC);
+    var vdb = Blockly.JavaScript.variableDB_;
+    var rectVar = vdb.getDistinctName('rect', Blockly.Variables.NAME_TYPE);
+
+    // The code should be evaluable to a single assignable value,
+    // because we defined an output (of type "image),
+    // that can be placed on the right side of = .
+    // We can use intermediary variables if we put them 
+    // inside an immediately evaluated function. 
     var code = '(function(){\n';
-    code += '  var '+bufferVar+' = document.createElement("canvas")';
     code += '  var '+rectVar+' = '+value_rectangle+';\n';
-    code += '  var '+pointVar+' = '+rectVar+'.pos;\n';
-    code += '  var '+dimVar+' = '+rectVar+'.dim;\n';
-    code += '  return ctx.getImageData('+pointVar+'.x, '+pointVar+'.y, '+dimVar+'.w, '+dimVar+'.h);\n';
+    code += '  return ctx.getImageData('+rectVar+'.pos.x, '+rectVar+'.pos.y, ';
+    code +=                             rectVar+'.dim.w, '+rectVar+'.dim.h);\n';
     code += '})()';
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};;
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+
+
+Blockly.Blocks['drawImage'] = {
+    init: function() {
+        this.appendValueInput("image")
+            .setCheck("image")
+            .appendField("Draw Image");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setColour(165);
+        this.setTooltip('');
+        this.setHelpUrl('http://www.example.com/');
+    }
+};
+
+var provideImageBuffer = Blockly.JavaScript.provideFunction_(
+    'provideImageBuffer',
+    [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+      '  if(!window.__imageBuffer__){',
+      '     window.__imageBuffer__ = document.createElement("canvas");',
+      '  }',
+      '  return window.__imageBuffer__;',
+      '}']);
+//TODO make this work
+//https://developers.google.com/blockly/custom-blocks/caching-arguments#utility_functions
+var functionName = Blockly.JavaScript.provideFunction_(
+    'list_lastElement',
+    [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(aList) {',
+      '  // Return the last element of a list.',
+      '  return aList[aList.length - 1];',
+      '}']);
+// Generate the function call for this block.
+
+Blockly.JavaScript['drawImage'] = function(block) {
+    var value_image = Blockly.JavaScript.valueToCode(
+        block, 'image', Blockly.JavaScript.ORDER_ATOMIC);
+
+    var vdb = Blockly.JavaScript.variableDB_;
+    var bufVar = vdb.getDistinctName('imgBuffer', Blockly.Variables.NAME_TYPE);
+    var code = functionName + '([1])';
+return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    // var code = bufVar+'=' + provideImageBuffer + '();\n';
+    // code += bufVar+'.putImageData('+value_image+', 0, 0);\n';
+    // code += 'ctx.drawImage('+bufVar+',0, 0,'+value_image +'.width, '; 
+    // code +=  value_image +'.height);\n';  
+
+    // return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
