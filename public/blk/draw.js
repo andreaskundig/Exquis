@@ -109,3 +109,22 @@ Blockly.JavaScript['dimension'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.Blocks['fillcolour'] = {
+  init: function() {
+    this.appendValueInput("colour")
+        .setCheck("Colour")
+        .appendField("Set fill colour");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(240);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.JavaScript['fillcolour'] = function(block) {
+  var value_colour = Blockly.JavaScript.valueToCode(block, 'colour', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = 'ctx.fillStyle = ' + value_colour + ';\n';
+  return code;
+};
+

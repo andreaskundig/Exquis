@@ -45,7 +45,9 @@ define(["nodestore", "evileval"], function(store, evileval){
         var runAnim = function(anim){
             var ctx = document.getElementById("canvas").getContext("2d");
             try {
+                ctx.save();
                 anim.setup(ctx);
+                ctx.restore();
                 var render = function(){
                     ctx.save();
                     anim.draw(ctx);

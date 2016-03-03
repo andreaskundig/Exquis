@@ -45,22 +45,14 @@ Blockly.Blocks['drawImage'] = {
     }
 };
 
-var provideImageBuffer = Blockly.JavaScript.provideFunction_(
-    'provideImageBuffer',
-    [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
-      '  if(!window.__imageBuffer__){',
-      '     window.__imageBuffer__ = document.createElement("canvas");',
-      '  }',
-      '  return window.__imageBuffer__;',
-      '}']);
 //TODO make this work
 //https://developers.google.com/blockly/custom-blocks/caching-arguments#utility_functions
-var functionName = Blockly.JavaScript.provideFunction_(
-    'list_lastElement',
-    [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(aList) {',
-      '  // Return the last element of a list.',
-      '  return aList[aList.length - 1];',
-      '}']);
+// var functionName = Blockly.JavaScript.provideFunction_(
+//     'list_lastElement',
+//     [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(aList) {',
+//       '  // Return the last element of a list.',
+//       '  return aList[aList.length - 1];',
+//       '}']);
 // Generate the function call for this block.
 
 Blockly.JavaScript['drawImage'] = function(block) {
@@ -69,13 +61,20 @@ Blockly.JavaScript['drawImage'] = function(block) {
 
     var vdb = Blockly.JavaScript.variableDB_;
     var bufVar = vdb.getDistinctName('imgBuffer', Blockly.Variables.NAME_TYPE);
-    var code = functionName + '([1])';
-return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-    // var code = bufVar+'=' + provideImageBuffer + '();\n';
-    // code += bufVar+'.putImageData('+value_image+', 0, 0);\n';
-    // code += 'ctx.drawImage('+bufVar+',0, 0,'+value_image +'.width, '; 
-    // code +=  value_image +'.height);\n';  
-
-    // return [code, Blockly.JavaScript.ORDER_NONE];
+    var provideImageBuffer = Blockly.JavaScript.provideFunction_(
+        'provideImageBuffer',
+        [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(width, height) {',
+          '  if(!window.__imageBuffer__){',
+          '     window.__imageBuffer__ = document.createElement("canvas");',
+          '  }',
+          '  window.__imageBuffer__.width = width;',
+          '  window.__imageBuffer__.height = height;',
+          '  return window.__imageBuffer__.getContext("2d");',
+          '}']);
+    var code = 'var '+bufVar+'=' + provideImageBuffer + '('+value_image+'.width, '+value_image+'.height);\n';
+    code += bufVar+'.putImageData('+value_image+', 0, 0);\n';
+    code += 'ctx.drawImage('+bufVar+'.canvas,0, 0,'+value_image +'.width, '; 
+    code +=  value_image +'.height);\n';  
+    return code;
 };
 
