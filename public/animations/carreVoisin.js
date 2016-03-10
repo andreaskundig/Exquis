@@ -5,7 +5,7 @@ function(canvasBuffer, anim1, anim2){
     return {
         setup: function (context){
             anim1.setup(context);
-            this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
+            this.buffer = canvasBuffer(context.canvas.width,
                                                   context.canvas.height);
             anim2.setup(this.buffer.context);
 

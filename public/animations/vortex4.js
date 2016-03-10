@@ -2,7 +2,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
     setup: function(context){
         this.toRadians =  Math.PI / 180; 
         this.rotation = 1 ;
-        this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
+        this.buffer = canvasBuffer(context.canvas.width,
                                               context.canvas.height);
     },
     

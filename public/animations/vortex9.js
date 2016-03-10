@@ -4,7 +4,7 @@ function(canvasBuffer,wp){ return {
         this.toRadians =  Math.PI / 180; 
         
         this.rotation = 0 ;
-        this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
+        this.buffer = canvasBuffer(context.canvas.width,
                                               context.canvas.height);
         var limit = [10 , 140];
         this.w = wp.makeWanderer([limit, limit]);

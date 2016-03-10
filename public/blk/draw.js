@@ -22,7 +22,7 @@ Blockly.JavaScript['draw'] = function(block) {
     code += 'if('+shVar+'.type === "rectangle"){\n';
     code += '  var '+pointVar+' = '+shVar+'.pos;\n';
     code += '  var '+dimVar+' = '+shVar+'.dim;\n';
-    code += '  ctx.fillRect('+pointVar+'.x, '+pointVar+'.y, '+dimVar+'.w, '+dimVar+'.h);\n';
+    code += '  ctx.fillRect('+pointVar+'.x, '+pointVar+'.y, '+dimVar+'.width, '+dimVar+'.height);\n';
     code += '}\n';
   return code;
 };
@@ -50,7 +50,7 @@ Blockly.Blocks['rectangle'] = {
 Blockly.JavaScript['rectangle'] = function(block) {
   var value_position = Blockly.JavaScript.valueToCode(block, 'position', Blockly.JavaScript.ORDER_ATOMIC);
   var value_dimension = Blockly.JavaScript.valueToCode(block, 'dimension', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = '{pos: ' + value_position + ', dim: ' + value_dimension + ', type: "rectangle" }';
+  var code = '{pos: ' + value_position + ',\n   dim: ' + value_dimension + ', \n   type: "rectangle"\n}';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -104,7 +104,7 @@ Blockly.Blocks['dimension'] = {
 Blockly.JavaScript['dimension'] = function(block) {
   var value_width = Blockly.JavaScript.valueToCode(block, 'width', Blockly.JavaScript.ORDER_ATOMIC);
   var value_height = Blockly.JavaScript.valueToCode(block, 'height', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = '{w: ' + value_width + ', h: ' + value_height + '}';
+  var code = '{width: ' + value_width + ', height: ' + value_height + '}';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
