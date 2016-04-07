@@ -63,7 +63,7 @@ define(["nodestore", "evileval"], function(store, evileval){
         var extractAnimationCodeString = function(){
             var dom = Blockly.Xml.workspaceToDom(workspace);
             Blockly.JavaScript.addReservedWords('code');
-            var code = "define(['bibs/canvasBuffer'], function(canvasBuffer){\n";
+            var code = "define(['bibs/canvasBuffer'], function(makeBuffer){\n";
             code += Blockly.JavaScript.workspaceToCode(workspace);
             code += "\nvar xmlSource = '";
             code += Blockly.Xml.domToText(dom) + "';\n";

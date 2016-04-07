@@ -1,4 +1,4 @@
-define(['bibs/canvasBuffer'], function(canvasBuffer){
+define(['bibs/canvasBuffer'], function(makeBuffer){
 var snapshot;
 
 function colour_random() {
@@ -19,7 +19,7 @@ var setupAnimation = function(ctx){
     var dim = shape.dim;
     ctx.fillRect(point.x, point.y, dim.width, dim.height);
   }
-  snapshot = canvasBuffer(({width: 150, height: 150}));
+  snapshot = makeBuffer(({width: 150, height: 150}));
 };
 var drawAnimation = function(ctx){
   snapshot.copyToBuffer(ctx, ({x: 0, y: 0}));

@@ -16,7 +16,7 @@ Blockly.JavaScript['blankImage'] = function(block) {
     var vdb = Blockly.JavaScript.variableDB_;
     var rectVar = vdb.getDistinctName('rect', Blockly.Variables.NAME_TYPE);
 
-    var code = 'canvasBuffer('+value_dimension+')';
+    var code = 'makeBuffer('+value_dimension+')';
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
