@@ -26,7 +26,7 @@
 </script>
   </head>
   <body >
-    <div id="blocklyDiv" style="height: 480px; width: 600px;position:absolute; top: 0px; left:0px"></div>
+    <div id="blocklyDiv" style="height: 570px; width: 800px;position:absolute; top: 0px; left:0px"></div>
     <xml id="toolbox" style="display: none">
       <block type="controls_if"></block>
       <block type="controls_repeat_ext"></block>
@@ -47,14 +47,16 @@
       <block type="point"></block>
       <block type="dimension"></block>
       <block type="snapshot"></block>
+      <block type="blankImage"></block>
+      <block type="takeSnapshot"></block>
       <block type="drawImage"></block>
       <block type="drawAnimation"></block>
       <block type="setupAnimation"></block>
       <block type="transformation_sandbox"></block>
     </xml>
-    <div style="position: absolute; top:0px; left: 610px">
-      <textarea id="textarea" style="width:400px; height:480px"></textarea>
-      <canvas width="350" height="480" id="canvas"></canvas>
+    <div style="position: absolute; top:0px; left: 810px">
+      <textarea id="textarea" style="width:400px; height:570px"></textarea>
+      <canvas width="150" height="150" id="canvas"></canvas>
       <br>
       <button onclick="execute()">exec</button>
       <button onclick="save()">save</button>
