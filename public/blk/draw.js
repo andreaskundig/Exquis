@@ -32,14 +32,12 @@ Blockly.JavaScript['draw'] = function(block) {
 
 Blockly.Blocks['rectangle'] = {
   init: function() {
-    this.appendDummyInput()
-        .appendField("Rectangle");
     this.appendValueInput("position")
         .setCheck("point")
-        .appendField("origin");
+        .appendField("Rectangle with origin");
     this.appendValueInput("dimension")
         .setCheck("dimension")
-        .appendField("dimension");
+        .appendField("and dimension");
     this.setOutput(true, "rectangle");
     this.setColour(300);
     this.setTooltip('');

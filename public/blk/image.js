@@ -1,9 +1,8 @@
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#m929q2
 Blockly.Blocks['blankImage'] = {
   init: function() {
-    this.appendValueInput("dimension")
-        .setCheck("dimension")
-        .appendField("Blank image of size");
+    this.appendDummyInput()
+        .appendField("Blank image");
     this.setOutput(true, "image");
     this.setColour(165);
     this.setTooltip('');
@@ -12,11 +11,7 @@ Blockly.Blocks['blankImage'] = {
 };
 
 Blockly.JavaScript['blankImage'] = function(block) {
-    var value_dimension = Blockly.JavaScript.valueToCode(block, 'dimension', Blockly.JavaScript.ORDER_ATOMIC);
-    var vdb = Blockly.JavaScript.variableDB_;
-    var rectVar = vdb.getDistinctName('rect', Blockly.Variables.NAME_TYPE);
-
-    var code = 'makeBuffer('+value_dimension+')';
+    var code = 'makeBuffer()';
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -25,7 +20,10 @@ Blockly.Blocks['takeSnapshot'] = {
     init: function() {
         this.appendValueInput("position")
             .setCheck("point")
-            .appendField("Copy from point");
+            .appendField("Copy from origin");
+        this.appendValueInput("dimension")
+            .setCheck("dimension")
+            .appendField("and dimension");
         this.appendValueInput("image")
             .setCheck("image")
             .appendField("into image");
@@ -40,10 +38,11 @@ Blockly.Blocks['takeSnapshot'] = {
 Blockly.JavaScript['takeSnapshot'] = function(block) {
     var value_image = Blockly.JavaScript.valueToCode(block, 'image', Blockly.JavaScript.ORDER_ATOMIC);
     var value_position = Blockly.JavaScript.valueToCode(block, 'position', Blockly.JavaScript.ORDER_ATOMIC);
+    var value_dimension = Blockly.JavaScript.valueToCode(block, 'dimension', Blockly.JavaScript.ORDER_ATOMIC);
     var vdb = Blockly.JavaScript.variableDB_;
     var rectVar = vdb.getDistinctName('rect', Blockly.Variables.NAME_TYPE);
 
-    var code = value_image + '.copyToBuffer(ctx, '+value_position+');\n';
+    var code = value_image + '.copyToBuffer(ctx, '+value_position+', '+value_dimension+');\n';
     return code;
 };
 
