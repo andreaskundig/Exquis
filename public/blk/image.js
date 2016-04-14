@@ -14,7 +14,15 @@ Blockly.JavaScript['blankImage'] = function(block) {
     var code = 'makeBuffer()';
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
+/*
+ copy from border: top bottom left right
+ (blockly enum https://developers.google.com/blockly/custom-blocks/dropdown-menus)
+ into image: canvasBuffer cb (blank image)
+ at: point
+ cb.context.putImageData(borders.east, point.x, point.y)
 
+ 
+ */
 
 Blockly.Blocks['takeSnapshot'] = {
     init: function() {
