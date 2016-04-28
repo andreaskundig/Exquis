@@ -49,7 +49,6 @@ Blockly.JavaScript['takeSnapshot'] = function(block) {
     var value_dimension = Blockly.JavaScript.valueToCode(block, 'dimension', Blockly.JavaScript.ORDER_ATOMIC);
     var vdb = Blockly.JavaScript.variableDB_;
     var rectVar = vdb.getDistinctName('rect', Blockly.Variables.NAME_TYPE);
-
     var code = value_image + '.copyToBuffer(ctx, '+value_position+', '+value_dimension+');\n';
     return code;
 };
@@ -73,3 +72,34 @@ Blockly.JavaScript['drawImage'] = function(block) {
     return value_image +'.copyFromBuffer(ctx);';
 };
 
+Blockly.Blocks['border'] = {
+    init: function() {
+        this.appendDummyInput()
+            .appendField("Copy from border")
+            .appendField(new Blockly.FieldDropdown([["top", "north"], ["right", "east"], ["bottom", "south"], ["left", "west"]]), "BORDER_DIRECTION");
+        this.appendValueInput("position")
+            .setCheck("point")
+            .appendField("to point");
+        this.appendValueInput("image")
+            .setCheck("image")
+            .appendField("in image");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setColour(165);
+        this.setTooltip('');
+        this.setHelpUrl('http://www.example.com/');
+    }
+};
+
+Blockly.JavaScript['border'] = function(block) {
+    var value_image = Blockly.JavaScript.valueToCode(block, 'image', Blockly.JavaScript.ORDER_ATOMIC);
+    var value_position = Blockly.JavaScript.valueToCode(block, 'position', Blockly.JavaScript.ORDER_ATOMIC);
+    
+    var dropdown_name = block.getFieldValue('BORDER_DIRECTION');
+    var vdb = Blockly.JavaScript.variableDB_;
+    var rectVar = vdb.getDistinctName('rect', Blockly.Variables.NAME_TYPE);
+
+    var code = [value_image, '.context.putImageData(borders.', dropdown_name, ', ',
+                value_position, '.x,', value_position, '.y)\n'].join('');
+    return code;
+};

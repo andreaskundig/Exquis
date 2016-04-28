@@ -19,14 +19,15 @@ define(["nodestore", "evileval"], function(store, evileval){
             ctx.restore();
             
             rotation += Math.PI / 180;
-            requestAnimationFrame(anim);
         };
 
-        anim();
+        return {
+            draw: anim,
+            ctx: ctx
+        };
     };
 
     function loadBlockly(){
-        setupBordersNorth();
         
         var workspace = Blockly.inject('blocklyDiv',
                                        {toolbox: document.getElementById('toolbox')});
@@ -68,7 +69,7 @@ define(["nodestore", "evileval"], function(store, evileval){
                 Blockly.Xml.domToWorkspace( Blockly.mainWorkspace, xml);
             });
         };
-        var runAnim = function(anim){
+        var runAnim = function(anim, northAnim){
             var ctx = document.getElementById("canvas").getContext("2d");
             try {
                 ctx.save();
@@ -76,7 +77,12 @@ define(["nodestore", "evileval"], function(store, evileval){
                 ctx.restore();
                 var render = function(){
                     ctx.save();
-                    anim.draw(ctx);
+
+                    var borders = {
+                       north: northAnim.ctx.getImageData(0,northAnim.ctx.canvas.height - 1, northAnim.ctx.canvas.width, 1)
+                    };
+                    northAnim.draw();
+                    anim.draw(ctx, borders);
                     ctx.restore();
                     requestAnimationFrame(render);
                 };
@@ -99,11 +105,13 @@ define(["nodestore", "evileval"], function(store, evileval){
             return code;
         };
         
-        window.execute  = function (){
+        var northAnim = setupBordersNorth();
+        
+        window.execute = function (){
             var code = extractAnimationCodeString(),
                 uri = evileval.toDataUri(code);
             evileval.loadJsAnim(uri).then(function(anim){
-                runAnim(anim);
+                runAnim(anim, northAnim);
             });
         };
         

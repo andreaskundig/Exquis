@@ -51,7 +51,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
 
                 // force reset matrix/
                 context.setTransform(1, 0, 0, 1, 0, 0);
-                this.currentCode.draw(context, borders, this.lib);
+                this.currentCode.draw(context, borders);
             },
 
             toDataUri : function(jsCode){
@@ -93,7 +93,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
                 this.setup = function(){
                     // force reset matrix
                     context.setTransform(1, 0, 0, 1, 0, 0);
-                    this.codeToSetup.setup(context, this.lib);
+                    this.codeToSetup.setup(context);
                     this.currentCode = this.codeToSetup;
                 };
 
@@ -257,7 +257,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             cell.canvasAnim.loadAnim(animUri);
             return cell;
         });
-        
         
         addHintListeners(exquis.cells);
         
