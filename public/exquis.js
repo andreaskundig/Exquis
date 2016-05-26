@@ -248,10 +248,18 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             exquis = {};
         exquis.assName = assName;
 
+        var cellWidth = 150,
+            cellHeight = 150,
+            dashboardWidth = animUris.length * cellWidth,
+            dashboardHeight = animUris[0].length * cellHeight,
+            dashboard = document.getElementById('dashboard');
+
+        dashboard.style.width = dashboardWidth + 'px';
+        dashboard.style.height = dashboardHeight + 'px';
+        
         exquis.cells = iter2d.map2dArray(animUris,function(animUri,row,col){
-            var height = 150,
-                width = 150,
-                cell = makeCell(row, col, height, width);
+            var cell = makeCell(row, col, cellHeight, cellWidth);
+
             cell.canvasAnim = makeCanvasAnimation(cell.context);
             addCellUiListeners(cell.ui, cell.canvasAnim, store);
             cell.canvasAnim.loadAnim(animUri);

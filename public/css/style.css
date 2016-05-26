@@ -2,8 +2,8 @@ body{
     font-family: Sans-Serif;
 }
 h2, h3 { display: inline;}
-.grid { width: 450px; max-width: 450px; position: absolute}
-#editor { position: absolute; left: 50%; }
+.grid {/* width: 450px; *//* max-width: 450px; *//* position: absolute; */}
+#editor {/* position: absolute; *//* left: 35%; */}
 #dialog {  
     position: absolute;
     left: 33%;
