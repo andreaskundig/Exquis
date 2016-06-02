@@ -1,9 +1,17 @@
 body{
     font-family: Sans-Serif;
 }
-h2, h3 { display: inline;}
-.grid {/* width: 450px; *//* max-width: 450px; *//* position: absolute; */}
-#editor {/* position: absolute; *//* left: 35%; */}
+
+h2, h3 {
+    display: inline;
+}
+
+#container{max-width: 1301px;position: relative;height: 100%;}
+
+#dashboard{position: absolute;left: 0;top: 0;}
+
+#editor {position: absolute;right: 0;top: 0;min-width: 700px;/* width: 50%; */height: 100%;/* background-color: bisque; */}
+
 #dialog {  
     position: absolute;
     left: 33%;

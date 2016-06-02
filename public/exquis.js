@@ -250,8 +250,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
 
         var cellWidth = 150,
             cellHeight = 150,
-            dashboardWidth = animUris.length * cellWidth,
-            dashboardHeight = animUris[0].length * cellHeight,
+            dashboardWidth = animUris[0].length * cellWidth,
+            dashboardHeight = animUris.length * cellHeight,
             dashboard = document.getElementById('dashboard');
 
         dashboard.style.width = dashboardWidth + 'px';
