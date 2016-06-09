@@ -100,6 +100,15 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
                 this.setup();
             },
             
+            getSourceCode: function(){
+                if(this.currentCode.source){
+                    return Promise.resolve(this.currentCode.source);
+                }
+                return this.getSourceCodeString().then(function(scs){
+                    return {code: scs, lang: 'javascript'};
+                });
+            },
+            
             getSourceCodeString: function(){
                 if (this.codeCacheUri){
                     // the code is in the cache
@@ -184,12 +193,14 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
                 }else{
                     throw "no animation name";
                 }
-            }).then(function(canvasAnim){ 
-                return canvasAnim.getSourceCodeString();
-            }).then(function(codeString){
+            }).then(function(canvasAnim){
+                return canvasAnim.getSourceCode().then(function(scs){
+                    return {code: scs, lang: 'javascript'};
+                });
+            }).then(function(source){
                 if(canvasAnim.updateListener){
                     canvasAnim.updateListener(canvasAnim.animationName, 
-                                              codeString);
+                                              source);
                 }
             }).catch(function(e){
                 console.log(e);

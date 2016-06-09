@@ -83,8 +83,12 @@ define([], function(){
         aceEditor.renderer.setShowGutter(false);
         aceEditor.setFontSize("14px");
 
-	var setEditorContent = function(animationName, animCode){
-            aceEditor.setValue(animCode);
+	var setEditorContent = function(animationName, animSource){
+            if(animSource.lang != 'javascript'){
+                alert(animSource.code);
+                return;
+            }
+            aceEditor.setValue(animSource.code);
             aceEditor.getSession().selection.clearSelection();
             
             displayAnimationName(animationName);

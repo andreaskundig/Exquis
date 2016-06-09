@@ -19,7 +19,7 @@ Blockly.JavaScript['blankImage'] = function(block) {
  (blockly enum https://developers.google.com/blockly/custom-blocks/dropdown-menus)
  into image: canvasBuffer cb (blank image)
  at: point
- cb.context.putImageData(borders.east, point.x, point.y)
+ cb.context.putImageData(borders.east, point.x, point.y);
 
  
  */
@@ -100,6 +100,6 @@ Blockly.JavaScript['border'] = function(block) {
     var rectVar = vdb.getDistinctName('rect', Blockly.Variables.NAME_TYPE);
 
     var code = [value_image, '.context.putImageData(borders.', dropdown_name, ', ',
-                value_position, '.x,', value_position, '.y)\n'].join('');
+                value_position, '.x,', value_position, '.y);\n'].join('');
     return code;
 };

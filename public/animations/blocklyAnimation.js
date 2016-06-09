@@ -15,7 +15,7 @@ var setupAnimation = function(ctx){
   rotation = 0;
 };
 var drawAnimation = function(ctx, borders){
-  snapshot.context.putImageData(borders.north, ({x: 0, y: 0}).x,({x: 0, y: 0}).y)
+  snapshot.context.putImageData(borders.north, ({x: 0, y: 0}).x,({x: 0, y: 0}).y);
   snapshot.copyFromBuffer(ctx);snapshot.copyToBuffer(ctx, ({x: 0, y: 0}), ({width: 150, height: 150}));
   ctx.translate(25, 75 );
   ctx.rotate(rotation* Math.PI/180);
