@@ -77,10 +77,11 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
             currentCanvasAnim.updateListener = null;
         }
         currentCanvasAnim = canvasAnim;
-        currentCanvasAnim.updateListener = _view.setEditorContent;
         
-        canvasAnim.getSourceCode().then(function(source){
+        return canvasAnim.getSourceCode().then(function(source){
+            currentCanvasAnim.updateListener = _view.setEditorContent;
             _view.setEditorContent(canvasAnim.animationName, source);
+            _view.show();
         });
     };
 
@@ -90,20 +91,25 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
             _view.displayCodeValidity(false);
         }
     };
-    
-    return function(exquis, makeEditorView, store){
-        var controller = {
-            assController: makeAssemblageController(exquis),
-            animController: makeAnimationController(),
-            textAreaController: makeTextAreaController(),
-            updateWithCanvasAnim: updateWithCanvasAnim
-        };
-        _view = makeEditorView(controller);
-        _store = store;
-        controller.hide = _view.hide;
-        controller.show = _view.show;
-        controller.displayInvalidity = displayInvalidity;
-        return controller;
+
+    var views = {javascript: 'editorViewAce', blockly: 'editorViewBlockly'};
+    return function(exquis, store){
+        return new Promise(function(resolve, reject){
+            require([views.javascript], function(makeView){
+                var controller = {
+                    assController: makeAssemblageController(exquis),
+                    animController: makeAnimationController(),
+                    textAreaController: makeTextAreaController(),
+                    updateWithCanvasAnim: updateWithCanvasAnim
+                };
+                _view = makeView(controller);
+                _store = store;
+                //TODO hide function that calls hide on the stored current view 
+                controller.hide = _view.hide;
+                controller.displayInvalidity = displayInvalidity;
+                resolve(controller);
+            });
+        });
     };
 
 });

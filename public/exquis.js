@@ -236,7 +236,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
                 exquis.currentCell = currentCell; //only for debugging
                 csshelper.addClass(currentCell.hint, "visible-cell");
                 exquis.editorController.updateWithCanvasAnim(cell.canvasAnim);
-                exquis.editorController.show();
             };
 
             var editIcon = makeIcon("fa fa-pencil-square-o fa-lg", cell.ui.id + "-edit-icon");
@@ -254,7 +253,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
         document.addEventListener('click', possiblyHideEditor, true);
     };
 
-    var init = function (assName, animUris, makeEditorView, makeEditorController, store) {
+    var init = function (assName, animUris, makeEditorController, store) {
         var container = document.getElementById("container"),
             exquis = {};
         exquis.assName = assName;
@@ -325,8 +324,9 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             });
         };
 
-        var editorController = makeEditorController(exquis, makeEditorView, store);
-        addEditor(exquis, editorController);
+        makeEditorController(exquis, store).then(function(editorController){
+            addEditor(exquis, editorController);
+        });
 
         var render = function(){
             draw();

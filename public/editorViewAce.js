@@ -4,7 +4,6 @@ define([], function(){
             animController = controller.animController,
             textAreaController = controller.textAreaController;
 
-        
         var makeTextContentSetter = function(domElement){
             return function(name){
                 domElement.textContent = name;
@@ -70,7 +69,7 @@ define([], function(){
 	var editor = document.getElementById("editor"),
             displayAssemblageName = makeTextContentSetter(document.getElementById("assemblage_name")),
             displayAnimationName = makeTextContentSetter(document.getElementById("filename_display")),
-            aceEditor = ace.edit("ace"),
+            aceEditor = ace.edit("animation_editor"),
             displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor); 
         addAceListener(aceEditor, displayCodeValidity);
         makeAnimationButtons(displayAnimationName);
@@ -84,10 +83,6 @@ define([], function(){
         aceEditor.setFontSize("14px");
 
 	var setEditorContent = function(animationName, animSource){
-            if(animSource.lang != 'javascript'){
-                alert(animSource.code);
-                return;
-            }
             aceEditor.setValue(animSource.code);
             aceEditor.getSession().selection.clearSelection();
             

@@ -56,7 +56,7 @@ h2, h3 {
 .code_valid { border: solid rgb(25, 125, 255); }
 .invisible { display: none;}
 
-.ace_editor { 
+#animation_editor { 
     position: relative;
     height: 600px;
     width: 700px;
