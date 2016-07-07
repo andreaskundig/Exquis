@@ -70,11 +70,11 @@ define([], function(){
 	    setEditorContent: setEditorContent,
 	    show: function(){
                 alert('show blockly editor');
-		editor.className = "";
+		//editor.className = "";
 	    },
 	    hide: function(){
 		// unselect edition
-		editor.className = "invisible";
+		//editor.className = "invisible";
 	    },
             displayCodeValidity: displayCodeValidity
         };

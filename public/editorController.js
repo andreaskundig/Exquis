@@ -1,6 +1,7 @@
 define(['ui', 'net', 'evileval'], function(ui, net, evileval){
-    var _view;
-    var _store;
+    var _view,
+        _store,
+        _controller;
     
     var makeAssemblageController = function(exquis){
         var controller = {
@@ -79,9 +80,15 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         currentCanvasAnim = canvasAnim;
         
         return canvasAnim.getSourceCode().then(function(source){
-            currentCanvasAnim.updateListener = _view.setEditorContent;
-            _view.setEditorContent(canvasAnim.animationName, source);
-            _view.show();
+            var oldView = _view;
+            return provideViewForLang(source.lang).then(function(view){
+                if(oldView && oldView !== view){
+                    oldView.hide();
+                }
+                currentCanvasAnim.updateListener = _view.setEditorContent;
+                view.setEditorContent(canvasAnim.animationName, source);
+                view.show();
+            });
         });
     };
 
@@ -92,24 +99,33 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         }
     };
 
-    var views = {javascript: 'editorViewAce', blockly: 'editorViewBlockly'};
-    return function(exquis, store){
+    var provideViewForLang = function(lang){
+        if(views[lang].editor){
+            _view = views[lang].editor;
+            return Promise.resolve(_view);
+        }
         return new Promise(function(resolve, reject){
-            require([views.javascript], function(makeView){
-                var controller = {
-                    assController: makeAssemblageController(exquis),
-                    animController: makeAnimationController(),
-                    textAreaController: makeTextAreaController(),
-                    updateWithCanvasAnim: updateWithCanvasAnim
-                };
-                _view = makeView(controller);
-                _store = store;
+            require([views[lang].libName], function(makeView){
+                _view = makeView(_controller);
                 //TODO hide function that calls hide on the stored current view 
-                controller.hide = _view.hide;
-                controller.displayInvalidity = displayInvalidity;
-                resolve(controller);
+                _controller.hide = _view.hide;
+                _controller.displayInvalidity = displayInvalidity;
+                resolve(_view);
             });
         });
+    };
+    
+    var views = { javascript: { libName: 'editorViewAce', editor: null },
+                  blockly: {libName: 'editorViewBlockly', editor: null } };
+    return function(exquis, store){
+        _controller = {
+            assController: makeAssemblageController(exquis),
+            animController: makeAnimationController(),
+            textAreaController: makeTextAreaController(),
+            updateWithCanvasAnim: updateWithCanvasAnim
+        };
+        _store = store;
+        return _controller;
     };
 
 });

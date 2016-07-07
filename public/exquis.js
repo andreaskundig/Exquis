@@ -324,9 +324,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             });
         };
 
-        makeEditorController(exquis, store).then(function(editorController){
-            addEditor(exquis, editorController);
-        });
+        var editorController = makeEditorController(exquis, store);
+        addEditor(exquis, editorController);
 
         var render = function(){
             draw();
