@@ -1,14 +1,21 @@
 define([], function(){
+    
     var makeEditorView = function(controller){
-        var assController = controller.assController,
-            animController = controller.animController,
-            textAreaController = controller.textAreaController;
-
         var makeTextContentSetter = function(domElement){
             return function(name){
                 domElement.textContent = name;
             };
         };
+
+        var assController = controller.assController,
+            animController = controller.animController,
+            textAreaController = controller.textAreaController,
+	    editor = document.getElementById("editor"),
+            aceEditor,
+            displayAssemblageName = makeTextContentSetter(document.getElementById("assemblage_name")),
+            displayAnimationName = makeTextContentSetter(document.getElementById("filename_display")),
+            displayCodeValidity;
+
 
 	var makeAssemblageButtons = function(displayAssemblageName){
  	    var assemblageLoadButton = document.getElementById("assemblage_load_button"),
@@ -65,29 +72,59 @@ define([], function(){
             });
         };
 
+
+        var insertScriptTag = function(domParent, scriptUrl){
+            return new Promise(function(resolve, reject){
+                var scriptTag = document.createElement('script');
+
+                scriptTag.src = scriptUrl;
+                // scriptTag.async = false;
+                scriptTag.type = "text/javascript";
+                scriptTag.charset = "utf-8";
+                scriptTag.onload = function(){
+                    resolve();
+                };
+                
+                domParent.appendChild(scriptTag);
+            });
+        };
         
-	var editor = document.getElementById("editor"),
-            displayAssemblageName = makeTextContentSetter(document.getElementById("assemblage_name")),
-            displayAnimationName = makeTextContentSetter(document.getElementById("filename_display")),
-            aceEditor = ace.edit("animation_editor"),
-            displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor); 
-        addAceListener(aceEditor, displayCodeValidity);
-        makeAnimationButtons(displayAnimationName);
-        makeAssemblageButtons(displayAssemblageName);
-        displayAssemblageName(assController.getAssemblageName());
-
-
-        aceEditor.setTheme("ace/theme/katzenmilch");
-        aceEditor.getSession().setMode("ace/mode/javascript");
-        aceEditor.renderer.setShowGutter(false);
-        aceEditor.setFontSize("14px");
-
-	var setEditorContent = function(animationName, animSource){
-            aceEditor.setValue(animSource.code);
-            aceEditor.getSession().selection.clearSelection();
+        var injectHtml = function(){
+            var editorContainer = document.getElementById("animation_editor"),
+                editorHtml = '<div id="ace_editor"></div>',
+                scriptContainer = document.getElementsByTagName('head')[0],
+                scriptUrl = '/lib/ace/ace.js';
             
-            displayAnimationName(animationName);
-            displayCodeValidity(true);
+            editorContainer.insertAdjacentHTML('beforeend', editorHtml);
+
+            return insertScriptTag(scriptContainer, scriptUrl);
+        };
+
+        var injectPromise = injectHtml().then(function(){
+
+            aceEditor = ace.edit("ace_editor");
+            addAceListener(aceEditor, displayCodeValidity);
+            makeAnimationButtons(displayAnimationName);
+            makeAssemblageButtons(displayAssemblageName);
+            displayAssemblageName(assController.getAssemblageName());
+            displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor); 
+
+            aceEditor.setTheme("ace/theme/katzenmilch");
+            aceEditor.getSession().setMode("ace/mode/javascript");
+            aceEditor.renderer.setShowGutter(false);
+            aceEditor.setFontSize("14px");
+
+            //return 
+        });
+        
+	var setEditorContent = function(animationName, animSource){
+            injectPromise.then(function(){
+                aceEditor.setValue(animSource.code);
+                aceEditor.getSession().selection.clearSelection();
+                
+                displayAnimationName(animationName);
+                displayCodeValidity(true);
+            });
         };
 	
 	var theView = {
