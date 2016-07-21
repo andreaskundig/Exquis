@@ -105,6 +105,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
             return Promise.resolve(_view);
         }
         return new Promise(function(resolve, reject){
+            // TODO: include ace using require.js -> http://stackoverflow.com/questions/25664843/requirejs-baseurl-and-require-in-ace-js
             require([views[lang].libName], function(makeView){
                 _view = makeView(_controller);
                 //TODO hide function that calls hide on the stored current view 
