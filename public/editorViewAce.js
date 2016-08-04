@@ -65,22 +65,54 @@ define([], function(){
             });
         };
 
-        
+       var injectHtml = function(id){
+            var editorContainer = document.getElementById("animation_editor"),
+                editorHtml = '<div id="'+id+'"></div>';
+            editorContainer.insertAdjacentHTML('beforeend', editorHtml);
+       };
+        var insertAceJavascript = function(){
+            var scriptContainer = document.getElementsByTagName('head')[0],
+                scriptUrl = '/lib/ace/ace.js';
+            return new Promise(function(resolve, reject){
+                var scriptTag = document.createElement('script');
+
+                scriptTag.src = scriptUrl;
+                // scriptTag.async = false;
+                scriptTag.type = "text/javascript";
+                scriptTag.charset = "utf-8";
+                //scriptTag.onload = function(){
+                //    resolve();
+                //};
+
+                var timeoutHandle = function(){
+                    if(window.ace){
+                        resolve();
+                    }else{
+                        setTimeout(timeoutHandle, 10);
+                    }
+                };
+                setTimeout(timeoutHandle, 10);
+
+                scriptContainer.appendChild(scriptTag);
+            });
+        };
 	var editor = document.getElementById("editor"),
             displayAssemblageName = makeTextContentSetter(document.getElementById("assemblage_name")),
-            displayAnimationName = makeTextContentSetter(document.getElementById("filename_display")),
-            aceEditor = ace.edit("animation_editor"),
+            displayAnimationName = makeTextContentSetter(document.getElementById("filename_display"));
+        var editorId = 'the_ace_editor'; 
+        injectHtml(editorId);
+        
+        var aceEditor = ace.edit(editorId),
             displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor); 
-        addAceListener(aceEditor, displayCodeValidity);
-        makeAnimationButtons(displayAnimationName);
-        makeAssemblageButtons(displayAssemblageName);
-        displayAssemblageName(assController.getAssemblageName());
+            addAceListener(aceEditor, displayCodeValidity);
+            makeAnimationButtons(displayAnimationName);
+            makeAssemblageButtons(displayAssemblageName);
+            displayAssemblageName(assController.getAssemblageName());
 
-
-        aceEditor.setTheme("ace/theme/katzenmilch");
-        aceEditor.getSession().setMode("ace/mode/javascript");
-        aceEditor.renderer.setShowGutter(false);
-        aceEditor.setFontSize("14px");
+            aceEditor.setTheme("ace/theme/katzenmilch");
+            aceEditor.getSession().setMode("ace/mode/javascript");
+            aceEditor.renderer.setShowGutter(false);
+            aceEditor.setFontSize("14px");
 
 	var setEditorContent = function(animationName, animSource){
             aceEditor.setValue(animSource.code);
