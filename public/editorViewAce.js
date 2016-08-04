@@ -75,24 +75,14 @@ define([], function(){
                 scriptUrl = '/lib/ace/ace.js';
             return new Promise(function(resolve, reject){
                 var scriptTag = document.createElement('script');
-
                 scriptTag.src = scriptUrl;
-                // scriptTag.async = false;
                 scriptTag.type = "text/javascript";
                 scriptTag.charset = "utf-8";
-                //scriptTag.onload = function(){
-                //    resolve();
-                //};
-
-                var timeoutHandle = function(){
-                    if(window.ace){
-                        resolve();
-                    }else{
-                        setTimeout(timeoutHandle, 10);
-                    }
+                scriptTag.onload = function(){
+                    require(['ace/ace'], function(ace){
+                        resolve(ace);
+                    });
                 };
-                setTimeout(timeoutHandle, 10);
-
                 scriptContainer.appendChild(scriptTag);
             });
         };
@@ -102,7 +92,10 @@ define([], function(){
         var editorId = 'the_ace_editor'; 
         injectHtml(editorId);
         
-        var aceEditor = ace.edit(editorId),
+        var aceEditor,
+            displayCodeValidity; 
+        return insertAceJavascript().then(function(ace){
+            aceEditor = ace.edit(editorId);//"animation_editor"),
             displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor); 
             addAceListener(aceEditor, displayCodeValidity);
             makeAnimationButtons(displayAnimationName);
@@ -113,27 +106,28 @@ define([], function(){
             aceEditor.getSession().setMode("ace/mode/javascript");
             aceEditor.renderer.setShowGutter(false);
             aceEditor.setFontSize("14px");
-
-	var setEditorContent = function(animationName, animSource){
-            aceEditor.setValue(animSource.code);
-            aceEditor.getSession().selection.clearSelection();
+            var setEditorContent = function(animationName, animSource){
+                aceEditor.setValue(animSource.code);
+                aceEditor.getSession().selection.clearSelection();
+                
+                displayAnimationName(animationName);
+                displayCodeValidity(true);
+            };
             
-            displayAnimationName(animationName);
-            displayCodeValidity(true);
-        };
-	
-	var theView = {
-	    setEditorContent: setEditorContent,
-	    show: function(){
-		    editor.className = "";
-	    },
-	    hide: function(){
-		// unselect edition
-		    editor.className = "invisible";
-	    },
-            displayCodeValidity: displayCodeValidity
-        };
-        return theView;
+            var theView = {
+                setEditorContent: setEditorContent,
+                show: function(){
+                    editor.className = "";
+                },
+                hide: function(){
+                    // unselect edition
+                    editor.className = "invisible";
+                },
+                displayCodeValidity: displayCodeValidity
+            };
+            return theView;
+        });
+
     };
 
     return makeEditorView;

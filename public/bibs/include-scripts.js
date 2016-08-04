@@ -12,4 +12,3 @@ var addScript = function(src){
 };
 
 addScript("/bibs/paper-core.js");
-addScript("/lib/ace/ace.js");
