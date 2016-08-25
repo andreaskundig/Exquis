@@ -54,11 +54,23 @@ define([], function(){
         makeAssemblageButtons(displayAssemblageName);
         displayAssemblageName(assController.getAssemblageName());
 
+        var injectBlocklyIframe = function(id){
+            return new Promise(function(resolve, reject){
+                var editorContainer = document.getElementById("animation_editor"),
+                    iframe = document.createElement('iframe');
+                iframe.id = id;
+                iframe.src = '/blockly-editor.html';
+                iframe.onload = function() { console.log('loaded!'); resolve(); };
 
-        // aceEditor.setTheme("ace/theme/katzenmilch");
-        // aceEditor.getSession().setMode("ace/mode/javascript");
-        // aceEditor.renderer.setShowGutter(false);
-        // aceEditor.setFontSize("14px");
+                // TODO the ace editor sets listeners for the buttons.
+                // this is not the job of the editor, move it somewhere else...
+                // addAnimationButtonListeners(displayAnimationName);
+                // addAssemblageButtonListeners(displayAssemblageName);
+                editorContainer.appendChild(iframe);
+            });
+        };
+
+        
 
 	var setEditorContent = function(animationName, animSource){
             animationEditor.innerHtml = animSource.code;
@@ -69,16 +81,18 @@ define([], function(){
 	var theView = {
 	    setEditorContent: setEditorContent,
 	    show: function(){
-                alert('show blockly editor');
-		//editor.className = "";
+		editor.className = "";
 	    },
 	    hide: function(){
 		// unselect edition
-		//editor.className = "invisible";
+		editor.className = "invisible";
 	    },
             displayCodeValidity: displayCodeValidity
         };
-        return theView;
+        
+        return injectBlocklyIframe('blockly-editor').then(function(){
+            return theView;
+        });
     };
 
     return makeEditorView;

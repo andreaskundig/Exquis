@@ -10,7 +10,7 @@ define([], function(){
             };
         };
 
-	var makeAssemblageButtons = function(displayAssemblageName){
+	var addAssemblageButtonListeners = function(displayAssemblageName){
  	    var assemblageLoadButton = document.getElementById("assemblage_load_button"),
 	        assemblageSaveButton = document.getElementById("assemblage_save_button"),
 	        assemblageSaveAsButton = document.getElementById("assemblage_save_as_button");
@@ -24,7 +24,7 @@ define([], function(){
             assemblageSaveAsButton.addEventListener('click', assemblageSaveAs, true);
         };
         
-        var makeAnimationButtons = function(displayAnimationName) {
+        var addAnimationButtonListeners = function(displayAnimationName) {
 
 	    var animSaveButton = document.getElementById("animation_save_button"),
 		animSaveAsButton = document.getElementById("animation_save_as_button");
@@ -98,8 +98,8 @@ define([], function(){
             aceEditor = ace.edit(editorId);//"animation_editor"),
             displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor); 
             addAceListener(aceEditor, displayCodeValidity);
-            makeAnimationButtons(displayAnimationName);
-            makeAssemblageButtons(displayAssemblageName);
+            addAnimationButtonListeners(displayAnimationName);
+            addAssemblageButtonListeners(displayAssemblageName);
             displayAssemblageName(assController.getAssemblageName());
 
             aceEditor.setTheme("ace/theme/katzenmilch");

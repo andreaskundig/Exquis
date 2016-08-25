@@ -105,12 +105,15 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
             return Promise.resolve(_view);
         }
         return new Promise(function(resolve, reject){
+            console.log(lang, views);
             require([views[lang].libName], function(makeView){
-                _view = makeView(_controller);
-                //TODO hide function that calls hide on the stored current view 
-                _controller.hide = _view.hide;
-                _controller.displayInvalidity = displayInvalidity;
-                resolve(_view);
+                makeView(_controller).then(function(view){
+                    _view = view; 
+                    //TODO hide function that calls hide on the stored current view 
+                    _controller.hide = _view.hide;
+                    _controller.displayInvalidity = displayInvalidity;
+                    resolve(_view);
+                });
             });
         });
     };
