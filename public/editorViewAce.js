@@ -65,11 +65,16 @@ define([], function(){
             });
         };
 
-       var injectHtml = function(id){
+        var injectHtml = function(id){
             var editorContainer = document.getElementById("animation_editor"),
                 editorHtml = '<div id="'+id+'"></div>';
+
+            document.getElementById('editor').Classname = 'editor_medium_width';
+            if(editorContainer.firstChild){
+                editorContainer.removeChild(editorContainer.firstChild);
+            }
             editorContainer.insertAdjacentHTML('beforeend', editorHtml);
-       };
+        };
         var insertAceJavascript = function(){
             var scriptContainer = document.getElementsByTagName('head')[0],
                 scriptUrl = '/lib/ace/ace.js';
@@ -117,10 +122,9 @@ define([], function(){
             var theView = {
                 setEditorContent: setEditorContent,
                 show: function(){
-                    editor.className = "";
+                    editor.className = "editor_medium_width";
                 },
                 hide: function(){
-                    // unselect edition
                     editor.className = "invisible";
                 },
                 displayCodeValidity: displayCodeValidity

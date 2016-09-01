@@ -17,15 +17,13 @@
      require.config({
          baseUrl: ".",
          paths: {
-             "bollockly": "blk/bollockly"
+             "blockly-editor": "blk/blockly-editor"
          }
      });
-     require( ["bollockly"], function(bollo) { bollo(); }
-     );
     </script>
   </head>
   <body >
-    <div id="blocklyDiv" style="height: 570px; width: 800px;position:absolute; top: 0px; left:0px"></div>
+    <div id="blocklyDiv" style="height: 100%; width: 100%;position:absolute; top: 0px; left:0px"></div>
     <xml id="toolbox" style="display: none">
       <category name="standard">
         <block type="controls_if"></block>
@@ -57,16 +55,5 @@
         <block type="transformation_sandbox"></block>
       </category>
     </xml>
-    <div style="position: absolute; top:0px; left: 810px">
-      <textarea id="textarea" style="width:400px; height:570px"></textarea>
-      <br>
-      <button onclick="execute()">exec</button>
-      <button onclick="save()">save</button>
-      <button onclick="load()">load</button>
-    </div>
-    <div style="position: absolute; top:0px; left: 1210px; width: 150px"> 
-      <canvas width="150" height="150" id="borders-north"></canvas>
-      <canvas width="150" height="150" id="canvas"></canvas>
-    </div> 
   </body>
 </html>

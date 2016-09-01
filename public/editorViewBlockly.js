@@ -58,6 +58,7 @@ define([], function(){
             return new Promise(function(resolve, reject){
                 var editorContainer = document.getElementById("animation_editor"),
                     iframe = document.createElement('iframe');
+
                 iframe.id = id;
                 iframe.src = '/blockly-editor.html';
                 iframe.onload = function() { console.log('loaded!'); resolve(); };
@@ -66,6 +67,9 @@ define([], function(){
                 // this is not the job of the editor, move it somewhere else...
                 // addAnimationButtonListeners(displayAnimationName);
                 // addAssemblageButtonListeners(displayAssemblageName);
+                if(editorContainer.firstChild){
+                    editorContainer.removeChild(editorContainer.firstChild);
+                }
                 editorContainer.appendChild(iframe);
             });
         };
@@ -73,20 +77,27 @@ define([], function(){
         
 
 	var setEditorContent = function(animationName, animSource){
-            animationEditor.innerHtml = animSource.code;
+            //TODO call a function in the iframe
+            // document.getElementById('blockly-editor').contentWindow.sourceCode = animSource.code;
+            // document.getElementById('blockly-editor').contentWindow.hello('animSource.code');
+            document.getElementById('blockly-editor')
+                .contentWindow
+                .require( ["blockly-editor"], function(editor) {
+                    editor.setEditorContent(animSource.code);
+                });
+            // animationEditor.innerHtml = animSource.code;
             displayAnimationName(animationName);
             displayCodeValidity(true);
         };
 	
 	var theView = {
 	    setEditorContent: setEditorContent,
-	    show: function(){
-		editor.className = "";
-	    },
-	    hide: function(){
-		// unselect edition
-		editor.className = "invisible";
-	    },
+            show: function(){
+                editor.className = "editor_full_width";
+            },
+            hide: function(){
+                editor.className = "invisible";
+            },
             displayCodeValidity: displayCodeValidity
         };
         

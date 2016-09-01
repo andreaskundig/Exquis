@@ -1,23 +1,44 @@
+body{
+    font-family: Sans-Serif;
+}
 
-h2, h3 { display: inline;}
-.grid { width: 450px; max-width: 450px; position: absolute}
-#grid_hint{z-index: 1}
-#editor { position: absolute; left: 50%; }
-#dialog {  position: absolute;
-           left: 33%;
-	   top:40px;
-	   background-color: white;
-	   padding: 5px;
-           width: 400px;
-           border-radius: 4px;
+h2, h3 {
+    display: inline;
+}
+
+#container{max-width: 1301px;position: relative;height: 100%;}
+
+#dashboard{position: absolute;left: 0;top: 0;}
+
+#editor {position: absolute;right: 0;top: 0;min-width: 700px; height: 100%;}
+
+#dialog {  
+    position: absolute;
+    left: 33%;
+    top:40px;
+    background-color: white;
+    padding: 10px ;
+    width: 400px;
+    border-radius: 4px;
  }
 #dialog_content {
-           overflow: auto;
-           max-height: 400px;
+    overflow: auto;
+    max-height: 400px;
+}
+#dialog_content > ul {
+    padding-left: 10px;
+    margin: 0px;
+}
+#dialog_content > ul > li {
+    list-style: none;
+    padding-bottom: 5px;
+    cursor: pointer;
 }
 #dialog_title { min-height: 30px;
+                padding-bottom: 10px;
                 font-size: 200%; }
-#dialog_footer { min-height: 30px; }
+#dialog_footer { min-height: 30px; 
+                 padding-top: 10px;}
 #dialog > p { padding: 2%; margin: 0}
 #dialog > p:hover { background-color:darkgrey;}
 #modal { position: fixed;
@@ -27,14 +48,21 @@ h2, h3 { display: inline;}
          left: 0;
          z-index: 999;
 	 background-color: rgba(100, 100, 100, 0.5); }
-.cell { width: 150px;  height: 150px; position:absolute}
+.cell, .cellUi { width: 150px;  height: 150px; position:absolute}
+.cellUi > span{ position: relative; margin: 5px; float: right }
 .hint { width: 148px;  height: 148px; position:absolute;border: 1px solid rgba(0,0,0,0);}
 .visible-grid, .visible-cell{ border: 1px solid rgba(200, 200, 200, 0.5); }
 .code_invalid { border: solid rgb(255, 0, 0); }
 .code_valid { border: solid rgb(25, 125, 255); }
 .invisible { display: none;}
 
-.ace_editor { 
+/* #animation_editor { */
+/*     position: relative; */
+/*     height: 600px; */
+/*     width: 700px; */
+/* } */
+
+#the_ace_editor { 
     position: relative;
     height: 600px;
     width: 700px;
@@ -57,12 +85,13 @@ h2, h3 { display: inline;}
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-color: #F7F7F9;
-    border: 1px solid transparent;
+    background-color:  rgb(248, 248, 248);
+    border: 1px solid rgb(185, 185, 185);
     background-image: none;
     border-radius: 4px;   
  }
 
 .btn:hover{
-    background-color: lightgray;
+    border: 1px solid rgb(165, 165, 165);
+    background-color: rgb(222, 222, 222);
 }
