@@ -7,62 +7,57 @@ define(["nodestore", "evileval"], function(store, evileval){
         Blockly.Xml.domToWorkspace( Blockly.mainWorkspace, xml );
     };
 
-    function loadBlockly(){
-        
-        workspace = Blockly.inject('blocklyDiv',
-                                       {toolbox: document.getElementById('toolbox')});
-        // setXmlCode(startcode);
-        function myUpdateFunction() {
-            var code = Blockly.JavaScript.workspaceToCode(workspace);
-            console.log(code);
-        }
-        workspace.addChangeListener(myUpdateFunction);
+    
+    workspace = Blockly.inject('blocklyDiv',
+                               {toolbox: document.getElementById('toolbox')});
 
-        window.save  = function (){
-            var code = extractAnimationCodeString(),
-                canvasAnim = {
-                    animationName: "blocklyAnimation",
-                    codeCacheUri: evileval.toDataUri(code)
-                };
+    window.save  = function (){
+        var code = extractAnimationCodeString(),
+            canvasAnim = {
+                animationName: "blocklyAnimation",
+                codeCacheUri: evileval.toDataUri(code)
+            };
 
-            store.saveAnimation(canvasAnim);
-            //localStorage.setItem('data',Blockly.Xml.domToText(dom));
-        };
+        store.saveAnimation(canvasAnim);
+        //localStorage.setItem('data',Blockly.Xml.domToText(dom));
+    };
 
-        window.saveToNode = function(){
-            var dom = Blockly.Xml.workspaceToDom(workspace);
-            var serialized = Blockly.Xml.domToText(dom); 
-            console.log(store);
-        };
-        
-        window.load = function () {
+    window.saveToNode = function(){
+        var dom = Blockly.Xml.workspaceToDom(workspace);
+        var serialized = Blockly.Xml.domToText(dom); 
+        console.log(store);
+    };
+    
+    window.load = function () {
 
-            var uri = '/animations/blocklyAnimation.js';
-            
-            evileval.loadJsAnim(uri).then(function(anim){
-                var xml = Blockly.Xml.textToDom(anim.source.code);
-                Blockly.mainWorkspace.clear();
-                Blockly.Xml.domToWorkspace( Blockly.mainWorkspace, xml);
-            });
-        };
+        var uri = '/animations/blocklyAnimation.js';
+        
+        evileval.loadJsAnim(uri).then(function(anim){
+            var xml = Blockly.Xml.textToDom(anim.source.code);
+            Blockly.mainWorkspace.clear();
+            Blockly.Xml.domToWorkspace( Blockly.mainWorkspace, xml);
+        });
+    };
 
-        var extractAnimationCodeString = function(){
-            var dom = Blockly.Xml.workspaceToDom(workspace);
-            Blockly.JavaScript.addReservedWords('code');
-            var code = "define(['bibs/canvasBuffer'], function(makeBuffer){\n";
-            code += Blockly.JavaScript.workspaceToCode(workspace);
-            code += "\nvar xmlSource = '";
-            code += Blockly.Xml.domToText(dom) + "';\n";
-            code += "return { setup: setupAnimation, draw: drawAnimation, source: { code: xmlSource, lang: 'blockly' } };\n";
-            code += "});\n";
-            console.log(code);
-            return code;
-        };
-        
-        
-        
-    }
-    loadBlockly();
+    var extractAnimationCodeString = function(){
+        var dom = Blockly.Xml.workspaceToDom(workspace);
+        Blockly.JavaScript.addReservedWords('code');
+        var code = "define(['bibs/canvasBuffer'], function(makeBuffer){\n";
+        code += Blockly.JavaScript.workspaceToCode(workspace);
+        code += "\nvar xmlSource = '";
+        code += Blockly.Xml.domToText(dom) + "';\n";
+        code += "return { setup: setupAnimation, draw: drawAnimation, source: { code: xmlSource, lang: 'blockly' } };\n";
+        code += "});\n";
+        // console.log(code);
+        return code;
+    };
+    
+    var addChangeListener = function(cb){
+        workspace.addChangeListener(function(event){
+            cb(extractAnimationCodeString());
+        });
+    };
     return {//TODO getSourceCode (?)
+        addChangeListener: addChangeListener,
         setEditorContent: setXmlCode};
 });

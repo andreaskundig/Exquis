@@ -29,7 +29,6 @@ define([], function(){
 	    var animSaveButton = document.getElementById("animation_save_button"),
 		animSaveAsButton = document.getElementById("animation_save_as_button");
 
-            
 	    animSaveButton.addEventListener('click', animController.save, true);
 
 	    var animSaveAs = function(){
@@ -43,9 +42,8 @@ define([], function(){
                 element.className = valid ? "code_valid" : "code_invalid";
             };
         };
-
         
-	var editor = document.getElementById("editor"),
+	var editorDom = document.getElementById("editor"),
             displayAssemblageName = makeTextContentSetter(document.getElementById("assemblage_name")),
             displayAnimationName = makeTextContentSetter(document.getElementById("filename_display")),
             animationEditor = document.getElementById("animation_editor"),
@@ -61,7 +59,11 @@ define([], function(){
 
                 iframe.id = id;
                 iframe.src = '/blockly-editor.html';
-                iframe.onload = function() { console.log('loaded!'); resolve(); };
+                iframe.onload = function() {
+                    iframe.contentWindow.require( ["blockly-editor"], function(ed) {
+                        resolve(ed);
+                    });
+                };
 
                 // TODO the ace editor sets listeners for the buttons.
                 // this is not the job of the editor, move it somewhere else...
@@ -74,18 +76,12 @@ define([], function(){
             });
         };
 
-        
-
 	var setEditorContent = function(animationName, animSource){
-            //TODO call a function in the iframe
-            // document.getElementById('blockly-editor').contentWindow.sourceCode = animSource.code;
-            // document.getElementById('blockly-editor').contentWindow.hello('animSource.code');
             document.getElementById('blockly-editor')
                 .contentWindow
-                .require( ["blockly-editor"], function(editor) {
-                    editor.setEditorContent(animSource.code);
+                .require( ["blockly-editor"], function(ed) {
+                    ed.setEditorContent(animSource.code);
                 });
-            // animationEditor.innerHtml = animSource.code;
             displayAnimationName(animationName);
             displayCodeValidity(true);
         };
@@ -93,15 +89,18 @@ define([], function(){
 	var theView = {
 	    setEditorContent: setEditorContent,
             show: function(){
-                editor.className = "editor_full_width";
+                editorDom.className = "editor_full_width";
             },
             hide: function(){
-                editor.className = "invisible";
+                editorDom.className = "invisible";
             },
             displayCodeValidity: displayCodeValidity
         };
         
-        return injectBlocklyIframe('blockly-editor').then(function(){
+        return injectBlocklyIframe('blockly-editor').then(function(ed){
+            ed.addChangeListener(function(animCode){
+                textAreaController.onCodeChange(animCode);
+            });
             return theView;
         });
     };
