@@ -1,6 +1,7 @@
 "use strict";
 
-define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshelper, evileval, net, ui){
+define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar"],
+       function(iter2d, csshelper, evileval, net, ui, menubar){
             
 
     var makeCell = function(row, col, height, width){
@@ -8,24 +9,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             context = canvas.getContext("2d"), 
             cell = {};
         cell.context = context;
-        cell.hint = createCellDiv("hint", row, col, height, width);
+        cell.hint = createCellDiv("hint invisible", row, col, height, width);
+        cell.hint.style.border = '1px solid rgba(200, 200, 200, 0.5)';
         cell.ui = makeCellUi(row, col, height, width);
         return cell;
-    };
-
-    var addCellUiListeners = function(cellUi, canvasAnim, store){
-        var childNodes = cellUi.childNodes;
-        cellUi.addEventListener("mouseover", function(e){
-            for(var i = 0; i < childNodes.length; i++){
-                childNodes[i].style.visibility = "visible";
-            };
-        });
-        cellUi.addEventListener("mouseout", function(e){
-            for(var i = 0; i < childNodes.length; i++){
-                childNodes[i].style.visibility = "hidden";
-            };
-        });
-        addLoadAnimationHandler(cellUi.id, canvasAnim, store); 
     };
 
     var makeCanvasAnimation = function(context){
@@ -162,7 +149,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
 
     var makeIcon = function(classNames, id){
         var icon = document.createElement('span');
-        icon.style.visibility = "hidden";
         icon.style.cursor = "pointer"; 
         icon.className = classNames;
         if(id){
@@ -177,6 +163,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
         var loadAnimationIcon = makeIcon("fa fa-folder-open-o fa-lg",
                                          cellUi.id + loadIconSuffix);
         cellUi.appendChild(loadAnimationIcon);
+        csshelper.addClass(cellUi, 'invisible');
         return cellUi;
     };
 
@@ -208,33 +195,18 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
 
         });
     };
-    
-    var addHintListeners = function(cells){
-        var showGridHint = function(show){
-            iter2d.forEach2dArray(cells, function(cell, row,col){
-                (show ? csshelper.addClass : csshelper.removeClass)(cell.hint, "visible-grid");
-            });
-        };
-
-        var onDashboardOver = function(e){  showGridHint(true);};
-        var onDashboardOut = function(e){ showGridHint(false);};
-
-        document.getElementById("dashboard").addEventListener("mouseover", onDashboardOver, false);
-        document.getElementById("dashboard").addEventListener("mouseout", onDashboardOut, false);
-
-    };
-
 
     var currentCell;
     var addEditor = function(exquis, editorController){
         exquis.editorController = editorController;
         
         iter2d.forEach2dArray(exquis.cells, function(cell){
-            var edit = function(){ 
-                if (currentCell) { csshelper.removeClass(currentCell.hint, "visible-cell"); }
+            var edit = function(){
+                hideHints();
+                // if (currentCell) { csshelper.addClass(currentCell.hint, "invisible"); }
                 currentCell = cell;
                 exquis.currentCell = currentCell; //only for debugging
-                csshelper.addClass(currentCell.hint, "visible-cell");
+                csshelper.removeClass(currentCell.hint, "invisible");
                 exquis.editorController.updateWithCanvasAnim(cell.canvasAnim);
             };
 
@@ -247,12 +219,18 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
             if (event.target.tagName === "HTML"){
                 // unselect edition
                 exquis.editorController.hide();
-                if (currentCell) { csshelper.removeClass(currentCell.hint, "visible-cell"); }
+                if (currentCell) { csshelper.addClass(currentCell.hint, "invisible"); }
             }
         };
         document.addEventListener('click', possiblyHideEditor, true);
     };
-
+           
+   var hideHints = function(){
+       document.querySelectorAll('.cellUi, .hint').forEach(
+           function(el){
+               csshelper.addClass(el, 'invisible');
+           });
+   };
     var init = function (assName, animUris, makeEditorController, store) {
         var container = document.getElementById("container"),
             exquis = {};
@@ -261,22 +239,27 @@ define(["iter2d", "csshelper", "evileval", "net", "ui"], function(iter2d, csshel
         var cellWidth = 150,
             cellHeight = 150,
             dashboardWidth = animUris[0].length * cellWidth,
-            dashboardHeight = animUris.length * cellHeight,
             dashboard = document.getElementById('dashboard');
 
-        dashboard.style.width = dashboardWidth + 'px';
-        dashboard.style.height = dashboardHeight + 'px';
+        menubar.init(dashboardWidth);
+        menubar.addCloseListener(hideHints);
+        menubar.addOpenListener(function(){
+            document.querySelectorAll('.cellUi, .hint').forEach(
+                function(el){
+                    csshelper.removeClass(el, 'invisible');
+                });
+        });
         
         exquis.cells = iter2d.map2dArray(animUris,function(animUri,row,col){
             var cell = makeCell(row, col, cellHeight, cellWidth);
 
             cell.canvasAnim = makeCanvasAnimation(cell.context);
-            addCellUiListeners(cell.ui, cell.canvasAnim, store);
+            // addCellUiListeners(cell.ui, cell.canvasAnim, store);
             cell.canvasAnim.loadAnim(animUri);
             return cell;
         });
         
-        addHintListeners(exquis.cells);
+        // addHintListeners(exquis.cells);
         
         exquis.assemblage = function(){
             var animationNames = iter2d.map2dArray(

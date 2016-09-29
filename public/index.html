@@ -14,35 +14,43 @@
 <body>
 
     <div id="container">
+        <div id="menubar">
+            <span id="menubar-open">
+                <i class="fa fa-cog fa-2x" aria-hidden="true"></i>
+            </span >
+            <span id="menubar-close" >
+                <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+            </span>
+        </div>
         <div id="dashboard" class="grid"></div>
 
         <div class="invisible" id="editor">
-         <div id="assemblage">
-            <h2 id="assemblage_name"></h2> 
-            <div id="assemblage-buttons">
-              <button id="assemblage_load_button" class="btn" type="button">load</button>
-              <button id="assemblage_save_button" class="btn" type="button">save</button>
-              <button id="assemblage_save_as_button" class="btn" type="button">save as</button>
+            <div id="assemblage">
+                <h2 id="assemblage_name"></h2> 
+                <div id="assemblage-buttons">
+                    <button id="assemblage_load_button" class="btn" type="button">load</button>
+                    <button id="assemblage_save_button" class="btn" type="button">save</button>
+                    <button id="assemblage_save_as_button" class="btn" type="button">save as</button>
+                </div>
             </div>
-          </div>
-          
-          <div >
-            <h3 id="filename_display"></h3> 
-            <div id="editor-buttons">
-              <button id="animation_save_button" class="btn" type="button">save</button>
-              <button id="animation_save_as_button" class="btn" type="button">save as</button>
+            
+            <div >
+                <h3 id="filename_display"></h3> 
+                <div id="editor-buttons">
+                    <button id="animation_save_button" class="btn" type="button">save</button>
+                    <button id="animation_save_as_button" class="btn" type="button">save as</button>
+                </div>
+                <div id="animation_editor">
+                </div>
             </div>
-            <div id="animation_editor">
-            </div>
-         </div>
         </div>
     </div>
     <div class="invisible" id="modal">
-      <div id="dialog">
-        <div id="dialog_title"></div>
-        <div id="dialog_content"></div>
-        <div id="dialog_footer"></div>
-      </div>
+        <div id="dialog">
+            <div id="dialog_title"></div>
+            <div id="dialog_content"></div>
+            <div id="dialog_footer"></div>
+        </div>
     </div>
 </body>
 </html>

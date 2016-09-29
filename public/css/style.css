@@ -8,7 +8,7 @@ h2, h3 {
 
 #container{max-width: 1301px;position: relative;height: 100%;}
 
-#dashboard{position: absolute;left: 0;top: 0;}
+#dashboard{position: absolute;left: 0;top: 10;}
 
 .editor_medium_width {position: absolute;right: 0;top: 0;min-width: 700px;}
 .editor_full_width {position: absolute;right: 0;top: 0;width: 100%;}
