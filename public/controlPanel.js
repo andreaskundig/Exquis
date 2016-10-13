@@ -11,11 +11,16 @@ define(['csshelper', 'iter2d' ], function(csshelper){
         }
     };
 
+    var hide = function(){
+        csshelper.addClass(rootDom, 'invisible');
+    };
+    
     var addEditor = function(zeEditorController){
         editorController = zeEditorController;
     };
 
     return {
+        hide: hide,
         show: show,
         addEditor: addEditor
     };

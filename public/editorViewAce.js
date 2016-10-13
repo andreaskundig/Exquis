@@ -69,7 +69,7 @@ define([], function(){
             var editorContainer = document.getElementById("animation_editor"),
                 editorHtml = '<div id="'+id+'"></div>';
 
-            document.getElementById('editor').Classname = 'editor_medium_width';
+            document.getElementById('editor').className = 'editor_medium_width';
             if(editorContainer.firstChild){
                 editorContainer.removeChild(editorContainer.firstChild);
             }

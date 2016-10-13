@@ -1,18 +1,25 @@
 * ui
-** modal plus supportable, qui ne dépasse pas de l'écran
-** filepicker hierarchique 
-** nom de l'assemblage au dessus des animations (avec un moyen de le cacher?)
-** trouver un moyen de laisser une animation réagir aux clicks sans ouvrir l'éditeur
+** menubar: icone [cog] / [nom de l'assemblage + pencil + x]
+cog: fait apparaitre le groupe [nom pencil x] et les cogs des animations
+pencil: ouvre le control panel d'assemblage
+cogs des animations: ouvre le control panel d'une animation
+x: fait apparaitre cog et disparaitre le reste, control panel compris.
+** control panel assemblage: icone pencil, nom d'assemblage, icone save, icone load
+groupe edit, nom d'assemblage: click rend le nom éditable.
+save: activé quand le nom est activé, ou une animation a changé de nom
+load: charge un autre assemblage
 
-** mettre le titre de l'assemblage a coté des boutons pour le modifier
-** rendre le role des boutons plus clair
-par exemple en mettant les boutons de l'animation à coté de son nom, ou les mettre dans un bloc visuel
-** collapsing textareas
+un seul tab avec une liste d'assemblages. 
+click sur le nom d'un assemblage le charge sans fermer le control panel
+** control panel: tab animations, tab editeur, (tab settings quand on en aura)
+une animation est chargée dès qu'elle est cliquée sur le tab animations
+** filepicker hierarchique 
+** trouver un moyen de laisser une animation réagir aux clicks sans ouvrir l'éditeur
+actuellement c'est le hint qui prend le click. Une solution serait de ne mettre
+les hints que sur les bords de l'animation (4 div minces)
 ** mecanisme pour signaler les animations à enregistrer
 * new animations
 * bugs
-
-* implement blockly interface https://code.google.com/p/blockly/
 * allow usage of files from external urls (github.com, pastebin, etc)
 define a assemblage file with urls
 
@@ -20,6 +27,3 @@ define a assemblage file with urls
 so that jsfiddle's javascript editor can be used to write animations or assemblages
 * faire en sorte que ça tourne sans serveur (ni internet?)
 avoir des animations par defaut dans des fichiers javascripts chargés par index.html
-* include
-** catch onScriptError (require.js) pour choper quand l'addresse est invalide ou le serveur injoignable
-** qu'est ce qui se passe quand le code de la lib est invalide

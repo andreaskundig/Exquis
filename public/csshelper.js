@@ -1,5 +1,6 @@
 define({
     addClass : function(element, className){
+        if(element.className.match("\\b"+className+"\\b")) return;
 	element.className += " "+className;
     },
     removeClass : function(element, className){

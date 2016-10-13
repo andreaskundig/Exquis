@@ -1,7 +1,7 @@
 "use strict";
 
-define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar"],
-       function(iter2d, csshelper, evileval, net, ui, menubar){
+define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel"],
+       function(iter2d, csshelper, evileval, net, ui, menubar, controlPanel){
             
 
     var makeCell = function(row, col, height, width){
@@ -157,14 +157,30 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar"],
         return icon;
     };
     
-    var loadIconSuffix = "-load-icon"; 
+    var loadIconSuffix = "-load-icon",
+        controlPanelIconSuffix = "-control-panel-icon";
     var makeCellUi = function(row, col, height, width){
         var cellUi = createCellDiv("cellUi", row, col, height, width);
+
         var loadAnimationIcon = makeIcon("fa fa-folder-open-o fa-lg",
                                          cellUi.id + loadIconSuffix);
         cellUi.appendChild(loadAnimationIcon);
+
+
+        var controlPanelIcon = makeIcon("fa fa-cog fa-lg",
+                                        cellUi.id + controlPanelIconSuffix);
+        cellUi.appendChild(controlPanelIcon);
+        
         csshelper.addClass(cellUi, 'invisible');
         return cellUi;
+    };
+
+    var addControlPanelIconHandler = function(cell){
+        var controlPanelIcon = document.getElementById(cell.ui.id + controlPanelIconSuffix);
+        
+        controlPanelIcon.addEventListener('click', function(){
+            controlPanel.show(cell);
+        });
     };
 
     var addLoadAnimationHandler = function(cellUiId, canvasAnim, store){
@@ -196,33 +212,9 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar"],
         });
     };
 
-    var currentCell;
     var addEditor = function(exquis, editorController){
         exquis.editorController = editorController;
-        
-        iter2d.forEach2dArray(exquis.cells, function(cell){
-            var edit = function(){
-                hideHints();
-                // if (currentCell) { csshelper.addClass(currentCell.hint, "invisible"); }
-                currentCell = cell;
-                exquis.currentCell = currentCell; //only for debugging
-                csshelper.removeClass(currentCell.hint, "invisible");
-                exquis.editorController.updateWithCanvasAnim(cell.canvasAnim);
-            };
-
-            var editIcon = makeIcon("fa fa-pencil-square-o fa-lg", cell.ui.id + "-edit-icon");
-            editIcon.addEventListener('click', edit, false);
-            cell.ui.appendChild(editIcon);
-        });
-        
-        var possiblyHideEditor = function(event){
-            if (event.target.tagName === "HTML"){
-                // unselect edition
-                exquis.editorController.hide();
-                if (currentCell) { csshelper.addClass(currentCell.hint, "invisible"); }
-            }
-        };
-        document.addEventListener('click', possiblyHideEditor, true);
+        controlPanel.addEditor(editorController);
     };
            
    var hideHints = function(){
@@ -250,11 +242,19 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar"],
                 });
         });
         
+        var possiblyHideControlPanel = function(event){
+            if (event.target.tagName === "HTML"){
+                controlPanel.hide();
+            }
+        };
+        document.addEventListener('click', possiblyHideControlPanel, true);
+        
         exquis.cells = iter2d.map2dArray(animUris,function(animUri,row,col){
             var cell = makeCell(row, col, cellHeight, cellWidth);
 
             cell.canvasAnim = makeCanvasAnimation(cell.context);
-            // addCellUiListeners(cell.ui, cell.canvasAnim, store);
+            addLoadAnimationHandler(cell.ui.id, cell.canvasAnim, store);
+            addControlPanelIconHandler(cell);
             cell.canvasAnim.loadAnim(animUri);
             return cell;
         });
