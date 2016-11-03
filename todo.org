@@ -4,22 +4,44 @@ cog: fait apparaitre le groupe [nom pencil x] et les cogs des animations
 pencil: ouvre le control panel d'assemblage
 cogs des animations: ouvre le control panel d'une animation
 x: fait apparaitre cog et disparaitre le reste, control panel compris.
-** control panel assemblage: icone pencil, nom d'assemblage, icone save, icone load
+
+** control panel assemblage: [icone pencil, nom d'assemblage], icone save
 groupe edit, nom d'assemblage: click rend le nom éditable.
 save: activé quand le nom est activé, ou une animation a changé de nom
-load: charge un autre assemblage
 
 un seul tab avec une liste d'assemblages. 
 click sur le nom d'un assemblage le charge sans fermer le control panel
-** control panel: tab animations, tab editeur, (tab settings quand on en aura)
+
+** control panel animation: tab animations, tab editeur, (tab settings quand on en aura)
 une animation est chargée dès qu'elle est cliquée sur le tab animations
+
 ** filepicker hierarchique 
+
 ** trouver un moyen de laisser une animation réagir aux clicks sans ouvrir l'éditeur
 actuellement c'est le hint qui prend le click. Une solution serait de ne mettre
 les hints que sur les bords de l'animation (4 div minces)
+
 ** mecanisme pour signaler les animations à enregistrer
+
+** éditer les librairies
+comment recharger une librairie éditée avant qu'elle soit enregistrée? 
+comment recharger la nouvelle version d'une librairie?
+require.js a undef pour enlever une librairie, on peut ensuite la recharger.
+comment charger la dernière version d'une librairie?
+faire nos propres require1 et define1([x,y..], f) qui prennent le premier argument
+trouvent la dernière version de x, y et appellent require/define de requirejs
+avec la dernière version.
+pour éviter d'avoir besoin d'écrire require1 au lieu de require dans les animations
+on peut remplacer require par une variable locale dans le contexte de l'animation.
+
+Comment recharger toutes les animations qui utilisent un librairie lorsqu'on met
+à jour la librairie? Nos require1 et define1 doivent garder en mémoire les dépendances
+des animations chargées. 
+
 * new animations
+
 * bugs
+
 * allow usage of files from external urls (github.com, pastebin, etc)
 define a assemblage file with urls
 
