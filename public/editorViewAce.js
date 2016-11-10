@@ -69,7 +69,6 @@ define([], function(){
             var editorContainer = document.getElementById("animation_editor"),
                 editorHtml = '<div id="'+id+'"></div>';
 
-            document.getElementById('editor').className = 'editor_medium_width';
             if(editorContainer.firstChild){
                 editorContainer.removeChild(editorContainer.firstChild);
             }
@@ -122,7 +121,7 @@ define([], function(){
             var theView = {
                 setEditorContent: setEditorContent,
                 show: function(){
-                    editor.className = "editor_medium_width";
+                    editor.className = "";
                 },
                 hide: function(){
                     editor.className = "invisible";

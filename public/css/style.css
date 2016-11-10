@@ -10,8 +10,18 @@ h2, h3 {
 
 #dashboard{position: absolute;left: 0;top: 10;}
 
-.editor_medium_width {position: absolute;right: 0;top: 0;min-width: 700px;}
-.editor_full_width {position: absolute;right: 0;top: 0;width: 100%;}
+.tabs{background-color: rgb(255, 255, 255);/* padding: 10px; */}
+
+.tabs__title{
+    display: inline-block;
+    padding: 15px;
+    margin-bottom: -1px;
+    /* margin-left: 7px; */
+}
+
+.tabs__title--active{border-width: 2px 1px 1px;border-style: solid;border-color: #c3c1bf;border-bottom-color: transparent;background: white;}
+
+.tabs__content{border: solid 1px #c3c1bf;padding: 10px;}
 
 .control_panel_medium_width {position: absolute;right: 0;top: 0;min-width: 700px;}
 .control_panel_full_width {position: absolute;right: 0;top: 0;width: 100%;}
