@@ -1,14 +1,26 @@
-define(['csshelper', 'iter2d' ], function(csshelper){
+define(['csshelper', 'tabs' ], function(csshelper, tabs){
 
     var rootDom = document.getElementById('control-panel'),
-        editorController;
+        editorController,
+        theCell,
+        animationTools = tabs({tabsRoot: 'control-panel', tabs:[
+            {name: "Animations", 
+             initHandler: null,
+             clickHandler: function(activeContent){
+                 alert(activeContent);
+             }},
+            {name: "Editor", 
+             initHandler: null,
+             clickHandler: function(activeContent){
+                 if (editorController) {
+                     editorController.updateWithCanvasAnim(theCell.canvasAnim);
+                 }
+             }
+        }]});
     
     var show = function(cell){
+        theCell = cell;
         csshelper.removeClass(rootDom, 'invisible');
-
-        if(editorController){
-            editorController.updateWithCanvasAnim(cell.canvasAnim);
-        }
     };
 
     var hide = function(){

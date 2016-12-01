@@ -4,40 +4,44 @@ define([], function(){
     // config
     // {
     //   tabsRoot: domId
-    //   tabs: [ { name, clickHandler } ]
+    //   tabs: [ { name, initHandler, clickHandler } ]
     // }
-    var init = function(config){
+    var create = function(config){
         var tabsRoot = document.getElementById(config.tabsRoot),
+            tabsHeaderRoot = document.createElement("div"),
             tabsContentRoot = document.createElement("div"),
-            tabsHeader = document.createElement("div");
-
+            activeContentSelector = '#'+tabsRoot.id+'>div>div.tabs__content:not(.invisible)';
+        tabsRoot.appendChild(tabsHeaderRoot);
         tabsContentRoot.classList.add("tabs__content");
         tabsRoot.appendChild(tabsContentRoot);
         
-        tabsRoot.appendChild(tabsHeader);
-        
-        config.tabs.forEach(function(tab, index){
-            var tabTitle = document.createElement("div");
-            tabTitle.classList.add("tabs__title");
-            tabTitle.innerHTML = tab.name;
+        config.tabs.forEach(function(tabConfig, index){
+            var tabHeader = document.createElement("div");
+            tabHeader.classList.add("tabs__title");
+            tabHeader.innerHTML = tabConfig.name;
             if(index === 0){
-                tabTitle.classList.add("tabs__title--active");
+                tabHeader.classList.add("tabs__title--active");
             }
-            tabsHeader.appendChild(tabTitle);
+            tabsHeaderRoot.appendChild(tabHeader);
 
             var tabContent = document.createElement("div");
-            tabContent.id = tabsRoot.id + "_" + tab.name;
-
+            tabContent.id = tabsRoot.id + "_" + tabConfig.name;
             tabsContentRoot.appendChild(tabContent);
             
-            tabTitle.addEventListener("click", function(){
-                
+            tabHeader.addEventListener("click", function(event){
+               var activeHeader = tabsHeaderRoot.querySelector('.tabs__title--active'),
+                   activeContent = document.querySelector(activeContentSelector);
+               if (event.target === activeHeader) { return; }
+               activeHeader.classList.remove('tabs__title--active');
+               activeContent.classList.add('invisible');
+               tabHeader.classList.add('tabs__title--active');
+               tabContent.classList.remove('invisible');
+               tabConfig.clickHandler(tabContent);
             });
+
+            tabConfig.initHandler && tabConfig.initHandler(tabContent);
         });
     };
 
-    return {
-
-
-    };
+    return create;
 });
