@@ -12,6 +12,7 @@ define([], function(){
             tabsContentRoot = document.createElement("div"),
             activeContentSelector = '#'+tabsRoot.id+'>div>div.tabs__content:not(.invisible)';
         tabsRoot.appendChild(tabsHeaderRoot);
+        tabsRoot.classList.add("tabs");
         tabsContentRoot.classList.add("tabs__content");
         tabsRoot.appendChild(tabsContentRoot);
         
@@ -32,9 +33,9 @@ define([], function(){
                var activeHeader = tabsHeaderRoot.querySelector('.tabs__title--active'),
                    activeContent = document.querySelector(activeContentSelector);
                if (event.target === activeHeader) { return; }
+               tabHeader.classList.add('tabs__title--active');
                activeHeader.classList.remove('tabs__title--active');
                activeContent.classList.add('invisible');
-               tabHeader.classList.add('tabs__title--active');
                tabContent.classList.remove('invisible');
                tabConfig.clickHandler(tabContent);
             });

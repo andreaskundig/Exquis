@@ -12,8 +12,10 @@ define(['csshelper', 'tabs' ], function(csshelper, tabs){
             {name: "Editor", 
              initHandler: null,
              clickHandler: function(activeContent){
+                 // TODO give this as argument?
+                 var parentId = 'todo';
                  if (editorController) {
-                     editorController.updateWithCanvasAnim(theCell.canvasAnim);
+                     editorController.updateWithCanvasAnim(theCell.canvasAnim, parentId);
                  }
              }
         }]});

@@ -73,7 +73,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         return controller;
     };
 
-    var updateWithCanvasAnim = function(canvasAnim){
+    var updateWithCanvasAnim = function(canvasAnim, parentId){
         if(currentCanvasAnim){
             currentCanvasAnim.updateListener = null;
         }
@@ -81,7 +81,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         
         return canvasAnim.getSourceCode().then(function(source){
             var oldView = _view;
-            return provideViewForLang(source.lang).then(function(view){
+            return provideViewForLang(source.lang, parentId).then(function(view){
                 if(oldView && oldView !== view){
                     oldView.hide();
                 }
@@ -99,7 +99,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         }
     };
 
-    var provideViewForLang = function(lang){
+    var provideViewForLang = function(lang, parentId){
         if(views[lang].editor){
             _view = views[lang].editor;
             return Promise.resolve(_view);
@@ -107,7 +107,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         return new Promise(function(resolve, reject){
             console.log(lang, views);
             require([views[lang].libName], function(makeView){
-                makeView(_controller).then(function(view){
+                makeView(_controller, parentId).then(function(view){
                     _view = view; 
                     //TODO hide function that calls hide on the stored current view 
                     _controller.hide = _view.hide;
