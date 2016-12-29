@@ -17,7 +17,6 @@ Blockly.Blocks['rotate'] = {
 
 Blockly.JavaScript['rotate'] = function(block) {
   var value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_ATOMIC);
-  console.log(value_angle);
 
   var code = "ctx.rotate(" + value_angle  + "* Math.PI/180);\n"; 
   return code;

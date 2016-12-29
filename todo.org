@@ -1,3 +1,11 @@
+
+* bugs
+
+** css for buttons (don't change size on hover)
+
+** create editor once and set/unset invisible class afterwards
+javascript and blockly
+** css to have always correct width (constrain content?)
 * ui
 ** menubar: icone [cog] / [nom de l'assemblage + pencil + x]
 cog: fait apparaitre le groupe [nom pencil x] et les cogs des animations
@@ -39,8 +47,6 @@ Comment recharger toutes les animations qui utilisent un librairie lorsqu'on met
 des animations chargées. 
 
 * new animations
-
-* bugs
 
 * allow usage of files from external urls (github.com, pastebin, etc)
 define a assemblage file with urls

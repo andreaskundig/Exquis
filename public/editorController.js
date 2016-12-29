@@ -105,7 +105,6 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
             return Promise.resolve(_view);
         }
         return new Promise(function(resolve, reject){
-            console.log(lang, views);
             require([views[lang].libName], function(makeView){
                 makeView(_controller, parentId).then(function(view){
                     _view = view; 

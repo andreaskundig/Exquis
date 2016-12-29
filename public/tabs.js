@@ -10,7 +10,8 @@ define([], function(){
         var tabsRoot = document.getElementById(config.tabsRoot),
             tabsHeaderRoot = document.createElement("div"),
             tabsContentRoot = document.createElement("div"),
-            activeContentSelector = '#'+tabsRoot.id+'>div>div.tabs__content:not(.invisible)';
+            activeContentSelector = '#'+tabsRoot.id+'>div.tabs__content>div:not(.invisible)',
+            activeTabConfig;
         tabsRoot.appendChild(tabsHeaderRoot);
         tabsRoot.classList.add("tabs");
         tabsContentRoot.classList.add("tabs__content");
@@ -22,12 +23,13 @@ define([], function(){
             tabHeader.innerHTML = tabConfig.name;
             if(index === 0){
                 tabHeader.classList.add("tabs__title--active");
+                activeTabConfig = tabConfig;
             }
             tabsHeaderRoot.appendChild(tabHeader);
 
-            var tabContent = document.createElement("div");
-            tabContent.id = tabsRoot.id + "_" + tabConfig.name;
-            tabsContentRoot.appendChild(tabContent);
+            var tabContentDiv = document.createElement("div");
+            tabContentDiv.id = tabsRoot.id + "_" + tabConfig.name;
+            tabsContentRoot.appendChild(tabContentDiv);
             
             tabHeader.addEventListener("click", function(event){
                var activeHeader = tabsHeaderRoot.querySelector('.tabs__title--active'),
@@ -36,12 +38,17 @@ define([], function(){
                tabHeader.classList.add('tabs__title--active');
                activeHeader.classList.remove('tabs__title--active');
                activeContent.classList.add('invisible');
-               tabContent.classList.remove('invisible');
-               tabConfig.clickHandler(tabContent);
+               tabContentDiv.classList.remove('invisible');
+               tabConfig.clickHandler(tabContentDiv);
+               activeTabConfig = tabConfig;
             });
 
-            tabConfig.initHandler && tabConfig.initHandler(tabContent);
+            tabConfig.initHandler && tabConfig.initHandler(tabContentDiv);
         });
+        var refreshActiveTab = function(){
+            activeTabConfig.clickHandler(document.querySelector(activeContentSelector));
+        };
+        return refreshActiveTab;
     };
 
     return create;

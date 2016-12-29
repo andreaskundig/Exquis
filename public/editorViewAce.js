@@ -113,7 +113,7 @@ define([], function(){
 
         var editorParent = document.getElementById(parentId);
         //TODO only if it's empty? or maybe this function is called only once?
-        editorParent.innerHtml = makeEditorHtml(); 
+        editorParent.innerHTML = makeEditorHtml(); 
         var editor = editorParent.querySelector("#editor"),
             displayAssemblageName = makeTextContentSetter(editorParent.querySelector("#assemblage_name")),
             displayAnimationName = makeTextContentSetter(editorParent.querySelector("#filename_display"));

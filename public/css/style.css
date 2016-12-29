@@ -68,7 +68,7 @@ h2, h3 {
 .visible-grid, .visible-cell{ border: 1px solid rgba(200, 200, 200, 0.5); }
 .code_invalid { border: solid rgb(255, 0, 0); }
 .code_valid { border: solid rgb(25, 125, 255); }
-.invisible { display: none;}
+.invisible {display: none;}
 
 /* #animation_editor { */
 /*     position: relative; */

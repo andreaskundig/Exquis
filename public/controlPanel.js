@@ -3,17 +3,16 @@ define(['csshelper', 'tabs' ], function(csshelper, tabs){
     var rootDom = document.getElementById('control-panel'),
         editorController,
         theCell,
-        animationTools = tabs({tabsRoot: 'control-panel', tabs:[
+        refreshActiveTab = tabs({tabsRoot: 'control-panel', tabs:[
             {name: "Animations", 
              initHandler: null,
-             clickHandler: function(activeContent){
-                 alert(activeContent);
+             clickHandler: function(activeContentDiv){
+                 console.log('anims content div', activeContentDiv);
              }},
             {name: "Editor", 
              initHandler: null,
-             clickHandler: function(activeContent){
-                 // TODO give this as argument?
-                 var parentId = 'todo';
+             clickHandler: function(activeContentDiv){
+                 var parentId = activeContentDiv.id;
                  if (editorController) {
                      editorController.updateWithCanvasAnim(theCell.canvasAnim, parentId);
                  }
@@ -23,6 +22,7 @@ define(['csshelper', 'tabs' ], function(csshelper, tabs){
     var show = function(cell){
         theCell = cell;
         csshelper.removeClass(rootDom, 'invisible');
+        refreshActiveTab();
     };
 
     var hide = function(){
