@@ -1,11 +1,4 @@
 
-* bugs
-
-** css for buttons (don't change size on hover)
-
-** create editor once and set/unset invisible class afterwards
-javascript and blockly
-** css to have always correct width (constrain content?)
 * ui
 ** menubar: icone [cog] / [nom de l'assemblage + pencil + x]
 cog: fait apparaitre le groupe [nom pencil x] et les cogs des animations
@@ -45,6 +38,8 @@ on peut remplacer require par une variable locale dans le contexte de l'animatio
 Comment recharger toutes les animations qui utilisent un librairie lorsqu'on met
 à jour la librairie? Nos require1 et define1 doivent garder en mémoire les dépendances
 des animations chargées. 
+
+* bugs
 
 * new animations
 

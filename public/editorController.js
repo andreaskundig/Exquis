@@ -99,19 +99,26 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         }
     };
 
+    var updateCurrentView = function(newView){
+        if(_view && _view !== newView){
+            _view.hide();
+        }
+        _view = newView;
+    };
+    
     var provideViewForLang = function(lang, parentId){
         if(views[lang].editor){
-            _view = views[lang].editor;
-            return Promise.resolve(_view);
+            var newView = views[lang].editor;
+            updateCurrentView(newView);
+            return Promise.resolve(newView);
         }
         return new Promise(function(resolve, reject){
             require([views[lang].libName], function(makeView){
-                makeView(_controller, parentId).then(function(view){
-                    _view = view; 
-                    //TODO hide function that calls hide on the stored current view 
-                    _controller.hide = _view.hide;
+                makeView(_controller, parentId).then(function(newView){
+                    updateCurrentView(newView);
+                    views[lang].editor = newView;
                     _controller.displayInvalidity = displayInvalidity;
-                    resolve(_view);
+                    resolve(newView);
                 });
             });
         });

@@ -1,5 +1,7 @@
 define([], function(){
     var makeEditorHtml = function(){
+        //TODO make all ids unique by prefixing them with parent id,
+        // or even better, use classes instead, or firstchild etc..
         return ['<div class="invisible" id="editor">',
                 '    <div id="assemblage">',
                 '        <h2 id="assemblage_name"></h2> ',
@@ -110,9 +112,7 @@ define([], function(){
     };
    
     var makeEditorView = function(controller, parentId){
-
         var editorParent = document.getElementById(parentId);
-        //TODO only if it's empty? or maybe this function is called only once?
         editorParent.innerHTML = makeEditorHtml(); 
         var editor = editorParent.querySelector("#editor"),
             displayAssemblageName = makeTextContentSetter(editorParent.querySelector("#assemblage_name")),

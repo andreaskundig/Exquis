@@ -79,7 +79,7 @@ h2, h3 {
 #the_ace_editor { 
     position: relative;
     height: 600px;
-    width: 700px;
+    width: 100%;
 }
 
 #blockly-editor {
@@ -111,6 +111,5 @@ h2, h3 {
  }
 
 .btn:hover{
-    border: 1px solid rgb(165, 165, 165);
     background-color: rgb(222, 222, 222);
 }
