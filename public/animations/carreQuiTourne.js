@@ -9,7 +9,7 @@ define({
             context.save();
             context.translate(75, 75);
             context.rotate(this.rotation);
-            context.fillStyle = "rgb(150,20,200)";
+            context.fillStyle = "rgb(200,0,255)";
             context.fillRect(-75, -75, 150, 150);
             context.restore();
             

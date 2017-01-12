@@ -1,4 +1,28 @@
 define([], function(){
+    var makeEditorHtml = function(){
+        //TODO make all ids unique by prefixing them with parent id,
+        // or even better, use classes instead, or firstchild etc..
+        return ['<div class="invisible" id="editor">',
+                '    <div id="assemblage">',
+                '        <h2 id="assemblage_name"></h2> ',
+                '        <div id="assemblage-buttons">',
+                '            <button id="assemblage_load_button" class="btn" type="button">load</button>',
+                '            <button id="assemblage_save_button" class="btn" type="button">save</button>',
+                '            <button id="assemblage_save_as_button" class="btn" type="button">save as</button>',
+                '        </div>',
+                '    </div>',
+                '    <div >',
+                '        <h3 id="filename_display"></h3> ',
+                '        <div id="editor-buttons">',
+                '            <button id="animation_save_button" class="btn" type="button">save</button>',
+                '            <button id="animation_save_as_button" class="btn" type="button">save as</button>',
+                '        </div>',
+                '        <div id="animation_editor">',
+                '        </div>',
+                '    </div>',
+                '</div>'].join('\n');
+    };
+    
     var makeEditorView = function(controller){
         var assController = controller.assController,
             animController = controller.animController,
@@ -69,9 +93,10 @@ define([], function(){
                 // this is not the job of the editor, move it somewhere else...
                 // addAnimationButtonListeners(displayAnimationName);
                 // addAssemblageButtonListeners(displayAssemblageName);
-                if(editorContainer.firstChild){
-                    editorContainer.removeChild(editorContainer.firstChild);
-                }
+
+                // if(editorContainer.firstChild){
+                //     editorContainer.removeChild(editorContainer.firstChild);
+                // }
                 editorContainer.appendChild(iframe);
             });
         };

@@ -10,7 +10,7 @@ define({
 
             this.rotation = this.rotation + 3;
 
-            context.fillStyle = "rgb(150,20,200)";
+            context.fillStyle = "rgb(250,20,255)";
             context.fillRect(-25, -25, 50, 50);
             
             context.restore();
