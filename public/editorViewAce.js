@@ -1,25 +1,26 @@
 define([], function(){
-    var makeButtonRow = function(){
-        var makeButtonRowHtml = function(){
+    var makeButtonRow = function(controller){
+        var makeButtonRowDiv = function(){
             //TODO make all ids unique by prefixing them with parent id,
             // or even better, use classes instead, or firstchild etc..
-            return ['<div>',
-                    '    <div id="assemblage">',
-                    '        <h2 id="assemblage_name"></h2> ',
-                    '        <div id="assemblage-buttons">',
-                    '            <button class="assemblage_load_button btn" type="button">load</button>',
-                    '            <button class="assemblage_save_button btn" type="button">save</button>',
-                    '            <button class="assemblage_save_as_button btn" type="button">save as</button>',
-                    '        </div>',
-                    '    </div>',
-                    '    <div >',
-                    '        <h3 id="filename_display"></h3> ',
-                    '        <div id="editor-buttons">',
-                    '            <button class="animation_save_button btn" type="button">save</button>',
-                    '            <button class="animation_save_as_button btn" type="button">save as</button>',
-                    '        </div>',
-                    '    </div>',
-                    '</div>'].join('\n');
+            var div = document.createElement('div');
+            div.innerHTML = [
+                '<div id="assemblage">',
+                '    <h2 class="assemblage_name"></h2> ',
+                '    <div id="assemblage-buttons">',
+                '        <button class="assemblage_load_button btn" type="button">load</button>',
+                '        <button class="assemblage_save_button btn" type="button">save</button>',
+                '        <button class="assemblage_save_as_button btn" type="button">save as</button>',
+                '    </div>',
+                '</div>',
+                '<div >',
+                '    <h3 class="filename_display"></h3> ',
+                '    <div id="editor-buttons">',
+                '        <button class="animation_save_button btn" type="button">save</button>',
+                '        <button class="animation_save_as_button btn" type="button">save as</button>',
+                '    </div>',
+                '</div>'].join('\n');
+            return div;
         };
         
         var addAssemblageButtonListeners = function(displayAssemblageName, assController, editorParent){
@@ -49,25 +50,37 @@ define([], function(){
             };
             animSaveAsButton.addEventListener('click', animSaveAs, true);
         };
-        return {makeHtml: makeButtonRowHtml,
-                addAssemblageButtonListeners: addAssemblageButtonListeners,
-                addAnimationButtonListeners: addAnimationButtonListeners};
+
+        var makeTextContentSetter = function(domElement){
+            return function(name){
+                domElement.textContent = name;
+            };
+        };
+
+        var buttonRowDiv = makeButtonRowDiv(),
+            displayAssemblageName = makeTextContentSetter(buttonRowDiv.querySelector(".assemblage_name")),
+            displayAnimationName = makeTextContentSetter(buttonRowDiv.querySelector(".filename_display"));
+        addAnimationButtonListeners(displayAnimationName,
+                                    controller.animController,
+                                    buttonRowDiv);
+        addAssemblageButtonListeners(displayAssemblageName,
+                                     controller.assController,
+                                     buttonRowDiv);
+        return {div: buttonRowDiv,
+                displayAssemblageName: displayAssemblageName,
+                displayAnimationName: displayAnimationName};
     };
 
-    var buttonRow = makeButtonRow();
 
-    var makeEditorHtml = function(){
-        return ['<div class="invisible" id="editor">',
-                buttonRow.makeHtml(),
-                '<div class="animation_editor"></div></div>'].join('\n');
+    var makeEditorDiv = function(buttonRow){
+        var editorDiv = document.createElement('div');
+        editorDiv.className = 'invisible editor';
+        editorDiv.appendChild(buttonRow.div);
+        editorDiv.insertAdjacentHTML('beforeend',
+                                     '<div class="animation_editor"></div>');
+        return editorDiv;
     };
     
-    var makeTextContentSetter = function(domElement){
-        return function(name){
-            domElement.textContent = name;
-        };
-    };
-
     var injectHtml = function(id, editorParent){
         var editorContainer = editorParent.querySelector(".animation_editor"),
             editorHtml = '<div id="'+id+'"></div>';
@@ -119,27 +132,20 @@ define([], function(){
     };
    
     var makeEditorView = function(controller, parentId){
-        var editorParent = document.getElementById(parentId);
-        editorParent.innerHTML = makeEditorHtml(); 
-        var editor = editorParent.querySelector("#editor"),
-            displayAssemblageName = makeTextContentSetter(editorParent.querySelector("#assemblage_name")),
-            displayAnimationName = makeTextContentSetter(editorParent.querySelector("#filename_display"));
+        var editorParent = document.getElementById(parentId), 
+            buttonRow = makeButtonRow(controller),
+            editor = makeEditorDiv(buttonRow);
+        editorParent.appendChild(editor); 
         var editorId = 'the_ace_editor'; 
         injectHtml(editorId, editorParent);
         
         var aceEditor,
-            displayCodeValidity; 
+            displayCodeValidity;
         return insertAceJavascript().then(function(ace){
             aceEditor = ace.edit(editorId);//"animation_editor"),
             displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor); 
             addAceListener(aceEditor, displayCodeValidity, controller.textAreaController);
-            buttonRow.addAnimationButtonListeners(displayAnimationName,
-                                                  controller.animController,
-                                                  editorParent);
-            buttonRow.addAssemblageButtonListeners(displayAssemblageName,
-                                                   controller.assController,
-                                                   editorParent);
-            displayAssemblageName(controller.assController.getAssemblageName());
+            buttonRow.displayAssemblageName(controller.assController.getAssemblageName());
 
             aceEditor.setTheme("ace/theme/katzenmilch");
             aceEditor.getSession().setMode("ace/mode/javascript");
@@ -156,10 +162,10 @@ define([], function(){
             var theView = {
                 setEditorContent: setEditorContent,
                 show: function(){
-                    editor.className = "";
+                    editor.classList.remove("invisible");
                 },
                 hide: function(){
-                    editor.className = "invisible";
+                    editor.classList.add("invisible");
                 },
                 displayCodeValidity: displayCodeValidity
             };
