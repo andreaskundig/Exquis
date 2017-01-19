@@ -53,4 +53,5 @@ define a assemblage file with urls
 * refactor dashboard so it can be included in a jsfiddle
 so that jsfiddle's javascript editor can be used to write animations or assemblages
 * faire en sorte que ça tourne sans serveur (ni internet?)
-avoir des animations par defaut dans des fichiers javascripts chargés par index.html
+avoir des animations par defaut dans des fichiers javascripts chargés
+par index.html
