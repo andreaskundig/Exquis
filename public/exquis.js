@@ -73,15 +73,15 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     }.bind(this));
             },
 
-            setAnimation: function(codeToSetup, uri){
-                this.codeToSetup = codeToSetup;
+            setAnimation: function(animationCloneToSetup, uri){
+                this.animationCloneToSetup = animationCloneToSetup;
                 this.animationName = net.extractAnimationNameFromUri(uri),
                 this.originalUrl = uri;
                 this.setup = function(){
                     // force reset matrix
                     context.setTransform(1, 0, 0, 1, 0, 0);
-                    this.codeToSetup.setup(context);
-                    this.currentCode = this.codeToSetup;
+                    this.animationCloneToSetup.setup(context);
+                    this.currentCode = this.animationCloneToSetup;
                 };
 
                 this.setup();
@@ -89,6 +89,9 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             
             getSourceCode: function(){
                 if(this.currentCode.source){
+                    // if the source code is not javascript
+                    // it is stored in the attribute source
+                    // of the current animation.
                     return Promise.resolve(this.currentCode.source);
                 }
                 return this.getSourceCodeString().then(function(scs){
@@ -100,16 +103,19 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 if (this.codeCacheUri){
                     // the code is in the cache
                     return new Promise(function(resolve, reject){
-                        var animCodeString = evileval.dataUri2text(this.codeCacheUri);
+                        var animCodeString =
+                                evileval.dataUri2text(this.codeCacheUri);
                         resolve(animCodeString);
                     }.bind(this));
                 }else{
                     // get the code from the internets
-                    return net.HTTPget(this.originalUrl).then(function(animCodeString){
-                        this.animationName = net.extractAnimationNameFromUri(this.originalUrl);
-                        this.addCodeStringToEvaluate(animCodeString);
-                        return animCodeString;
-                    }.bind(this));
+                    return net.HTTPget(this.originalUrl)
+                        .then(function(animCodeString){
+                            var url = this.originalUrl;
+                            this.animationName =
+                                net.extractAnimationNameFromUri(url);
+                            return animCodeString;
+                        }.bind(this));
                 }
             }
         };
@@ -197,9 +203,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     throw "no animation name";
                 }
             }).then(function(canvasAnim){
-                return canvasAnim.getSourceCode().then(function(scs){
-                    return {code: scs, lang: 'javascript'};
-                });
+                return canvasAnim.getSourceCode();
             }).then(function(source){
                 if(canvasAnim.updateListener){
                     canvasAnim.updateListener(canvasAnim.animationName, 
