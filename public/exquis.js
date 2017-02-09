@@ -1,8 +1,7 @@
 "use strict";
 
-define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel"],
-       function(iter2d, csshelper, evileval, net, ui, menubar, controlPanel){
-            
+define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel"], function(
+    iter2d, csshelper, evileval, net, ui, menubar, controlPanel){
 
     var makeCell = function(row, col, height, width){
         var canvas = makeCanvas(row, col, height, width), 
@@ -21,7 +20,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             currentCode: null,
             context: context, //might be useful to debug
             borders : function(){
-               return {
+                return {
                     north: context.getImageData(0, 0, context.canvas.width, 1),
                     south: context.getImageData(0, context.canvas.height - 1,
                                                 context.canvas.width, 1),
@@ -185,6 +184,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         var controlPanelIcon = document.getElementById(cell.ui.id + controlPanelIconSuffix);
         
         controlPanelIcon.addEventListener('click', function(){
+            csshelper.addClassForSelector('invisible','.hint');
+            cell.hint.classList.remove('invisible');
             controlPanel.show(cell);
         });
     };
@@ -220,13 +221,15 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         exquis.editorController = editorController;
         controlPanel.addEditor(editorController);
     };
-           
-   var hideHints = function(){
-       document.querySelectorAll('.cellUi, .hint').forEach(
-           function(el){
-               csshelper.addClass(el, 'invisible');
-           });
-   };
+    
+    var hideHints = function(){
+        csshelper.addClassForSelector('invisible','.cellUi, .hint');
+    };
+    
+    var showHints = function(){
+        csshelper.removeClassForSelector('invisible','.cellUi, .hint');
+    };
+    
     var init = function (assName, animUris, makeEditorController, store) {
         var container = document.getElementById("container"),
             exquis = {};
@@ -239,15 +242,11 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
 
         menubar.init(dashboardWidth);
         menubar.addCloseListener(hideHints);
-        menubar.addOpenListener(function(){
-            document.querySelectorAll('.cellUi, .hint').forEach(
-                function(el){
-                    csshelper.removeClass(el, 'invisible');
-                });
-        });
+        menubar.addOpenListener(showHints);
         
         var possiblyHideControlPanel = function(event){
             if (event.target.tagName === "HTML"){
+                csshelper.removeClassForSelector('invisible','.hint');
                 controlPanel.hide();
             }
         };
@@ -271,7 +270,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 function(cell, row, col){
                     return cell.canvasAnim.animationName;
                 });
-
             return animationNames;
         };
 
@@ -299,8 +297,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 });
 
                 if(canvasAnim.evaluateCode){
-		           canvasAnim.evaluateCode();
-		           delete(canvasAnim.evaluateCode);
+                    canvasAnim.evaluateCode();
+                    delete(canvasAnim.evaluateCode);
                 }
 
                 try{
