@@ -1,8 +1,9 @@
-define(['csshelper', 'tabs' ], function(csshelper, tabs){
+define(['csshelper', 'tabs', 'ui' ], function(csshelper, tabs, ui){
 
     var rootDom = document.getElementById('control-panel'),
         editorController,
         theCell,
+        store,
         refreshActiveTab = tabs({tabsRoot: 'control-panel', tabs:[
             {name: "Animations", 
              initHandler: null,
@@ -33,9 +34,42 @@ define(['csshelper', 'tabs' ], function(csshelper, tabs){
         editorController = zeEditorController;
     };
 
-    return {
-        hide: hide,
-        show: show,
-        addEditor: addEditor
+    //TODO use this in animation tab
+    var makeChooseAnimation = function(canvasAnim, store){
+        var loadAnimation = function(animationName){
+            if (!animationName){
+                return;
+            }
+            var fileUri = store.animationNameToUri(animationName);
+            canvasAnim.loadAnim(fileUri)
+                .then(function(canvasAnim){
+                    return canvasAnim.getSourceCode();
+                }).then(function(source){
+                    if(canvasAnim.updateListener){
+                        canvasAnim.updateListener(canvasAnim.animationName, 
+                                                  source);
+                    }
+                }).catch(function(e){
+                    console.log(e);
+                });;
+        };
+        
+        var chooseAnimation = function(parent){
+            store.loadAnimationList().then(function(fileUris){
+                var names = fileUris.map(store.uriToAnimationName);
+                ui.createList(parent, names, loadAnimation);
+            });
+        };
+        return chooseAnimation;
     };
+    var makeControlPanel = function(zeStore){
+        store = zeStore;
+        return {
+            hide: hide,
+            show: show,
+            addEditor: addEditor
+        };
+    };
+    
+    return makeControlPanel;
 });

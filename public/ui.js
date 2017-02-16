@@ -87,6 +87,24 @@ define(["csshelper"], function( csshelper){
             showDialog(true);
         });
     };
+    var createList = function(parent, names, onClickName){
+        parent.innerHTML = '';
+        var nameList = document.createElement("div"),
+            list = document.createElement("ul");
+        nameList.classList.add('name--list');
+        nameList.appendChild(list);
+        parent.appendChild(nameList);
+        for(var i = 0; i < names.length; ++i){
+            var item = document.createElement("li");
+            item.textContent = names[i];
+            item.id = names[i];
+            item.addEventListener('click', function(e){
+                onClickName(e.target.textContent);
+            });
+            
+            list.appendChild(item);
+        }
+    };
 
     var setKeyHandler = function(handler){
         document.getElementsByTagName('body')[0].onkeyup = handler;
@@ -120,6 +138,7 @@ define(["csshelper"], function( csshelper){
 
     return {
         buildPrompt: buildPrompt,
+        createList: createList,
         populateNamePicker: populateNamePicker
     };
 });

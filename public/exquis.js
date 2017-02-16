@@ -1,7 +1,7 @@
 "use strict";
 
 define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel"], function(
-    iter2d, csshelper, evileval, net, ui, menubar, controlPanel){
+    iter2d, csshelper, evileval, net, ui, menubar, makeControlPanel){
 
     var makeCell = function(row, col, height, width){
         var canvas = makeCanvas(row, col, height, width), 
@@ -180,7 +180,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         return cellUi;
     };
 
-    var addControlPanelIconHandler = function(cell){
+    var addControlPanelIconHandler = function(cell, controlPanel){
         var controlPanelIcon = document.getElementById(cell.ui.id + controlPanelIconSuffix);
         
         controlPanelIcon.addEventListener('click', function(){
@@ -217,7 +217,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         });
     };
 
-    var addEditor = function(exquis, editorController){
+    var addEditor = function(exquis, controlPanel, editorController){
         exquis.editorController = editorController;
         controlPanel.addEditor(editorController);
     };
@@ -232,7 +232,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
     
     var init = function (assName, animUris, makeEditorController, store) {
         var container = document.getElementById("container"),
-            exquis = {};
+            exquis = {},
+            controlPanel = makeControlPanel(store);
         exquis.assName = assName;
 
         var cellWidth = 150,
@@ -257,7 +258,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
 
             cell.canvasAnim = makeCanvasAnimation(cell.context);
             addLoadAnimationHandler(cell.ui.id, cell.canvasAnim, store);
-            addControlPanelIconHandler(cell);
+            addControlPanelIconHandler(cell, controlPanel);
             cell.canvasAnim.loadAnim(animUri);
             return cell;
         });
@@ -310,7 +311,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         };
 
         var editorController = makeEditorController(exquis, store);
-        addEditor(exquis, editorController);
+        addEditor(exquis, controlPanel, editorController);
 
         var render = function(){
             draw();
