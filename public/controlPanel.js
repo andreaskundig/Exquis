@@ -9,6 +9,8 @@ define(['csshelper', 'tabs', 'ui' ], function(csshelper, tabs, ui){
              initHandler: null,
              clickHandler: function(activeContentDiv){
                  console.log('anims content div', activeContentDiv);
+                 var chooseAnimation = makeChooseAnimation(theCell.canvasAnim, store);
+                 chooseAnimation(activeContentDiv);
              }},
             {name: "Editor", 
              initHandler: null,

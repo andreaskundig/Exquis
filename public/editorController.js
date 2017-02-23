@@ -80,13 +80,9 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         currentCanvasAnim = canvasAnim;
         
         return canvasAnim.getSourceCode().then(function(source){
-            var oldView = _view;
             return provideViewForLang(source.lang, parentId)
                 .then(function(view){
-                    if(oldView && oldView !== view){
-                        oldView.hide();
-                    }
-                    currentCanvasAnim.updateListener = _view.setEditorContent;
+                    currentCanvasAnim.updateListener = view.setEditorContent;
                     view.setEditorContent(canvasAnim.animationName, source);
                     view.show();
                 });

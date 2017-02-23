@@ -23,7 +23,7 @@ h2, h3 {
 
 .tabs__content{border: solid 1px #c3c1bf;padding: 10px;}
 
-.control_panel_medium_width {position: absolute;right: 0;top: 0;min-width: 700px;}
+.control_panel_medium_width {position: absolute;right: 0;top: 0;height: 100;min-width: 700px;}
 .control_panel_full_width {position: absolute;right: 0;top: 0;width: 100%;}
 
 #dialog {  
@@ -37,7 +37,7 @@ h2, h3 {
  }
 #dialog_content {
     overflow: auto;
-    max-height: 400px;
+    max-height: 100%;
 }
 #dialog_content > ul {
     padding-left: 10px;
@@ -55,6 +55,21 @@ h2, h3 {
                  padding-top: 10px;}
 #dialog > p { padding: 2%; margin: 0}
 #dialog > p:hover { background-color:darkgrey;}
+#name-list {
+    overflow: auto;
+    max-height: 400px;
+}
+#name-list > ul {
+    padding-left: 10px;
+    margin: 0px;
+}
+#name-list > ul > li {
+    list-style: none;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+#name-list > p { padding: 2%; margin: 0}
+#name-list > p:hover { background-color:darkgrey;}
 #modal { position: fixed;
          top: 0;
          right: 0;
