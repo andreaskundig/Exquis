@@ -34,10 +34,11 @@ h2, h3 {
 .tabs__content{
     flex-grow: 1;
     border: solid 1px #c3c1bf;
-    top:0;
-    bottom:0;
+    /* top:0; */
+    /* bottom:0; */
     overflow-y: scroll;
-    padding: 10px;}
+    padding: 10px;
+    }
 
 
 .control_panel_medium_width {
@@ -82,21 +83,21 @@ h2, h3 {
                  padding-top: 10px;}
 #dialog > p { padding: 2%; margin: 0}
 #dialog > p:hover { background-color:darkgrey;}
-#name-list {
+.name-list {
     overflow: auto;
-    max-height: 400px;
 }
-#name-list > ul {
-    padding-left: 10px;
+.name-list > ul {
+    padding-left: 0px;
     margin: 0px;
 }
-#name-list > ul > li {
+.name-list > ul > li {
     list-style: none;
-    padding-bottom: 5px;
     cursor: pointer;
 }
-#name-list > p { padding: 2%; margin: 0}
-#name-list > p:hover { background-color:darkgrey;}
+.name-list > ul > li > p {padding: 6px 0px 4px 15px;margin: 0;}
+.name-list > ul > li > p:hover { background-color:#eeeeee;}
+.name-list > ul > li > p.selected { background-color:#cccccc;}
+.name-list > ul > li > p.selected:hover { background-color:#cccccc;}
 #modal { position: fixed;
          top: 0;
          right: 0;

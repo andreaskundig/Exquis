@@ -90,18 +90,26 @@ define(["csshelper"], function( csshelper){
     var createList = function(parent, names, onClickName){
         parent.innerHTML = '';
         var nameList = document.createElement("div"),
-            list = document.createElement("ul");
-        nameList.classList.add('name--list');
+            list = document.createElement("ul"),
+            selectedText;
+        nameList.classList.add('name-list');
         nameList.appendChild(list);
         parent.appendChild(nameList);
         for(var i = 0; i < names.length; ++i){
-            var item = document.createElement("li");
-            item.textContent = names[i];
-            item.id = names[i];
-            item.addEventListener('click', function(e){
+            var item = document.createElement("li"),
+                text = document.createElement("p");
+            text.textContent = names[i];
+            text.id = names[i];
+            text.addEventListener('click', function(e){
+                if(selectedText){
+                    selectedText.classList.remove('selected');
+                }
+                selectedText = e.target;
+                selectedText.classList.add('selected');
                 onClickName(e.target.textContent);
             });
             
+            item.appendChild(text);
             list.appendChild(item);
         }
     };
