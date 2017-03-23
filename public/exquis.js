@@ -162,14 +162,9 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         return icon;
     };
     
-    var loadIconSuffix = "-load-icon",
-        controlPanelIconSuffix = "-control-panel-icon";
+    var controlPanelIconSuffix = "-control-panel-icon";
     var makeCellUi = function(row, col, height, width){
         var cellUi = createCellDiv("cellUi", row, col, height, width);
-
-        var loadAnimationIcon = makeIcon("fa fa-folder-open-o fa-lg",
-                                         cellUi.id + loadIconSuffix);
-        cellUi.appendChild(loadAnimationIcon);
 
 
         var controlPanelIcon = makeIcon("fa fa-cog fa-lg",
@@ -187,33 +182,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             csshelper.addClassForSelector('invisible','.hint');
             cell.hint.classList.remove('invisible');
             controlPanel.show(cell);
-        });
-    };
-
-    var addLoadAnimationHandler = function(cellUiId, canvasAnim, store){
-        var loadAnimationIcon = document.getElementById(cellUiId + loadIconSuffix);
-        loadAnimationIcon.addEventListener('click', function(){
-            store.loadAnimationList().then(function(fileUris){
-                var names = fileUris.map(store.uriToAnimationName);
-                return ui.populateNamePicker("choose animation", names);
-            }).then(function(animationName){
-                if (animationName){
-                    var fileUri = store.animationNameToUri(animationName);
-                    return canvasAnim.loadAnim(fileUri);
-                }else{
-                    throw "no animation name";
-                }
-            }).then(function(canvasAnim){
-                return canvasAnim.getSourceCode();
-            }).then(function(source){
-                if(canvasAnim.updateListener){
-                    canvasAnim.updateListener(canvasAnim.animationName, 
-                                              source);
-                }
-            }).catch(function(e){
-                console.log(e);
-            });
-
         });
     };
 
@@ -257,7 +225,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             var cell = makeCell(row, col, cellHeight, cellWidth);
 
             cell.canvasAnim = makeCanvasAnimation(cell.context);
-            addLoadAnimationHandler(cell.ui.id, cell.canvasAnim, store);
             addControlPanelIconHandler(cell, controlPanel);
             cell.canvasAnim.loadAnim(animUri);
             return cell;

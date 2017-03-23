@@ -59,7 +59,7 @@ define(['csshelper', 'tabs', 'ui' ], function(csshelper, tabs, ui){
         var chooseAnimation = function(parent){
             store.loadAnimationList().then(function(fileUris){
                 var names = fileUris.map(store.uriToAnimationName);
-                ui.createList(parent, names, loadAnimation);
+                ui.createList(parent, names, loadAnimation, canvasAnim.animationName);
             });
         };
         return chooseAnimation;

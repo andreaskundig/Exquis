@@ -87,7 +87,16 @@ define(["csshelper"], function( csshelper){
             showDialog(true);
         });
     };
-    var createList = function(parent, names, onClickName){
+
+    var selectText = function(textToSelect, selectedText){ 
+        if(selectedText){
+            selectedText.classList.remove('selected');
+        }
+        textToSelect.classList.add('selected');
+        return textToSelect;
+    };
+    
+    var createList = function(parent, names, onClickName, selectedName){
         parent.innerHTML = '';
         var nameList = document.createElement("div"),
             list = document.createElement("ul"),
@@ -100,12 +109,11 @@ define(["csshelper"], function( csshelper){
                 text = document.createElement("p");
             text.textContent = names[i];
             text.id = names[i];
+            if(names[i] === selectedName){
+                selectedText = selectText(text, selectedText);
+            }
             text.addEventListener('click', function(e){
-                if(selectedText){
-                    selectedText.classList.remove('selected');
-                }
-                selectedText = e.target;
-                selectedText.classList.add('selected');
+                selectedText = selectText(e.target, selectedText);
                 onClickName(e.target.textContent);
             });
             
