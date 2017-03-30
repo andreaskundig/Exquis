@@ -88,11 +88,18 @@ define(["csshelper"], function( csshelper){
         });
     };
 
-    var selectText = function(textToSelect, selectedText){ 
+    var selectText = function(textToSelect, selectedText, scrollToTop){ 
         if(selectedText){
             selectedText.classList.remove('selected');
         }
         textToSelect.classList.add('selected');
+
+        if(scrollToTop){
+            var top = textToSelect.offsetTop,
+                container = textToSelect.parentNode.parentNode.parentNode;
+            console.log(container);
+            container.scrollTop = top - container.getBoundingClientRect().top;
+        }
         return textToSelect;
     };
     
@@ -107,18 +114,19 @@ define(["csshelper"], function( csshelper){
         for(var i = 0; i < names.length; ++i){
             var item = document.createElement("li"),
                 text = document.createElement("p");
+            item.appendChild(text);
+            list.appendChild(item);
+
             text.textContent = names[i];
             text.id = names[i];
             if(names[i] === selectedName){
-                selectedText = selectText(text, selectedText);
+                selectedText = selectText(text, selectedText, true);
             }
             text.addEventListener('click', function(e){
-                selectedText = selectText(e.target, selectedText);
+                selectedText = selectText(e.target, selectedText, false);
                 onClickName(e.target.textContent);
             });
             
-            item.appendChild(text);
-            list.appendChild(item);
         }
     };
 

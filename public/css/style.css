@@ -33,13 +33,16 @@ h2, h3 {
 
 .tabs__content{
     flex-grow: 1;
+    display: flex;
     border: solid 1px #c3c1bf;
-    /* top:0; */
-    /* bottom:0; */
-    overflow-y: scroll;
+    overflow-y: hidden;
     padding: 10px;
     }
 
+.tabs__content > div{
+    flex-grow: 1;
+    display: flex;
+    }
 
 .control_panel_medium_width {
     position: absolute;
@@ -84,7 +87,8 @@ h2, h3 {
 #dialog > p { padding: 2%; margin: 0}
 #dialog > p:hover { background-color:darkgrey;}
 .name-list {
-    overflow: auto;
+    flex: 1;
+    overflow: scroll;
 }
 .name-list > ul {
     padding-left: 0px;
