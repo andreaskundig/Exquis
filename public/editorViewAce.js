@@ -2,6 +2,7 @@ define(['editorButtonRow'], function(makeButtonRow){
 
     var makeEditorDiv = function(buttonRow){
         var editorDiv = document.createElement('div');
+        editorDiv.style.width = '100%';
         editorDiv.className = 'invisible';
         editorDiv.appendChild(buttonRow.div);
         editorDiv.insertAdjacentHTML('beforeend',

@@ -28,6 +28,9 @@ define([], function(){
             tabsHeaderRoot.appendChild(tabHeader);
 
             var tabContentDiv = document.createElement("div");
+            if(index > 0){
+                tabContentDiv.classList.add("invisible");
+            }
             tabContentDiv.id = tabsRoot.id + "_" + tabConfig.name;
             tabsContentRoot.appendChild(tabContentDiv);
             
