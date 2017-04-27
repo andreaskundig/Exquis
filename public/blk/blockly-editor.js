@@ -4,6 +4,7 @@ define(["nodestore", "evileval"], function(store, evileval){
     var workspace;
     var setXmlCode = function(xmlCode){
         var xml = Blockly.Xml.textToDom(xmlCode);
+        Blockly.mainWorkspace.clear();
         Blockly.Xml.domToWorkspace( Blockly.mainWorkspace, xml );
     };
 
@@ -42,13 +43,14 @@ define(["nodestore", "evileval"], function(store, evileval){
     var extractAnimationCodeString = function(){
         var dom = Blockly.Xml.workspaceToDom(workspace);
         Blockly.JavaScript.addReservedWords('code');
-        var code = "define(['bibs/canvasBuffer'], function(makeBuffer){\n";
-        code += Blockly.JavaScript.workspaceToCode(workspace);
-        code += "\nvar xmlSource = '";
-        code += Blockly.Xml.domToText(dom) + "';\n";
-        code += "return { setup: setupAnimation, draw: drawAnimation, source: { code: xmlSource, lang: 'blockly' } };\n";
-        code += "});\n";
-        // console.log(code);
+        var code = ["define(['bibs/canvasBuffer'], function(makeBuffer){",
+                    "var createAnimation = function(){",
+                    Blockly.JavaScript.workspaceToCode(workspace),
+                    "var xmlSource = '" + Blockly.Xml.domToText(dom) + "';",
+                    "return { setup: setupAnimation, draw: drawAnimation, source: { code: xmlSource, lang: 'blockly' } };",
+                    "};", "return createAnimation();",
+                    "});"].join('\n');;
+        //console.log(code);
         return code;
     };
     
