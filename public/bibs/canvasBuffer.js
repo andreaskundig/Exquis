@@ -34,6 +34,7 @@ define(function(){
                 bufferCtx.putImageData(imageData, 0, 0);
                 return this;
             },
+            //TODO rename to pasteInto
             copyFromBuffer: function(destinationCtx){
                 // use drawImage because it allows to scale,
                 // translate and rotate destinationCtx

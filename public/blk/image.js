@@ -69,7 +69,7 @@ Blockly.Blocks['drawImage'] = {
 Blockly.JavaScript['drawImage'] = function(block) {
     var value_image = Blockly.JavaScript.valueToCode(
         block, 'image', Blockly.JavaScript.ORDER_ATOMIC);
-    return value_image +'.copyFromBuffer(ctx);';
+    return value_image +'.copyFromBuffer(ctx);\n';
 };
 
 Blockly.Blocks['border'] = {
