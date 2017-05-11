@@ -10,8 +10,8 @@ define(['editorButtonRow'], function(makeButtonRow){
         return editorDiv;
     };
     
-    var injectHtml = function(id, editorParent){
-        var editorContainer = editorParent.querySelector(".animation_editor"),
+    var injectHtml = function(id, editor){
+        var editorContainer = editor.querySelector(".animation_editor"),
             editorHtml = '<div id="'+id+'"></div>';
         editorContainer.insertAdjacentHTML('beforeend', editorHtml);
     };
@@ -66,7 +66,7 @@ define(['editorButtonRow'], function(makeButtonRow){
             editor = makeEditorDiv(buttonRow);
         editorParent.appendChild(editor); 
         var editorId = 'the_ace_editor'; 
-        injectHtml(editorId, editorParent);
+        injectHtml(editorId, editor);
         
         var aceEditor,
             displayCodeValidity;

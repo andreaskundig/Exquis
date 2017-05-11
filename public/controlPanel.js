@@ -8,7 +8,6 @@ define(['csshelper', 'tabs', 'ui' ], function(csshelper, tabs, ui){
             {name: "Animations", 
              initHandler: null,
              clickHandler: function(activeContentDiv){
-                 console.log('anims content div', activeContentDiv);
                  var chooseAnimation = makeChooseAnimation(theCell.canvasAnim, store);
                  chooseAnimation(activeContentDiv);
              }},

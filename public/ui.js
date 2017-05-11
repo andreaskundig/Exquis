@@ -97,7 +97,6 @@ define(["csshelper"], function( csshelper){
         if(scrollToTop){
             var top = textToSelect.offsetTop,
                 container = textToSelect.parentNode.parentNode.parentNode;
-            console.log(container);
             container.scrollTop = top - container.getBoundingClientRect().top;
         }
         return textToSelect;

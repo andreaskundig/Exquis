@@ -44,11 +44,9 @@ define(["nodestore", "evileval"], function(store, evileval){
         var dom = Blockly.Xml.workspaceToDom(workspace);
         Blockly.JavaScript.addReservedWords('code');
         var code = ["define(['bibs/canvasBuffer'], function(makeBuffer){",
-                    "var createAnimation = function(){",
                     Blockly.JavaScript.workspaceToCode(workspace),
                     "var xmlSource = '" + Blockly.Xml.domToText(dom) + "';",
                     "return { setup: setupAnimation, draw: drawAnimation, source: { code: xmlSource, lang: 'blockly' } };",
-                    "};", "return createAnimation();",
                     "});"].join('\n');;
         //console.log(code);
         return code;

@@ -2,6 +2,7 @@ define([], function(){
 
     var loadJsAnim = function(jsAnimPath){
         return new Promise(function(resolve, reject){
+            require.undef(jsAnimPath);
             require([jsAnimPath],
                     function(evaluatedAnimation){
                         resolve(Object.create(evaluatedAnimation));
