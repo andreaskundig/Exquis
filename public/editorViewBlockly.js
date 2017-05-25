@@ -60,6 +60,7 @@ define(['editorButtonRow'], function(makeButtonRow){
             hide: function(){
                 editor.classList.add("invisible");
             },
+            lang: 'blk',
             displayCodeValidity: displayCodeValidity
         };
         

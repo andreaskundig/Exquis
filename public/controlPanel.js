@@ -42,19 +42,7 @@ define(['csshelper', 'tabs', 'ui' ], function(csshelper, tabs, ui){
                 return;
             }
             var fileUri = store.animationNameToUri(animationName);
-            canvasAnim.loadAnim(fileUri)
-                .then(function(canvasAnim){
-                    return canvasAnim.getSourceCode();
-                }).then(function(source){
-                    //TODO make this work when source = {code: '<xml', lang: 'xml'}
-                    //TODO what was the point of updateListener again?
-                    if(canvasAnim.updateListener){
-                        canvasAnim.updateListener(canvasAnim.animationName, 
-                                                  source);
-                    }
-                }).catch(function(e){
-                    console.log(e);
-                });;
+            canvasAnim.loadAnim(fileUri);
         };
         
         var chooseAnimation = function(parent){

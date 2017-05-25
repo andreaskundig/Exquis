@@ -19,6 +19,8 @@ define([], function(){
             }
             require([jsAnimPath],
                     function(evaluatedAnimation){
+                        // remove the script
+                        //require.undef(jsAnimPath);
                         resolve(Object.create(evaluatedAnimation));
                     },
                     function(err){

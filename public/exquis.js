@@ -17,7 +17,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
     var makeCanvasAnimation = function(context){
         return {
             creation: Date.now(),
-            updateListener:null,
             currentCode: null,
             context: context, //might be useful to debug
             borders : function(){

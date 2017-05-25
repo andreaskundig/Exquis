@@ -96,6 +96,7 @@ define(['editorButtonRow'], function(makeButtonRow){
                 hide: function(){
                     editor.classList.add("invisible");
                 },
+                lang: 'js',
                 displayCodeValidity: displayCodeValidity
             };
             return theView;

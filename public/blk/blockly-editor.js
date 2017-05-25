@@ -46,7 +46,9 @@ define(["nodestore", "evileval"], function(store, evileval){
         var code = ["define(['bibs/canvasBuffer'], function(makeBuffer){",
                     Blockly.JavaScript.workspaceToCode(workspace),
                     "var xmlSource = '" + Blockly.Xml.domToText(dom) + "';",
-                    "return { setup: setupAnimation, draw: drawAnimation, source: { code: xmlSource, lang: 'blockly' } };",
+                    "return { setup: setupAnimation, draw: drawAnimation,",
+                    " source: { code: xmlSource, lang: 'blockly',",
+                    "           timestamp: "+Date.now()+" } };",
                     "});"].join('\n');;
         //console.log(code);
         return code;
