@@ -28,9 +28,8 @@ function(idu, shapes){
           });
           lastAvgCol = currentAvgCol;
           
-          var biggestCardi = distAndCardi.sort().reverse()[0][1],
-          direction = directions[biggestCardi];
-
+          var biggestCardi = distAndCardi.sort().reverse()[0][1];
+          var direction = directions[biggestCardi];
 
               // closure that binds the arguments context, borders, filter
               pushAvg = function(rec, horiz, speed){
