@@ -3,8 +3,8 @@ define(["bibs/wanderingPoint"], function(wp){ return {
             var limit = [0 , 255 ];
             var limits = [limit, limit, limit];
             var direction = [8, 5, 1];
-            var startPoint = [255, 255,255];
-            var speed = 3  ;
+            var startPoint = [2, 255,255];
+            var speed = 0.5  ;
             this.w = wp.makeWanderer(limits, direction, startPoint, speed);
         },
         draw: function (context, borders){
