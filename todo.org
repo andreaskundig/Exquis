@@ -1,10 +1,6 @@
 
 
 * bugs
-** probleme de chargement d'une animation, pas a chaque fois 
-(en enregistrer une d'abord peut-etre)
-** editeur reste 'invisible'
-button row devrait être utilisé par ace et blockly
 * ui
 ** menubar: icone [cog] / [nom de l'assemblage + pencil + x]
 cog: fait apparaitre le groupe [nom pencil x] et les cogs des animations

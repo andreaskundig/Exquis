@@ -272,7 +272,13 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 try{
                     canvasAnim.draw(neighborBorders);
                 }catch(e){
-                    exquis.editorController.displayInvalidity(e, cell.canvasAnim);
+                    if(exquis.editorController.displayInvalidity){
+                        exquis.editorController
+                            .displayInvalidity(e,
+                                               cell.canvasAnim);
+                    }else{
+                        console.error(e);
+                    }
                 }
             });
         };

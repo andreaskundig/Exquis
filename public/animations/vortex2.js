@@ -18,9 +18,16 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         
         this.buffer.copyToBuffer(context, {x:0, y:0});
         
-
-        var axis = this.rotation % 360 < 180 ? [150,0] : [0,150];
-
+        var normRotation = this.rotation % 360 ;
+        var axis = normRotation < 180? [150,0] : [0,150];
+        var fastZone = 60;
+        var acceleration = 4; //TODO sinus acceleration
+        if ( 0< normRotation && normRotation < fastZone
+            || 180-fastZone< normRotation && normRotation < 180+fastZone
+            || 360-fastZone< normRotation && normRotation < 360){
+            this.rotation += acceleration;
+        }
+//console.log(normRotation);
         context.save();
         context.translate(axis[0], axis[1]);
         context.rotate(this.rotation* this.toRadians);

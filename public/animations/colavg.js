@@ -42,25 +42,21 @@ function(idu, shapes){
             distAndCardi.push([distsSum, cardi]);
           });
           lastAvgCol = currentAvgCol;
-          var biggestDistAndCardi = distAndCardi.sort().reverse()[0];
-          var biggestDist = Math.sqrt(biggestDistAndCardi[0]);
-          var speedAmpl = 1;//biggestDist / 147 + 1;
-          //console.log(biggestDist);
-          var biggestCardi = biggestDistAndCardi[1];
-          var direction = directions[biggestCardi];
+          var sortedDistAndCardi = distAndCardi.sort().reverse();
 
               // closure that binds the arguments context, borders, filter
-              pushAvg = function(rec, horiz, speed){
+          var pushAvg = function(rec, horiz, speed){
  //                 idu.pushLine(context, borders, rec, horiz, speed, 
  //                 idu.avgColorFilter);
                   idu.pushLine(context, borders, rec, horiz, speed);
-              },
-
-              // aliases to make arguments more readable
-              horizontal = true,
-              vertical = false;
-
-          pushAvg(rect, direction.horizontal, direction.speedSign * speedAmpl);
+          };
+          sortedDistAndCardi.slice(0,2).forEach(function(dc){
+              var biggestCardi = dc[1],
+                  biggestDist = dc[0],
+                  speed = Math.max(1,Math.min(148, biggestDist / 800)),
+                  direction = directions[biggestCardi];
+              pushAvg(rect, direction.horizontal, direction.speedSign * speed);
+          });
       }
   };
 });
