@@ -19,7 +19,7 @@ define(['csshelper'], function(csshelper){
     
     var init = function(dashboardWidth){
         rootDiv.style.width = dashboardWidth + "px";
-        rootDiv.style.textAlign = 'right';
+        rootDiv.style.textAlign = 'left';
         
         csshelper.addClass(menubarClose, 'invisible');
     };

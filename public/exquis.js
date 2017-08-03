@@ -211,6 +211,9 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
 
         menubar.init(dashboardWidth);
         menubar.addCloseListener(hideHints);
+        menubar.addCloseListener(function(){
+            controlPanel.hide();
+        });
         menubar.addOpenListener(showHints);
         
         var possiblyHideControlPanel = function(event){
