@@ -1,40 +1,33 @@
 define(["bibs/imageDataUtils", "bibs/shapes"], 
 function(idu, shapes){
-    var colSqDistance = function(c1, c2){
-        if(!c1 || !c2){ return 0;}
-        var d = c1.map(function(e,i){
-            return Math.pow(c2[i]-c1[i],2);
-        });
-        return d[0]+d[1]+d[2];
-    },
-    pushValueInQueue = function(value, queue, size){
+    var pushValueInQueue = function(value, queue, size){
         size = size || 5;
         queue.push(value);
         while(queue.length > size){
             queue.shift();
         }
     },
-   lastAvgCol = {},
+   lastAvgCol = {north:null, east:null, south:null, west:null},
    lastDists = {north:[], east:[], south:[], west:[]},
 
-   directions ={north:{horizontal:false, speedSign:1},
+   directions = {
+       north:{horizontal:false, speedSign:1},
        east:{horizontal:true, speedSign:-1},
        south:{horizontal:false, speedSign:-1},
        west:{horizontal:true, speedSign:1}
    },
-    rect = idu.rectangle(0, 0, 150, 150);
+   rect = idu.rectangle(0, 0, 150, 150);
 
   return {
       setup: function(){},
       draw: function (context, borders){
-          //console.log(Math.sqrt(colSqDistance([255,255,255],[0,0,0])));
           var currentAvgCol = {},
               distAndCardi = [];
           Object.keys(borders).forEach(function(cardi){
               var current = idu.averageColor(borders[cardi]),
                   last = lastAvgCol[cardi],
-                  dist = colSqDistance(last,current);
-                  
+                  dist = Math.pow(idu.colorDistance(last,current),2);
+
             pushValueInQueue(dist, lastDists[cardi]);
             currentAvgCol[cardi] = current;
             var distsSum = lastDists[cardi].reduce(function(acc,val){
@@ -46,8 +39,6 @@ function(idu, shapes){
 
               // closure that binds the arguments context, borders, filter
           var pushAvg = function(rec, horiz, speed){
- //                 idu.pushLine(context, borders, rec, horiz, speed, 
- //                 idu.avgColorFilter);
                   idu.pushLine(context, borders, rec, horiz, speed);
           };
           sortedDistAndCardi.slice(0,2).forEach(function(dc){
@@ -55,6 +46,7 @@ function(idu, shapes){
                   biggestDist = dc[0],
                   speed = Math.max(1,Math.min(148, biggestDist / 800)),
                   direction = directions[biggestCardi];
+                  //if(speed>2){console.log(speed);}
               pushAvg(rect, direction.horizontal, direction.speedSign * speed);
           });
       }

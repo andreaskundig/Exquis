@@ -119,6 +119,13 @@ define({
         avgArray[3] = 255;
         return avgArray;
     },
+    colorDistance: function(color1, color2){
+        if(!color1 || !color2){ return 0;}
+        var squaresSum = color1.slice(0,3).reduce(function(sumsq,_,i){
+            return sumsq + Math.pow(color2[i]-color1[i],2);
+        },0);
+        return Math.sqrt(squaresSum);
+    },
     array2CSSColor: function(colorArray){
         var alpha = colorArray.length < 4 ? 1 : colorArray[3];
         return "rgba(" + colorArray[0] + "," + colorArray[1] + ","
