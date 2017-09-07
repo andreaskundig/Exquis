@@ -1,11 +1,19 @@
-define(["bibs/imageDataUtils", "bibs/shapes"], 
+define(["bibs/imageDataUtils", "bibs/shapes"],
 function(idu, shapes){
+  const drawText = function(context, value, x, y, w, h){
+        x = x || 0;
+        y = y || 0;
+        w = w || 50;
+        h = h || 20;
+        context.fillStyle = 'khaki';
+        context.fillRect(x, y, w, h);
+        context.font = "12px Arial";
+        context.fillStyle = 'black';
+        context.fillText(value, x + 15, y + 15);
+  };
   return {
       setup: function (context){
-          this.side = 150;
-          this.depth = 112;
-          this.breadth = this.side - this.depth;
-          this.speed = 3;
+          this.start = Date.now();
       },
       draw: function (context, borders){
           var now = Date.now();
@@ -13,30 +21,28 @@ function(idu, shapes){
           if(this.lastTime){
               var elapsed = now - this.lastTime;
               fps = Math.round(10000 / elapsed)/10;
-                      context.fillStyle = 'white';
-                      context.fillRect(0,0,150,50);
-                      context.font = "12px Arial";
-                      context.fillStyle = 'black'
-                      context.fillText(fps,50,20);
-
-              //context.
+              if(Date.now() - this.start > 200){
+                 this.start = Date.now();
+                  drawText(context, fps, 20, 20 );
+              }
+                    
           }
           this.lastTime = now;
           
           
-          let height = 80;
+          let height = 60;
+          let width = 80;
           let maxFps = 120;
           let graphY = 50;
+          let graphX = 30;
           context.fillStyle = 'white';
 
-          context.fillRect(29, graphY ,1,height);
-
+          context.fillRect(graphX + width, graphY ,1,height);
           context.fillStyle = 'black'
-          
           let fpsY = (maxFps - fps) * height / maxFps;
-          context.fillRect(29, graphY +  fpsY,1,1);
+          context.fillRect(graphX + width , graphY +  fpsY,1,1);
 
-          var middleLeft = idu.rectangle(30, graphY, 80, height) ,
+          var middleLeft = idu.rectangle(graphX, graphY, width, height) ,
               // closure that binds the arguments context and borders
               push = function(rec, horiz, speed, filter){
                   idu.pushLine(context, borders, rec, horiz, speed);
@@ -46,7 +52,7 @@ function(idu, shapes){
               horizontal = true,
               vertical = false;
 
-          push(middleLeft,  horizontal, 1);
+          push(middleLeft,  horizontal, -1);
       }
   };
 });

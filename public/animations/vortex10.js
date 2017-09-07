@@ -22,7 +22,7 @@ function(canvasBuffer,wp){ return {
         
         this.buffer.copyToBuffer(context, {x:0, y:0});
         
-                this.w.move();
+        this.w.move();
         var x = this.w.coordinates[0];
         var y = 40;
 
