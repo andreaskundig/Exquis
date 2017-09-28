@@ -41,13 +41,17 @@ function(idu, shapes){
           var pushAvg = function(rec, horiz, speed){
                   idu.pushLine(context, borders, rec, horiz, speed);
           };
-          sortedDistAndCardi.slice(0,2).forEach(function(dc){
+          sortedDistAndCardi.slice(0,2).forEach(function(dc,i){
               var biggestCardi = dc[1],
                   biggestDist = dc[0],
-                  speed = Math.max(1,Math.min(148, biggestDist / 800)),
+                  speed = Math.max(1,Math.min(148, biggestDist / 600)),
                   direction = directions[biggestCardi];
+                  
                   //if(speed>2){console.log(speed);}
               pushAvg(rect, direction.horizontal, direction.speedSign * speed);
+              //shapes.drawLabel(context,biggestDist,{x:10, y:20+i*50,
+             //                                        width:60})
+
           });
       }
   };

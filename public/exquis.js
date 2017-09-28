@@ -171,7 +171,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                                         cellUi.id + controlPanelIconSuffix);
         cellUi.appendChild(controlPanelIcon);
         
-        csshelper.addClass(cellUi, 'invisible');
         return cellUi;
     };
 

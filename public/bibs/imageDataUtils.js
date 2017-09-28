@@ -219,5 +219,17 @@ define({
 
         }
         return null;
+    },
+    drawGraph: function(context, value, opts){
+        context.fillStyle = 'white';
+
+        context.fillRect(opts.x + opts.width, opts.y ,1, opts.height);
+        context.fillStyle = 'black';
+        let scaledValue = (opts.maxValue - value) * opts.height / opts.maxValue;
+        context.fillRect(opts.x + opts.width , opts.y + scaledValue, 1, 1);
+
+        let middleLeft = this.rectangle(opts.x, opts.y, opts.width, opts.height),
+            horizontal = true;
+        this.pushLine(context, null, middleLeft, horizontal, -1);
     }
 });

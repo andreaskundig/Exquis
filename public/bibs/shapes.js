@@ -24,5 +24,18 @@ define({
         ctx.lineTo(b.x, b.y);
         ctx.closePath();
         ctx.stroke();
-    }
+    },
+    drawLabel: function(context, text, opts){
+        opts = opts || {};
+        const x = opts.x || 0,
+              y = opts.y || 0,
+              w = opts.width || 50,
+              h = opts.height || 20;
+              
+        context.fillStyle = opts.backgroundColor || 'khaki';
+        context.fillRect(x, y, w, h);
+        context.font = opts.font || "12px Arial";
+        context.fillStyle = opts.textColor || 'black';
+        context.fillText(text, x + 15, y + 15);
+  }
 });
