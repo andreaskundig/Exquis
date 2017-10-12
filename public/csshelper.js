@@ -1,13 +1,14 @@
 define(function(){
     var changeClassForSelector =  function(add, className, selector){
-        document.querySelectorAll(selector).forEach(
-            function(el){
-                if(add){
-                    el.classList.add('invisible');
-                }else{
-                    el.classList.remove('invisible');
-                };
-            });
+        const elements = document.querySelectorAll(selector);
+        for(let i=0; i<elements.length; i++){
+            let el = elements[i]; 
+            if(add){
+                el.classList.add(className);
+            }else{
+                el.classList.remove(className);
+            };
+        };
     };
     
     return {

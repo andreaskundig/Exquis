@@ -3,7 +3,7 @@ define(["paper"], function(paper){
     return {
         setup: function(context){
             //context.canvas.setAttribute('resize','true');
-            this.paper = new paper.PaperScope(context.canvas);
+            this.paper = new paper.PaperScope();
             this.paper.setup(context.canvas);
                   
             // Create a Paper.js Path to draw a line into it:

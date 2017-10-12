@@ -35,8 +35,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     return;
                 }
 
-                // force reset matrix/
-                context.setTransform(1, 0, 0, 1, 0, 0);
                 this.currentCode.draw(context, borders);
             },
 
@@ -79,6 +77,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 this.setup = function(){
                     // force reset matrix
                     context.setTransform(1, 0, 0, 1, 0, 0);
+                    // because using paper.js resizes the canvas
+                    // dependending on screen dpi 
+                    context.canvas.width = 150;
+                    context.canvas.height = 150;
                     this.animationCloneToSetup.setup(context);
                     this.currentCode = this.animationCloneToSetup;
                 };
