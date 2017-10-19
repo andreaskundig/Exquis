@@ -9,7 +9,7 @@ define(["paper"], function(paper){
             // Create a Paper.js Path to draw a line into it:
             this.path = new paper.Path();
             // Give the stroke a color
-            this.path.strokeColor = 'blue';
+            this.path.strokeColor = '#ffff99';
             this.path.strokeWidth = 10;
             var start = new paper.Point(5, 5);
             // Move to start and draw a line from there
