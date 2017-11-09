@@ -6,7 +6,7 @@ return {
         this.squares = [];
         this.squaresPerSide = 5;
         const stepSize = context.canvas.width / this.squaresPerSide,
-              squareSize = 25,
+              squareSize = 29,
               centeringOffset = new p.Point(1,1)
                            .multiply((stepSize - squareSize)/2);
         
@@ -27,51 +27,30 @@ return {
         this.j = 42;
     },
     draw: function (context, borders){
-                    // paste current image one pixel down
-            context.clearRect(0, 0, 150, 150);
-            
+
             // east
-            var scale = 30;
-            context.fillStyle = "black"
+        var scale = 30;
 
-            for (var x = 0; x < context.canvas.width / scale; x++) {
-                for (var y = 0; y < context.canvas.height / scale; y++) {
-                    // noise.simplex2 and noise.perlin2 return values between -1 and 1.
-                    var rotNoise = noise.simplex2(x / 10 + this.i, y / 10 + this.i),
-                        sideNoise = noise.simplex2(x / 10 + this.j, y / 10 + this.j),
-                        rotation = rotNoise * Math.PI * .3, 
-                        side = scale * 0.9 * Math.abs(sideNoise * 0.6+0.9);
-                        side = 25
-                    context.save();
-                    context.translate((x + 0.5) * scale, (y + 0.5) * scale);
-                    context.rotate(rotation);
-                    context.fillRect(-side / 2, -side / 2, side, side);
-                    
-                    context.restore();
-                }
-            }
-
-
-        
         this.squares.forEach((square,index) =>{
             const y = index % this.squaresPerSide,
                   x = Math.floor(index / this.squaresPerSide),
                   rotNoise = noise.simplex2(x / 10 + this.i, y / 10 + this.i),
                   sideNoise = noise.simplex2(x / 10 + this.j, y / 10 + this.j),
                   rotation = rotNoise * 180 * 0.3,
-                  relRotation = rotation - square.oldRotation||0 ; 
+//                  scaling = .8,
+                  scaling = sideNoise* 0.5 + 1,
+                  relScaling = scaling / (square.oldScaling || 1),
+                  relRotation = rotation - square.oldRotation || 0 ; 
                    //     side = scale * 0.9 * Math.abs(sideNoise * 0.6+0.9);
-            square.rotation = relRotation;// (rotation * 180 /Math.PI) - square.oldRotation || 0;          
+            square.rotate(relRotation);
             square.oldRotation = rotation;
+            square.scale(relScaling)
+            square.oldScaling = scaling;
+//            console.log(square.scaling,sideNoise);
         })
-        //this.i += 0.01;
-        //this.j += 0.003;
 
-        this.ps.view.draw();
-          //  return;
-
-            this.i += 0.01;
-            this.j += 0.003;
-        }
+            this.i += 0.003;
+            this.j += 0.004;
+    }
 }
 });
