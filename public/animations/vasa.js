@@ -1,8 +1,41 @@
 define(["bibs/noise","paper","bibs/imageDataUtils"], function(noise, paper,idu){
     const squaresPerSide = 5,
           squares = [],
-          xy= index => [Math.floor(index / squaresPerSide),
+          calculatedColors = [];
+    const xy = index => [Math.floor(index / squaresPerSide),
                         index % squaresPerSide];
+    const indexForXY = (x,y) => x * squaresPerSide + y;
+    const neighboringBorder = (x,y) => {
+        if(x == 0){ return 'west';}                        
+        if(y == 0){ return 'north';}                        
+        if(x == squaresPerSide - 1){ return 'east';}                        
+        if(y == squaresPerSide - 1){ return 'south';}
+        return null;
+    };
+    const colorIfIntersectsBorder = (x,y, square, borderColors, canvasSize) => {
+        let border = neighboringBorder(x,y);
+        if(border == 'west' && square.bounds.left < 0){
+            return borderColors[border];
+        }                        
+        if(border == 'north' && square.bounds.top < 0){
+            return borderColors[border];
+        } 
+        if(border == 'east' && square.bounds.right > canvasSize){
+            return borderColors[border];
+        }
+        if(border == 'south' && square.bounds.bottom > canvasSize){
+            return borderColors[border];
+        }
+        return null;
+    };
+    const neighborsXYs = (x,y) => {
+        return [[x+1, y], [x, y+1], [x-1, y], [x, y-1]]
+            .filter(([x,y]) => {
+            let ok = x > 0 && x < squaresPerSide ;
+                return ok &&  y > 0 && y < squaresPerSide;
+        }) 
+                   ;
+    }; 
     let i = 0,
         j=42;
 
@@ -17,14 +50,15 @@ define(["bibs/noise","paper","bibs/imageDataUtils"], function(noise, paper,idu){
                       .multiply((stepSize - squareSize)/2);
             
             for (var x = 0; x < squaresPerSide; x++) {
+                calculatedColors[x] = [];
                 for (var y = 0; y < squaresPerSide; y++) {
+                    calculatedColors[x][y] = 'black';
                     const topLeft = new p.Point(x,y)
                               .multiply(stepSize)
                               .add(centeringOffset),
                           square = p.Path.Rectangle({
                               point:topLeft, 
-                              size: new p.Size(squareSize,squareSize),
-                              fillColor: 'blue'}) ;
+                              size: new p.Size(squareSize,squareSize)}) ;
                     squares.push(square);
                 }
             }
@@ -33,7 +67,8 @@ define(["bibs/noise","paper","bibs/imageDataUtils"], function(noise, paper,idu){
         draw: function (context, borders){
 
             let colors = Object.keys(borders).reduce((acc, dir) => {
-                acc[dir] = idu.averageColor(borders[dir]);
+                let avg = idu.averageColor(borders[dir]);
+                acc[dir] = `rgb(${avg.join(',')})`;
                 return acc;
              } ,{});
             let sizes = [],
@@ -53,18 +88,32 @@ define(["bibs/noise","paper","bibs/imageDataUtils"], function(noise, paper,idu){
                 square.scale(relScaling);
                 square.oldScaling = scaling;
                 sizes.push(scaling);
-                let newColor = false;
-                //are we close to a border
-                //which one
-                // compare bounds to check intersection
-                //if intersection, take new color from average color
-                // else take color from calculatedColors
-                // set color of square
-                coloredSquares.push([square, scaling, newColor]);
-                //            console.log(square.scaling,sideNoise);
+                let borderColor = colorIfIntersectsBorder(x, y, 
+                                                      square, colors, 
+                                                      context.canvas.width),
+                    newColor = borderColor || calculatedColors[x][y];
+                square.fillColor = newColor;
+                coloredSquares.push([square, borderColor]);
             });
             sizes.forEach((size,index) =>{
                 const [x,y] = xy(index);
+                if(!coloredSquares[index][1]){
+                    const sq = coloredSquares[index][0],
+                    neighbors = neighborsXYs(x,y)
+                    .map(indexForXY)
+                    //.filter(i => sizes[i] > size)
+                    .sort((a,b) => sizes[b] - sizes[a])
+                    .map(i => squares[i]);
+                    //console.log(size);
+                    for(let i = 0; i < neighbors.length; i++){
+                        const neighbor = neighbors[i];
+                        if(sq.intersects(neighbor)){
+                            calculatedColors[x][y] = neighbor.fillColor;
+                            break;
+                        }
+                    }
+                    //console.log('no col')
+                }
                 //return if square already has a color
                 // else take biggest intersecting neighbor's color
                 // keep same color
