@@ -11,12 +11,12 @@ var setupAnimation = function(ctx){
 var drawAnimation = function(ctx, borders){
 ctx.setTransform(1, 0, 0, 1, 0, 0);
   snapshot.context.putImageData(borders.north, ({x: 0, y: 0}).x,({x: 0, y: 0}).y);
-  snapshot.copyFromBuffer(ctx);
+  snapshot.pasteInto(ctx);
   snapshot.copyToBuffer(ctx, ({x: 0, y: 0}), ({width: 150, height: 150}));
   ctx.translate(25, 75 );
   ctx.rotate(rotation* Math.PI/180);
   ctx.translate(-75, -75 );
-  snapshot.copyFromBuffer(ctx);
+  snapshot.pasteInto(ctx);
   rotation = rotation + 2;
 
 };

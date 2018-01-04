@@ -22,7 +22,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         context.translate(this.axis.x, this.axis.y);
         context.rotate(this.rotation * this.TO_RADIANS);
         context.translate(-this.axis.x, -this.axis.y);
-        this.buffer.copyFromBuffer(context);
+        this.buffer.pasteInto(context);
         context.restore();
         
         // change rotation for next loop        

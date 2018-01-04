@@ -13,8 +13,8 @@ function(noise, paper, idu, shapes){
         if(y == squaresPerSide - 1){ return 'south';}
         return null;
     };
-    const colorIfIntersectsBorder = (x,y, square, borderColors, canvasSize) => {
-        let border = neighboringBorder(x,y);
+    const colorIfIntersectsBorder = (x, y, square, borderColors, canvasSize) => {
+        let border = neighboringBorder(x, y);
         if(border == 'west' && square.bounds.left < 0){
             return borderColors[border];
         }                        
@@ -77,11 +77,9 @@ function(noise, paper, idu, shapes){
                       rotNoise = noise.simplex2(x / 10 + i, y / 10 + i),
                       sideNoise = noise.simplex2(x / 10 + j, y / 10 + j),
                       rotation = rotNoise * 180 * 0.3,
-                      //                  scaling = .8,
-                      scaling = sideNoise* 2 + 1,
+                      scaling = sideNoise* 1.1 + 1.5,
                       relScaling = scaling / (square.oldScaling || 1),
                       relRotation = rotation - square.oldRotation || 0 ; 
-                //     side = scale * 0.9 * Math.abs(sideNoise * 0.6+0.9);
                 square.rotate(relRotation);
                 square.oldRotation = rotation;
                 square.scale(relScaling);
@@ -93,7 +91,7 @@ function(noise, paper, idu, shapes){
                     newColor = borderColor || calculatedColors[index];
                 square.fillColor = newColor;
                 coloredSquares.push([square, borderColor]);
-            });
+         });
             sizes.forEach((size,index) =>{
                 const [x,y] = xy(index);
                 if(!coloredSquares[index][1]){
@@ -103,7 +101,6 @@ function(noise, paper, idu, shapes){
                     .filter(i => sizes[i] > size)
                     .sort((a,b) => sizes[b] - sizes[a])
                     .map(i => squares[i]);
-                    //console.log(size);
                     for(let i = 0; i < neighbors.length; i++){
                         const neighbor = neighbors[i];
                         if(sq.intersects(neighbor)){
@@ -111,12 +108,7 @@ function(noise, paper, idu, shapes){
                             break;
                         }
                     }
-                    //console.log('no col')
                 }
-                //return if square already has a color
-                // else take biggest intersecting neighbor's color
-                // keep same color
-                // put color in calculatedColor
             });
 
             i += 0.002;

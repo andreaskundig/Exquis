@@ -33,7 +33,7 @@ function(canvasBuffer,wp){ return {
             context.save();
             context.rotate(this.rotation* this.toRadians + Math.PI*i/2);
             context.translate(10, 10);
-            this.buffer.copyFromBuffer(context);
+            this.buffer.pasteInto(context);
             context.restore();
         }
         context.restore();

@@ -1,6 +1,6 @@
 define(["bibs/canvasBuffer", 
         "/animations/carreQuiTourne.js", 
-        "/animations/copieBordOuest.js"], 
+        "/animations/vasa.js"], 
 function(canvasBuffer, anim1, anim2){
     return {
         setup: function (context){
@@ -14,8 +14,7 @@ function(canvasBuffer, anim1, anim2){
             anim1.draw(context, borders);
             anim2.draw(this.buffer.context, borders);
 
-            this.buffer.setTransparency(122);
-            this.buffer.copyFromBuffer(context);
+            this.buffer.pasteInto(context,'destination-in');
         }
     };
 });

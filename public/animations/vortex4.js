@@ -21,7 +21,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         context.scale(.99,.99)
         context.translate(-75, -75);
     
-        this.buffer.copyFromBuffer(context);
+        this.buffer.pasteInto(context);
         context.restore();
     }};
                                                     });

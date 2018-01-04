@@ -19,7 +19,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         context.translate(150, 150);
         context.scale(.999,.99)
         context.rotate(this.rotation* this.toRadians);
-        this.buffer.copyFromBuffer(context);
+        this.buffer.pasteInto(context);
         context.restore();
     }};
                                                     });

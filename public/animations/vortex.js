@@ -27,7 +27,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         context.save();
         context.translate(75, 75);
         context.rotate(this.rotation* this.toRadians);
-        this.buffer.copyFromBuffer(context);
+        this.buffer.pasteInto(context);
         context.restore();
 
         this.rotation = this.rotation + 1;

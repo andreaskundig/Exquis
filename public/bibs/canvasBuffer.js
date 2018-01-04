@@ -34,11 +34,14 @@ define(function(){
                 bufferCtx.putImageData(imageData, 0, 0);
                 return this;
             },
-            //TODO rename to pasteInto
-            copyFromBuffer: function(destinationCtx){
+            pasteInto: function(destinationCtx, compositeOperation){
+                const oldOp = destinationCtx.globalCompositeOperation;
+                destinationCtx.globalCompositeOperation = compositeOperation || oldOp;
+
                 // use drawImage because it allows to scale,
                 // translate and rotate destinationCtx
                 destinationCtx.drawImage(buffer, 0, 0, buffer.width, buffer.height);
+                destinationCtx.globalCompositeOperation = oldOp;
                 return this;
             },
             setTransparency: function(alpha){
