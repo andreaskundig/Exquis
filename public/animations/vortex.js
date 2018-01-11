@@ -6,7 +6,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         this.halfWidth = context.canvas.width / 2;
         this.halfHeight = context.canvas.height / 2;
         
-        this.buffer = canvasBuffer(context.canvas.width,
+        this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
                                               context.canvas.height);
         context.fillStyle = "rgb(150,10,20)";
         context.fillRect(0, 0, context.canvas.width, context.canvas.height);

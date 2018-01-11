@@ -1,4 +1,4 @@
-define(["bibs/canvasBuffer", "bibs/imageDataUtils"],function(makeBuffer, idu){
+define(["bibs/canvasBuffer", "bibs/imageDataUtils"],function(canvasBuffer, idu){
 
     var createExquisBuffers = function(context, cols, rows){
         var ex = {buffers: [],
@@ -9,7 +9,7 @@ define(["bibs/canvasBuffer", "bibs/imageDataUtils"],function(makeBuffer, idu){
         for(var r = 0; r < rows; r++){
             ex.buffers[r] = [];
             for(var c = 0; c < cols; c++){
-                ex.buffers[r][c] = makeBuffer(ex.width, ex.height);
+                ex.buffers[r][c] = canvasBuffer.makeBuffer(ex.width, ex.height);
             }
         }
         return ex;

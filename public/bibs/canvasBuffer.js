@@ -55,5 +55,14 @@ define(function(){
         };
     };
 
-    return makeBuffer;
+    const bufferAnim = function(anim, width, height){
+        var buffer = makeBuffer(width, height);
+        anim.setup(buffer.context);
+        return {draw: borders => anim.draw(buffer.context, borders),
+                context: buffer.context,
+                setTransparency: buffer.setTransparency.bind(buffer),
+                pasteInto: buffer.pasteInto};
+    };
+
+    return { makeBuffer, bufferAnim };
 });
