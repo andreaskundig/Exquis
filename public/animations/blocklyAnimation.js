@@ -1,10 +1,10 @@
-define(['bibs/canvasBuffer'], function(makeBuffer){
+define(['bibs/canvasBuffer'], function(canvasBuffer){
 var snapshot;
 var rotation;
 
 
 var setupAnimation = function(ctx){
-  snapshot = makeBuffer();
+  snapshot = canvasBuffer.makeBuffer();
   rotation = 0;
   ctx.translate(75, 75 );
 };

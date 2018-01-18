@@ -51,6 +51,9 @@ function(noise, paper, idu, shapes){
             i += 0.003;
             j += 0.004;
             
+        },
+        tearDown: function(context){
+            console.log("youpie");
         }
     };
 });

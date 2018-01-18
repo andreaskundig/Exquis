@@ -11,7 +11,7 @@ Blockly.Blocks['blankImage'] = {
 };
 
 Blockly.JavaScript['blankImage'] = function(block) {
-    var code = 'makeBuffer()';
+    var code = 'canvasBuffer.makeBuffer()';
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 /*
@@ -69,7 +69,7 @@ Blockly.Blocks['drawImage'] = {
 Blockly.JavaScript['drawImage'] = function(block) {
     var value_image = Blockly.JavaScript.valueToCode(
         block, 'image', Blockly.JavaScript.ORDER_ATOMIC);
-    return value_image +'.copyFromBuffer(ctx);\n';
+    return value_image +'.pasteInto(ctx);\n';
 };
 
 Blockly.Blocks['border'] = {

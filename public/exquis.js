@@ -71,6 +71,9 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             },
 
             setAnimation: function(animationCloneToSetup, uri){
+                if(this.currentCode && this.currentCode.tearDown){
+                    this.currentCode.tearDown(context);
+                }
                 this.animationCloneToSetup = animationCloneToSetup;
                 this.animationName = net.extractAnimationNameFromUri(uri),
                 this.originalUrl = uri;
@@ -104,8 +107,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 if (this.codeCacheUri){
                     // the code is in the cache
                     return new Promise(function(resolve, reject){
-                        var animCodeString =
-                                evileval.dataUri2text(this.codeCacheUri);
+                        var animCodeString = evileval.dataUri2text(this.codeCacheUri);
                         resolve(animCodeString);
                     }.bind(this));
                 }else{
@@ -268,18 +270,17 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     neighborBorders[side] = allBorders[siderow][sidecol][opp];
                 });
 
-                if(canvasAnim.evaluateCode){
-                    canvasAnim.evaluateCode();
-                    delete(canvasAnim.evaluateCode);
-                }
-
                 try{
+                    if(canvasAnim.evaluateCode){
+                        canvasAnim.evaluateCode();
+                        delete(canvasAnim.evaluateCode);
+                    }
+
                     canvasAnim.draw(neighborBorders);
                 }catch(e){
                     if(exquis.editorController.displayInvalidity){
                         exquis.editorController
-                            .displayInvalidity(e,
-                                               cell.canvasAnim);
+                            .displayInvalidity(e, cell.canvasAnim);
                     }else{
                         console.error(e);
                     }
