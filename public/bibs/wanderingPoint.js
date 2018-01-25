@@ -43,6 +43,9 @@ define(function(){
 
         while (totalTravelledPercentage < 0.999999){
             if(nextPoint){
+                // we've been through the loop once
+                // so we must have hit a wall that stopped us
+                // from having totalTravelledPercentage == 1
                 direction[completion.limitingDimension] *= -1;
                 startPoint = nextPoint;
             }
@@ -64,6 +67,8 @@ define(function(){
         if(!limits){
             var limit = [0,150]; 
             limits = [limit, limit];
+        }else{
+            limits = limits.map(l => l.sort());
         }
         if(!direction){
             direction = limits.map(function(l,index){
