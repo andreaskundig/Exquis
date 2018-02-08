@@ -40,7 +40,6 @@ define(function(){
         var totalTravelledPercentage = 0;
         var nextPoint = null;
         direction = direction.slice();
-
         while (totalTravelledPercentage < 0.999999){
             if(nextPoint){
                 // we've been through the loop once
@@ -68,7 +67,7 @@ define(function(){
             var limit = [0,150]; 
             limits = [limit, limit];
         }else{
-            limits = limits.map(l => l.sort());
+            limits = limits.map(l => l.sort((a,b) => a - b));
         }
         if(!direction){
             direction = limits.map(function(l,index){
