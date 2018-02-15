@@ -1,7 +1,11 @@
 define(["bibs/wanderingPoint","bibs/imageDataUtils"], function(wp,idu){return {
     setup: function (context){
-        var limit = [-155 , 155 ];
-        this.w = wp.makeWanderer([limit, limit]);
+        // setup wandering point
+        const limit = [-155, 155 ];
+        const direction = [1, .9];
+        const startPoint = [0, 150];
+        const speed = 15;
+        this.w = wp.makeWanderer([limit, limit],direction,startPoint,speed);
         this.copyHorizontal = true;
         this.copyDirection = Math.sign(this.w.direction[0]);
     },
@@ -16,37 +20,25 @@ define(["bibs/wanderingPoint","bibs/imageDataUtils"], function(wp,idu){return {
             const copyIndex = switched[0];
             this.copyHorizontal = copyIndex === 0;
             this.copyDirection = Math.sign(this.w.direction[copyIndex]);
-
-            // console.log('switch', switched[0], 
-            // this.copyHorizontal, this.copyDirection);
         }
         var x = Math.round(this.w.coordinates[0]);
         var y = Math.round(this.w.coordinates[1]);
         context.fillStyle = "rgb(255,190,255)";
         const recSize = 150;
         const canSize = context.canvas.width;
-        const copySpeed = 10;
-        //context.fillRect(x + 50, y +50, recSize-50, recSize-50);
+        const copySpeed = 6;
         let visible = -recSize + copySpeed < x &&
                 x < canSize - copySpeed &&
                 -recSize + copySpeed < y &&
                 y < canSize - copySpeed;
-        // console.log(x,y,x + recSize, y+recSize);
         if(visible){
             const rec = idu.rectangle(Math.max(x,0),
                                       Math.max(y,0),
                                       Math.min(x + canSize, canSize),
                                       Math.min(y+ canSize, canSize));
-            try{
             idu.pushLine(context, borders, rec,
-                         this.copyHorizontal, this.copyDirection * 2);
-            }catch(e){
-            console.log('visible', Math.max(x,0),
-                                      Math.max(y,0),
-                                      Math.min(x + canSize, canSize),
-                        Math.min(y + canSize, canSize));
-                console.error(e);
-            }
+                         this.copyHorizontal, 
+                         this.copyDirection * copySpeed);
         }
         
 
