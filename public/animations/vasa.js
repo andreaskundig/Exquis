@@ -11,7 +11,11 @@ function(noise, paper, idu, shapes){
         setup: function (context){
             const p = new paper.PaperScope();
             p.setup(context.canvas);
-            const stepSize = context.canvas.width / squaresPerSide,
+            const pr = p.view.pixelRatio;
+            const [ocx, ocy] = [p.view.center.x, p.view.center.y];
+            console.log(p.view.center);
+            console.log(p.view.center);
+            const stepSize = p.view.size.width / squaresPerSide,
                   squareSize = 29,
                   centeringOffset = new p.Point(1,1)
                       .multiply((stepSize - squareSize)/2);

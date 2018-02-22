@@ -5,8 +5,8 @@
   "main": "server.js",
   "private": true,
   "dependencies": {
-      "requirejs": "^2.1.15",
-    "request": "^2.55.0"
+    "request": "^2.55.0",
+    "requirejs": "^2.1.15"
   },
   "directories": {
     "test": "tests"
@@ -20,5 +20,8 @@
     "url": "https://github.com/andreaskundig/Exquis.git"
   },
   "author": "David Hodgetts et Andreas Kundig",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "webdriverio": "^4.10.2"
+  }
 }
