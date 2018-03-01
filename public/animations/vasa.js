@@ -13,8 +13,7 @@ function(noise, paper, idu, shapes){
             p.setup(context.canvas);
             const pr = p.view.pixelRatio;
             const [ocx, ocy] = [p.view.center.x, p.view.center.y];
-            console.log(p.view.center);
-            console.log(p.view.center);
+
             const stepSize = p.view.size.width / squaresPerSide,
                   squareSize = 29,
                   centeringOffset = new p.Point(1,1)
