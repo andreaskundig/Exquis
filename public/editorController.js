@@ -1,4 +1,4 @@
-define(['ui', 'net', 'evileval'], function(ui, net, evileval){
+define(['ui', 'net'], function(ui, net){
     var _view,
         _store,
         _controller;
@@ -77,7 +77,7 @@ define(['ui', 'net', 'evileval'], function(ui, net, evileval){
         currentCanvasAnim = canvasAnim;
         console.log(canvasAnim.animationName); 
         return canvasAnim.getSourceCode().then(function(source){
-            console.log('lang', source.lang);
+            // console.log('lang', source.lang);
             return provideViewForLang(source.lang, parentId)
                 .then(function(view){
                     view.setEditorContent(canvasAnim.animationName, source);

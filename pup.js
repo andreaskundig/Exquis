@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const assert = require('assert');
 
 function waitUntil(cb, timeLimit){
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const start = Date.now();
         let id = setInterval(() => {
             if(cb()){
@@ -21,7 +21,7 @@ function waitUntil(cb, timeLimit){
     const browser = await puppeteer.launch();
     try{
         const page = await browser.newPage();
-        page.on('console', e => console.log(e._text));
+        page.on('console', e => console.log('page says:', e._text));
         await page.setViewport({width: 1024, height: 768});  
         const url = 'http://localhost:8000/assemblage/delay';
         await page.goto(url, {waitUntil: 'networkidle2'});
@@ -40,31 +40,37 @@ function waitUntil(cb, timeLimit){
 
         fs.removeSync(filePath);
         assert(!fs.existsSync(filePath));
-        
-        await page.evaluate(async (newAnimationName) => {
+        //const correctFileContent = 'define({setup:()=>{}, draw:()=>{}})';
+        const correctFileContent = 'define({setup: function (context){}, draw: function (context, borders){}})';
+        await page.evaluate(async (newAnimationName, correctFileContent) => {
             let originalAnimationName = 'meuh';
             try{
                 const aceEditor = ace.edit('the_ace_editor');
-                aceEditor.setValue('foo');
-                
+                aceEditor.setValue(correctFileContent);
+                // TODO check that
+                //x.cells[0][0].canvasAnim.evaluateCode exists TODO
+                //wait until the code is added to the animation
+                //x.cells[0][0].canvasAnim.evaluateCode is undefined
+
+
                 originalAnimationName = document.querySelector('.filename_display').innerHTML;
-                console.log("youpi", originalAnimationName, newAnimationName);
+                console.log("animations", originalAnimationName, newAnimationName);
                 const editors = [... document.querySelector('#control-panel_Editor').children];
                 const theEditor = editors.filter(n => !n.classList.contains('invisible'))[0];
                 theEditor.querySelector('.animation_save_as_button').click();
                 document.querySelector('#prompt_input').value = newAnimationName;
                 document.querySelector('#ok_button').click();
             }catch(e){
-                console.log('page says', e.message);
+                console.log('page complains:', e.message);
             }
-        }, newAnimationName);
-
+        }, newAnimationName, correctFileContent);
 
         await waitUntil(()=> fs.existsSync(filePath), 2);
 
         let fileContent = fs.readFileSync(filePath, 'utf8');
-        assert.equal(fileContent, 'foo');
-        
+        assert.equal(fileContent, correctFileContent);
+
+        console.log("test done");
     }finally{
         await browser.close();
     }

@@ -38,14 +38,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 this.currentCode.draw(context, borders);
             },
 
-            toDataUri : function(jsCode){
-                return "data:text/javascript;base64," + btoa(jsCode);
-            },
-            
             addCodeStringToEvaluate: function(codeString){
                 return new Promise(function(resolve, reject){
                     this.evaluateCode = function(){
-                        var codeAsUri = this.toDataUri(codeString);
+                        var codeAsUri = evileval.toDataUri(codeString);
                         evileval.loadJsAnim(codeAsUri)
                             .then(function(evaluatedAnimationClone){
                                 this.setAnimation(evaluatedAnimationClone,
