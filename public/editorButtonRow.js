@@ -59,7 +59,10 @@ define([], function(){
 
         var buttonRowDiv = makeButtonRowDiv(),
             displayAssemblageName = makeTextContentSetter(buttonRowDiv.querySelector(".assemblage_name")),
-            displayAnimationName = makeTextContentSetter(buttonRowDiv.querySelector(".filename_display"));
+            displayAnimationName = makeTextContentSetter(buttonRowDiv.querySelector(".filename_display")),
+            enableAnimationSave = (enable) => {
+                [...buttonRowDiv.querySelectorAll('.editor-buttons button')].forEach( b => b.disabled = !enable);
+            };
         addAnimationButtonListeners(displayAnimationName,
                                     controller.animController,
                                     buttonRowDiv);
@@ -68,7 +71,8 @@ define([], function(){
                                      buttonRowDiv);
         return {div: buttonRowDiv,
                 displayAssemblageName: displayAssemblageName,
-                displayAnimationName: displayAnimationName};
+                displayAnimationName: displayAnimationName,
+                enableAnimationSave: enableAnimationSave};
     };
     
     return makeButtonRow;

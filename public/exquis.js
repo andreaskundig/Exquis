@@ -39,22 +39,22 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             },
 
             addCodeStringToEvaluate: function(codeString){
-                return new Promise(function(resolve, reject){
-                    this.evaluateCode = function(){
+                this.evaluateCode = function(){
+                    return new Promise((resolve, reject) => {
                         var codeAsUri = evileval.toDataUri(codeString);
                         evileval.loadJsAnim(codeAsUri)
-                            .then(function(evaluatedAnimationClone){
+                            .then((evaluatedAnimationClone) => {
                                 this.setAnimation(evaluatedAnimationClone,
                                                   this.originalUrl);
                                 this.codeCacheUri = codeAsUri;
                                 resolve();
-                            }.bind(this))
+                            })
                             .catch( function(err){
                                 console.log(err);
                                 reject(err);
                             });
-                    };
-                }.bind(this));
+                    });
+                };
             },
             
             loadAnim: function(url){
@@ -243,12 +243,12 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             return animationNames;
         };
 
-        var draw = function(){
+        var draw = async function(){
 
             var allBorders = iter2d.map2dArray(exquis.cells,function(cell){ 
                 return cell.canvasAnim.borders();
             });
-            iter2d.forEach2dArray(exquis.cells,function(cell, row, col){
+            iter2d.forEach2dArray(exquis.cells, async function(cell, row, col){
                 var neighborBorders = {},
                     cells = exquis.cells,
                     canvasAnim = cell.canvasAnim;
@@ -268,18 +268,14 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
 
                 try{
                     if(canvasAnim.evaluateCode){
-                        canvasAnim.evaluateCode();
+                        await canvasAnim.evaluateCode();
                         delete(canvasAnim.evaluateCode);
                     }
 
                     canvasAnim.draw(neighborBorders);
+                    exquis.editorController.displayInvalidity(null, cell.canvasAnim);
                 }catch(e){
-                    if(exquis.editorController.displayInvalidity){
-                        exquis.editorController
-                            .displayInvalidity(e, cell.canvasAnim);
-                    }else{
-                        console.error(e);
-                    }
+                    exquis.editorController.displayInvalidity(e, cell.canvasAnim);
                 }
             });
         };
@@ -287,8 +283,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         var editorController = makeEditorController(exquis, store);
         addEditor(exquis, controlPanel, editorController);
 
-        var render = function(){
-            draw();
+        var render = async function(){
+            await draw();
             requestAnimationFrame(render);
         };
         render();

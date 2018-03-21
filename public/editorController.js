@@ -88,8 +88,12 @@ define(['ui', 'net'], function(ui, net){
 
     var displayInvalidity = function(err, canvasAnim){
         if(currentCanvasAnim === canvasAnim){
-            console.log(err);
-            _view.displayCodeValidity(false);
+            //console.log(err);
+            if(err){
+                _view.displayCodeValidity(false);
+            }else{
+                _view.displayCodeValidity(true);
+            }
         }
     };
 
@@ -125,7 +129,8 @@ define(['ui', 'net'], function(ui, net){
             assController: makeAssemblageController(exquis),
             animController: makeAnimationController(),
             textAreaController: makeTextAreaController(),
-            updateWithCanvasAnim: updateWithCanvasAnim
+            updateWithCanvasAnim: updateWithCanvasAnim,
+            displayInvalidity: (err, canvasAnim) => { if(err) { console.error(err); }}
         };
         _store = store;
         return _controller;

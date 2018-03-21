@@ -16,30 +16,23 @@ define(['editorButtonRow'], function(makeButtonRow){
         editorContainer.insertAdjacentHTML('beforeend', editorHtml);
     };
     
-    var makeDisplayCodeValidity = function(element){
-        return function(valid){
-            element.className = valid ? "code_valid" : "code_invalid";
-        };
-    };
-
-    var makeDisplayCodeValidityForAce = function(aceEditor){
+    var makeDisplayCodeValidityForAce = function(aceEditor, buttonRow){
         return function(valid){
             aceEditor.setStyle( valid ? "code_valid" : "code_invalid");
             aceEditor.unsetStyle( !valid ? "code_valid" : "code_invalid");
+            enableSave(valid, buttonRow);
         };
     };
 
+    const enableSave = function(enable, buttonRow){
+        buttonRow.enableAnimationSave(enable);
+    };
+    
     var addAceListener = function(aceEditor, displayCodeValidity, textAreaController){
         displayCodeValidity(true);
         
         aceEditor.getSession().on('change', function(e) {
-            textAreaController.onCodeChange(aceEditor.getValue())
-                .then(function(){
-                    displayCodeValidity(true);  
-                }, function(err){
-                    console.log(err);
-                    displayCodeValidity(false);
-                });
+            textAreaController.onCodeChange(aceEditor.getValue());
         });
     };
 
@@ -72,7 +65,7 @@ define(['editorButtonRow'], function(makeButtonRow){
             displayCodeValidity;
         return insertAceJavascript().then(function(ace){
             aceEditor = ace.edit(editorId);//"animation_editor"),
-            displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor); 
+            displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor, buttonRow); 
             addAceListener(aceEditor, displayCodeValidity, controller.textAreaController);
             buttonRow.displayAssemblageName(controller.assController.getAssemblageName());
 

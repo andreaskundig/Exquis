@@ -19,9 +19,18 @@ define([], function(){
             }
             require([jsAnimPath],
                     function(evaluatedAnimation){
+                        if(!evaluatedAnimation){
+                            reject('Animation code could not be evaluated.');
+                            return;
+                        }
                         // remove the script
                         require.undef(jsAnimPath);
-                        resolve(Object.create(evaluatedAnimation));
+                        try{
+                            const anim = Object.create(evaluatedAnimation);
+                            resolve(anim);
+                        }catch(err){
+                            reject(err);
+                        }
                     },
                     function(err){
                         reject(err);
