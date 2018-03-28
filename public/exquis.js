@@ -270,10 +270,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     if(canvasAnim.evaluateCode){
                         await canvasAnim.evaluateCode();
                         delete(canvasAnim.evaluateCode);
+                        exquis.editorController.displayInvalidity(null, cell.canvasAnim);
                     }
 
                     canvasAnim.draw(neighborBorders);
-                    exquis.editorController.displayInvalidity(null, cell.canvasAnim);
                 }catch(e){
                     exquis.editorController.displayInvalidity(e, cell.canvasAnim);
                 }

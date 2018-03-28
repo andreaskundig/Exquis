@@ -15,7 +15,7 @@ define([], function(){
                 '</div>',
                 '<div >',
                 '    <h3 class="filename_display"></h3> ',
-                '    <div id="editor-buttons">',
+                '    <div class="editor-buttons">',
                 '        <button class="animation_save_button btn" type="button">save</button>',
                 '        <button class="animation_save_as_button btn" type="button">save as</button>',
                 '    </div>',
@@ -61,7 +61,9 @@ define([], function(){
             displayAssemblageName = makeTextContentSetter(buttonRowDiv.querySelector(".assemblage_name")),
             displayAnimationName = makeTextContentSetter(buttonRowDiv.querySelector(".filename_display")),
             enableAnimationSave = (enable) => {
-                [...buttonRowDiv.querySelectorAll('.editor-buttons button')].forEach( b => b.disabled = !enable);
+                [...buttonRowDiv.querySelectorAll('.editor-buttons button')].forEach( b => {
+                    b.disabled = !enable;
+                });
             };
         addAnimationButtonListeners(displayAnimationName,
                                     controller.animController,

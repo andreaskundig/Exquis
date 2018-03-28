@@ -35,6 +35,22 @@ function waitUntil(cb, timeLimit){
         await page.click('.tabs__title:nth-of-type(2)');
         await page.waitForSelector('.filename_display', {visible:true}); 
 
+        await page.evaluate(async () => {
+             window.waitUntil = function(cb, timeLimit){
+                return new Promise((resolve, reject) => {
+                    const start = Date.now();
+                    let id = setInterval(() => {
+                        if(cb()){
+                            clearInterval(id);
+                            resolve();
+                        }else if(Date.now() - start > timeLimit * 1000){
+                            clearInterval(id);
+                            reject('time out');
+                        }
+                    }, 500);
+                });
+             };
+        });
         const newAnimationName = 'save-as-test';
         const filePath =`./public/animations/${newAnimationName}.js`;
 
@@ -46,12 +62,12 @@ function waitUntil(cb, timeLimit){
             let originalAnimationName = 'meuh';
             try{
                 const aceEditor = ace.edit('the_ace_editor');
+                if(x.cells[0][0].canvasAnim.evaluateCode != null){ throw 'evaluateCode should be null';};
                 aceEditor.setValue(correctFileContent);
-                // TODO check that
-                //x.cells[0][0].canvasAnim.evaluateCode exists TODO
-                //wait until the code is added to the animation
-                //x.cells[0][0].canvasAnim.evaluateCode is undefined
-
+                if(x.cells[0][0].canvasAnim.evaluateCode == null){ throw 'evaluateCode should not be null';};
+                console.log('evaluateCode', x.cells[0][0].canvasAnim.evaluateCode);
+                
+                await waitUntil(()=> x.cells[0][0].canvasAnim.evaluateCode == null, 2);
 
                 originalAnimationName = document.querySelector('.filename_display').innerHTML;
                 console.log("animations", originalAnimationName, newAnimationName);
