@@ -149,8 +149,6 @@ div.invisible, .invisible {display: none;}
     white-space: nowrap;
     /* vertical-align: middle; */
     -ms-touch-action: manipulation;
-    /* touch-action: manipulation; */
-    cursor: pointer;
     /* -webkit-user-select: none; */
     -moz-user-select: none;
     -ms-user-select: none;
@@ -159,8 +157,13 @@ div.invisible, .invisible {display: none;}
     border: 0px solid rgb(185, 185, 185);
     /* background-image: none; */
     border-radius: 4px;
- }
+}
 
-.btn:hover{
+.btn:disabled{
+    background-color: white
+}
+.btn:hover:enabled{
     background-color: rgb(222, 222, 222);
+    /* touch-action: manipulation; */
+    cursor: pointer;
 }
