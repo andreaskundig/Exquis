@@ -40,7 +40,6 @@ define(['editorButtonRow'], function(makeButtonRow){
             editor = makeEditorDiv(buttonRow),
             displayCodeValidity = makeDisplayCodeValidity() ; 
         editorParent.appendChild(editor);
-        buttonRow.displayAssemblageName(controller.assController.getAssemblageName());
 
 	var setEditorContent = function(animationName, animSource){
             document.getElementById('blockly-editor')

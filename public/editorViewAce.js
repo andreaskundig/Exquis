@@ -67,7 +67,6 @@ define(['editorButtonRow'], function(makeButtonRow){
             aceEditor = ace.edit(editorId);//"animation_editor"),
             displayCodeValidity = makeDisplayCodeValidityForAce(aceEditor, buttonRow); 
             addAceListener(aceEditor, displayCodeValidity, controller.textAreaController);
-            buttonRow.displayAssemblageName(controller.assController.getAssemblageName());
 
             aceEditor.setTheme("ace/theme/katzenmilch");
             aceEditor.getSession().setMode("ace/mode/javascript");

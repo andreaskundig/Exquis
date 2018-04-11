@@ -1,7 +1,7 @@
 "use strict";
 
-define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel"], function(
-    iter2d, csshelper, evileval, net, ui, menubar, makeControlPanel){
+define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel", "assemblageController"], function(
+    iter2d, csshelper, evileval, net, ui, menubar, makeControlPanel, makeAssemblageController){
 
     var makeCell = function(row, col, height, width){
         var canvas = makeCanvas(row, col, height, width), 
@@ -206,7 +206,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         var cellWidth = 150,
             cellHeight = 150,
             dashboardWidth = animUris[0].length * cellWidth,
-            dashboard = document.getElementById('dashboard');
+            dashboard = document.getElementById('dashboard'),
+            assemblageController = makeAssemblageController(exquis, store);
 
         menubar.init(dashboardWidth);
         menubar.addCloseListener(hideHints);
@@ -214,6 +215,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             controlPanel.hide();
         });
         menubar.addOpenListener(showHints);
+        menubar.addAssemblageLoadListener(assemblageController.load);
+        menubar.addAssemblageSaveAsListener(assemblageController.saveAs);
         
         var possiblyHideControlPanel = function(event){
             if (event.target.tagName === "HTML"){

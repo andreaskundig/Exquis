@@ -2,18 +2,21 @@ define(['csshelper'], function(csshelper){
 
     var rootDiv = document.getElementById('menubar'),
         menubarOpen = document.getElementById('menubar-open'),
-        menubarClose = document.getElementById('menubar-close');
+        menubarClose = document.getElementById('menubar-close'),
+        menubarDetails = document.getElementById('menubar-details'),
+        menubarAssemblageLoad = document.getElementById('menubar-assemblage-load'),
+        menubarAssemblageSaveAs = document.getElementById('menubar-assemblage-save-as');
 
     menubarOpen.addEventListener('click', function(e){
         // 1 switch visibility with menubarClose
-        menubarClose.classList.remove('invisible');
+        menubarDetails.classList.remove('invisible');
         menubarOpen.classList.add('invisible');
     });
     
     menubarClose.addEventListener('click', function(e){
         // 1 switch visibility with menubarOpen
         menubarOpen.classList.remove('invisible');
-        menubarClose.classList.add('invisible');
+        menubarDetails.classList.add('invisible');
     });
     
     var init = function(dashboardWidth){
@@ -31,9 +34,19 @@ define(['csshelper'], function(csshelper){
         menubarClose.addEventListener('click', listener);
     };
 
+    var addAssemblageLoadListener = function(listener){
+        menubarAssemblageLoad.addEventListener('click', listener);
+    };
+
+    var addAssemblageSaveAsListener = function(listener){
+        menubarAssemblageSaveAs.addEventListener('click', listener);
+    };
+    
     return {
         init: init,
         addOpenListener: addOpenListener,
-        addCloseListener: addCloseListener
+        addCloseListener: addCloseListener,
+        addAssemblageLoadListener: addAssemblageLoadListener,
+        addAssemblageSaveAsListener: addAssemblageSaveAsListener
     };
 });
