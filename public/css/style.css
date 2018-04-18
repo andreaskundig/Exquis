@@ -1,4 +1,4 @@
-html, body, container, #control-panel {
+html, body, #container, #control-panel {
     height:100%;
 }
 
@@ -12,7 +12,7 @@ h2, h3 {
     display: inline;
 }
 
-#container{max-width: 1301px;position: relative;height: 100%;}
+#container{position: relative;height: 100%;}
 
 #dashboard{position: absolute;left: 0;top: 10;}
 
@@ -20,23 +20,37 @@ h2, h3 {
     background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
-    /* padding: 10px; */
     }
 
 .tabs__title{
-    display: inline-block;
     padding: 15px;
-    margin-bottom: -1px;
-    /* z-index: 1000; */
-    /* margin-left: 7px; */
+    border-width: 2px 1px 1px;
+    border-style: solid;
+    border-color: white;
+    border-bottom-color:  #c3c1bf;
 }
 
-.tabs__title--active{border-width: 2px 1px 1px;border-style: solid;border-color: #c3c1bf;border-bottom-color: white;background: #ffffff;}
+.tabs__title--empty{
+    flex-grow: 1;
+}
+.tabs__title--active{
+    border-width: 2px 1px 1px;
+    border-style: solid;
+    border-color: #c3c1bf;
+    border-bottom-color: white;
+    background: #ffffff;
+}
+
+.tabs__header{
+    display: flex;
+    flex-shrink: 0;
+}
 
 .tabs__content{
     flex-grow: 1;
-    display: flex;
+    /* display: flex; */
     border: solid 1px #c3c1bf;
+    border-top: none;
     overflow-y: hidden;
     padding: 10px;
     z-index: 0;

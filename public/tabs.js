@@ -16,6 +16,7 @@ define([], function(){
         tabsRoot.classList.add("tabs");
         tabsContentRoot.classList.add("tabs__content");
         tabsRoot.appendChild(tabsContentRoot);
+        tabsHeaderRoot.classList.add("tabs__header");
         
         config.tabs.forEach(function(tabConfig, index){
             var tabHeader = document.createElement("div");
@@ -48,6 +49,14 @@ define([], function(){
 
             tabConfig.initHandler && tabConfig.initHandler(tabContentDiv);
         });
+
+        // add dummy tab to display a bottom border
+        var bottomBorderDiv = document.createElement('div');
+        bottomBorderDiv.classList.add('tabs__title--empty', 'tabs__title');
+        
+        tabsHeaderRoot.appendChild(bottomBorderDiv);
+
+        
         var refreshActiveTab = function(){
             activeTabConfig.clickHandler(document.querySelector(activeContentSelector));
         };

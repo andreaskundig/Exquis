@@ -4,7 +4,9 @@ define(['ui', 'net'], function(ui, net){
         var controller = {
             load: function(){
               var pickAssemblage = function(chosenAssemblage){
-                  document.location = "/assemblage/" + chosenAssemblage;
+                  if(chosenAssemblage){
+                      document.location = "/assemblage/" + chosenAssemblage;
+                  }
               };
 
               net.HTTPgetJSON("/assemblages/").then(function(files){
