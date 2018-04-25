@@ -48,7 +48,7 @@ h2, h3 {
 
 .tabs__content{
     flex-grow: 1;
-    /* display: flex; */
+    display: flex;
     border: solid 1px #c3c1bf;
     border-top: none;
     overflow-y: hidden;
@@ -135,16 +135,25 @@ h2, h3 {
 .code_valid { border: solid rgb(25, 125, 255); }
 div.invisible, .invisible {display: none;}
 
-/* #animation_editor { */
-/*     position: relative; */
-/*     height: 600px; */
-/*     width: 700px; */
-/* } */
 
-#the_ace_editor { 
-    position: relative;
-    height: 600px;
+#control-panel_Editor > div{
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    height: 100%;
+}
+
+.animation_editor {
+    display: flex;
+    flex-grow: 1;
+    /* height: 100%; */
+    overflow: hidden;
+}
+
+#the_ace_editor {
+    position: relative;
+    width: 100%;
+    flex-grow: 1;
 }
 
 #blockly-editor {
