@@ -13,5 +13,7 @@ define({
             context.fillRect(-75, -75, 150, 150);
             context.restore();
             
-            this.rotation += Math.PI / 180;
-        }});
+            this.rotation += this.params.speed.value * Math.PI / 180;
+        },
+        params:{speed:{value:1, min:-10, max:10, step:0.01}}
+});

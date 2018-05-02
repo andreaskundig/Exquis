@@ -38,6 +38,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 this.currentCode.draw(context, borders);
             },
 
+            getParams : function(){
+                return this.currentCode.params;
+            },
+
             addCodeStringToEvaluate: function(codeString){
                 this.evaluateCode = function(){
                     return new Promise((resolve, reject) => {

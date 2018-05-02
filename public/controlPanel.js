@@ -1,5 +1,5 @@
-define(['csshelper', 'tabs', 'ui' ], function(csshelper, tabs, ui){
-
+define(['csshelper', 'tabs', 'ui', 'paramController' ], function(csshelper, tabs, ui, paramController){
+    
     var rootDom = document.getElementById('control-panel'),
         editorController,
         theCell,
@@ -18,8 +18,13 @@ define(['csshelper', 'tabs', 'ui' ], function(csshelper, tabs, ui){
                  if (editorController) {
                      editorController.updateWithCanvasAnim(theCell.canvasAnim, parentId);
                  }
-             }
-        }]});
+             }},
+            {name: "Parameters", 
+             initHandler: null,
+             clickHandler: function(activeContentDiv){
+                 paramController.refreshController(activeContentDiv, theCell);
+             }}
+        ]});
     
     var show = function(cell){
         theCell = cell;
