@@ -6,7 +6,6 @@
   "private": true,
   "dependencies": {
     "fs-extra": "^5.0.0",
-    "puppeteer": "^1.1.0",
     "request": "^2.55.0",
     "requirejs": "^2.1.15"
   },
@@ -24,6 +23,9 @@
   "author": "David Hodgetts et Andreas Kundig",
   "license": "",
   "devDependencies": {
+    "escodegen": "^1.9.1",
+    "esprima": "^4.0.0",
+    "puppeteer": "^1.1.0",
     "webdriverio": "^4.10.2"
   }
 }
