@@ -35,30 +35,34 @@ const findDefineArguments = function(parseTree){
 
 const extractParamsFromArguments = function(args){
     return args[0].properties.find(
-        p => p.key.name == "params")
-    .value.properties;
+        p => p.key.name == "params");
 };
 
+const extractParamsObject = function(paramsAst) {
+    let codeString = escodegen.generate(paramsAst.value);
+    eval(`var paramsObject = ${codeString}`);
+    return paramsObject;
+};
 
-const parseTree = esprima.parse(program);
-// console.log(JSON.stringify(parseTree, null, 2));
+const setParamsValue = function(paramsAst, paramsValueObject){
+    let paramsCodeString = JSON.stringify(paramsValueObject);
+    let paramsValueAst = esprima.parse('a = '+paramsCodeString).body[0].expression.right;
+    paramsAst.value = paramsValueAst;
+};
 
-let args = findDefineArguments(parseTree);
-let params = extractParamsFromArguments(args);
-assert.equal(args[0].type, "ObjectExpression");
-let speed  = params[0];
-assert.equal(speed.key.name, "speed");
-let speedValue = speed.value.properties[0].value;
-assert.equal(speedValue.value, 1);
+const rootAst = esprima.parse(program);
+// console.log(JSON.stringify(rootAst, null, 2));
+let argsAst = findDefineArguments(rootAst);
+let paramsAst = extractParamsFromArguments(argsAst);
+let paramsO = extractParamsObject(paramsAst);
 
-// modifies parse tree
-speedValue.value = 12;
+paramsO.speed.value = 257;
+setParamsValue(paramsAst, paramsO);
+const modifiedProg = escodegen.generate(rootAst);
+// console.log(modifiedProg);
 
-const modifiedProg = escodegen.generate(parseTree);
-const modifiedPT =  esprima.parse(modifiedProg);
-const modArgs = findDefineArguments(modifiedPT);
-const modParams = extractParamsFromArguments(modArgs);
-speed  = modParams[0];
-speedValue = speed.value.properties[0].value;
-assert.equal(speedValue.value, 12);
-console.log(escodegen.generate(parseTree));
+const modifiedRootAst =  esprima.parse(modifiedProg);
+const modArgsAst = findDefineArguments(modifiedRootAst);
+const modParamsAst = extractParamsFromArguments(modArgsAst);
+let modParamsO = extractParamsObject(modParamsAst);
+assert.equal(paramsO.speed.value, 257);
