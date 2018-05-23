@@ -72,3 +72,33 @@ The type of code could be specified in a comment at the beginning of the file, o
 <!--blockly--> ;clojure 
 
 
+* code lifecycle
+
+** cell creation
+[[file:public/exquis.js::exquis.cells%20%3D%20iter2d.map2dArray(animUris,function(animUri,row,col){][exquis.init]] creates cells from uris defined in assemblage, calls
+[[file:public/exquis.js::var%20makeCanvasAnimation%20%3D%20function(context){][makeCanvasAnimation]] which creates a canvasAnim object
+with methods 
+
+*** [[file:public/exquis.js::getSourceCode:%20function(){][getSourceCode]] which either gets the code from
+- the animation's source attribute (for blockly)
+- the cache if it is there
+- the originalUrl (as text)
+
+*** [[file:public/exquis.js::addCodeStringToEvaluate:%20function(codeString){][addCodeStringToEvaluate]](codeString) 
+which creates an evaluateCode method
+that replaces the current animation 
+by what the codeString returns when executed,
+and store the code in the attribute codeCacheUri.
+The evaluateCode function will be called 
+in the next execution of the main draw function. 
+
+** code edition
+To see the code, you need to open the control panel
+and click on the editor tab.
+This calls [[file:public/editorController.js::var%20updateWithCanvasAnim%20%3D%20function(canvasAnim,%20parentId){][editorController.updateWithCanvasAnim]]
+which calls canvasAnim.getSourceCode 
+and puts the code in the editor with setEditorContent. 
+
+When the code is changed in the editor view,
+it calls[[file:public/editorController.js::onCodeChange:%20function(codeString){][ editorController.onCodeChange]] 
+which calls canvasAnim.addCodeStringToEvaluate
