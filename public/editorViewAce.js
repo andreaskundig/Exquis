@@ -1,4 +1,4 @@
-define(['editorButtonRow'], function(makeButtonRow){
+define(['editorButtonRow', 'net'], function(makeButtonRow, net){
 
     var makeEditorDiv = function(buttonRow){
         var editorDiv = document.createElement('div');
@@ -37,20 +37,14 @@ define(['editorButtonRow'], function(makeButtonRow){
     };
 
     var insertAceJavascript = function(){
-        var scriptContainer = document.getElementsByTagName('head')[0],
-            scriptUrl = '/lib/ace/ace.js';
-        return new Promise(function(resolve, reject){
-            var scriptTag = document.createElement('script');
-            scriptTag.src = scriptUrl;
-            scriptTag.type = "text/javascript";
-            scriptTag.charset = "utf-8";
-            scriptTag.onload = function(){
-                require(['ace/ace'], function(ace){
-                    resolve(ace);
+        return net.insertJavascriptTag('/lib/ace/ace.js')
+            .then(() =>{
+                return new Promise((resolve, reject) => {
+                    require(['ace/ace'], function(ace){
+                        resolve(ace);
+                    });
                 });
-            };
-            scriptContainer.appendChild(scriptTag);
-        });
+            }); 
     };
    
     var makeEditorView = function(controller, parentId){

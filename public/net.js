@@ -1,6 +1,18 @@
 "use strict";
 
 define(["iter2d", "evileval"], function(iter2d, evileval){
+    var insertJavascriptTag = function(scriptUrl){
+        var scriptContainer = document.getElementsByTagName('head')[0];
+        
+        return new Promise(function(resolve, reject){
+            var scriptTag = document.createElement('script');
+            scriptTag.src = scriptUrl;
+            scriptTag.type = "text/javascript";
+            scriptTag.charset = "utf-8";
+            scriptTag.onload = resolve;
+            scriptContainer.appendChild(scriptTag);
+        });
+    };
     
     var extractAnimationNameFromUri = function(uri){
         var match = uri.match(/([^\/]+)\.js/);
@@ -88,12 +100,13 @@ define(["iter2d", "evileval"], function(iter2d, evileval){
     };
 
     return {
-            getAssemblageNameFromUrlOrDefaultWithUrlChange: getAssemblageNameFromUrlOrDefaultWithUrlChange,
-            loadAssemblage: loadAssemblage,
-            makeAnimationPath: makeAnimationPath ,
-            extractAnimationNameFromUri: extractAnimationNameFromUri, 
-            HTTPgetJSON: HTTPgetJSON,
-            HTTPget: HTTPget,
-            HTTPpost: HTTPpost
-           };
+        getAssemblageNameFromUrlOrDefaultWithUrlChange: getAssemblageNameFromUrlOrDefaultWithUrlChange,
+        loadAssemblage: loadAssemblage,
+        makeAnimationPath: makeAnimationPath ,
+        extractAnimationNameFromUri: extractAnimationNameFromUri, 
+        HTTPgetJSON: HTTPgetJSON,
+        HTTPget: HTTPget,
+        HTTPpost: HTTPpost,
+        insertJavascriptTag: insertJavascriptTag
+    };
 });
