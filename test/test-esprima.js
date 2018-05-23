@@ -42,12 +42,11 @@ requirejs(['paramsManager', 'escodegen'], function(paramsManager, escodegen){
     paramsO.speed.value = newSpeedValue;
     mgr.setParamsValue(paramsAst, paramsO);
     const modifiedProg = mgr.generateCodeString(rootAst);
-    // console.log(modifiedProg);
 
     const modifiedRootAst =  mgr.parseCodeString(modifiedProg);
     const modArgsAst = mgr.findDefineArguments(modifiedRootAst);
     const modParamsAst = mgr.extractParamsFromArguments(modArgsAst);
     let modParamsO = mgr.extractParamsObject(modParamsAst);
+    
     assert.equal(paramsO.speed.value, newSpeedValue);
-
 });
