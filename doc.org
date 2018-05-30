@@ -90,7 +90,8 @@ that replaces the current animation
 by what the codeString returns when executed,
 and store the code in the attribute codeCacheUri.
 The evaluateCode function will be called 
-in the next execution of the main draw function. 
+in the next execution of the main draw function.
+Afterwards it is deleted. 
 
 ** code edition
 To see the code, you need to open the control panel

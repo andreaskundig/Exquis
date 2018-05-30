@@ -84,8 +84,17 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     // dependending on screen dpi 
                     context.canvas.width = 150;
                     context.canvas.height = 150;
-                    this.animationCloneToSetup.setup(context);
-                    this.currentCode = this.animationCloneToSetup;
+
+                    const oldSetup = this.currentCode && this.currentCode.setup.toString();
+                    const newSetup = this.animationCloneToSetup.setup.toString();
+                    const doCallSetup = newSetup != oldSetup;
+                    
+                    if(doCallSetup){
+                        this.animationCloneToSetup.setup(context);
+                        this.currentCode = this.animationCloneToSetup;
+                    }else{
+                        Object.assign(this.currentCode, this.animationCloneToSetup);
+                    }
                 };
 
                 this.setup();

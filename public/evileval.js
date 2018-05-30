@@ -26,7 +26,7 @@ define([], function(){
                         // remove the script
                         require.undef(jsAnimPath);
                         try{
-                            const anim = Object.create(evaluatedAnimation);
+                            const anim = Object.assign({}, evaluatedAnimation);
                             resolve(anim);
                         }catch(err){
                             reject(err);
