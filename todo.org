@@ -66,6 +66,8 @@ We want to create it when we open the control panel,
 In the method show in controlPanel.js
 where we need a way to access parentId.
 
-parentId is generated in tabs.js, which currently just returns a method refreshActiveTab
-It should instead return an object {refreshActiveTab, getParentId/Div(tabName)}
+parentId is generated in tabs.js, which currently just returns a
+method refreshActiveTab It should instead return an object
+{refreshActiveTab, getParentId/Div(tabName)}
 
+* TODO only call teardown if we're going to call a setup afterwards 
