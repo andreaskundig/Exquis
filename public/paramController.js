@@ -8,7 +8,7 @@ define(function(){
     };
 
 
-    const refreshController = function(activeContentDiv, theCell){
+    const refreshController = function(activeContentDiv, theCell, editorController){
         activeContentDiv.innerHTML = '';
         let params = theCell.canvasAnim.getParams();
         for(let key in params){
@@ -21,7 +21,14 @@ define(function(){
                                          max=${param.max || 1} step=${param.step || 0.0001}>`;
             let slider = htmlToElement(sliderString);
             activeContentDiv.appendChild(slider);
-            slider.addEventListener('input', (event) => param.value = event.target.value);
+            slider.addEventListener('input', (event) => {
+                 //TODO make this work without needing to know the parentId 
+                 // if (editorController) {
+                 //     editorController.updateWithCanvasAnim(theCell.canvasAnim, parentId);
+                 // }else{
+                     param.value = event.target.value;
+                 // }
+            });
         }
     };
 

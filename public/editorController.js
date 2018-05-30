@@ -130,6 +130,7 @@ define(['ui', 'net'], function(ui, net){
             animController: makeAnimationController(),
             textAreaController: makeTextAreaController(),
             updateWithCanvasAnim: updateWithCanvasAnim,
+            provideViewForLang: provideViewForLang,
             displayInvalidity: (err, canvasAnim) => { if(err) { console.error(err); }}
         };
         _store = store;

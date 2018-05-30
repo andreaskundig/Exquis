@@ -22,12 +22,20 @@ define(['csshelper', 'tabs', 'ui', 'paramController' ], function(csshelper, tabs
             {name: "Parameters", 
              initHandler: null,
              clickHandler: function(activeContentDiv){
-                 paramController.refreshController(activeContentDiv, theCell);
+                 paramController.refreshController(activeContentDiv, theCell, editorController);
              }}
         ]});
     
     var show = function(cell){
         theCell = cell;
+        //TODO create editor view if we have an editorController:
+        // For this we need the parentId of the editor for source.lang
+        // if(editorController){
+        //     theCell.canvasAnim.getSourceCode().then(function(source){
+        //         // console.log('lang', source.lang);
+        //         return editorController.provideViewForLang(source.lang, parentId);
+        //     });
+        // } 
         csshelper.removeClass(rootDom, 'invisible');
         refreshActiveTab();
     };

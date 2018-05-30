@@ -51,3 +51,21 @@ so that jsfiddle's javascript editor can be used to write animations or assembla
 * faire en sorte que ça tourne sans serveur (ni internet?)
 avoir des animations par defaut dans des fichiers javascripts chargés
 par index.html
+* TODO parameters changed with the slider are updated in the editor
+
+paramsController 
+parses the animation code, changes the parameter value, rewrites the code
+(using paramsManager.js)
+and replaces the code in the editor
+using the method editorController.updateWithCanvasAnim(theCell.canvasAnim, parentId);
+
+that method needs to be changed to work without parentId.
+The parentId is needed to create the editor.
+We can do without if we create the editor earlier.
+We want to create it when we open the control panel,
+In the method show in controlPanel.js
+where we need a way to access parentId.
+
+parentId is generated in tabs.js, which currently just returns a method refreshActiveTab
+It should instead return an object {refreshActiveTab, getParentId/Div(tabName)}
+
