@@ -11,7 +11,8 @@ define([], function(){
             tabsHeaderRoot = document.createElement("div"),
             tabsContentRoot = document.createElement("div"),
             activeContentSelector = '#'+tabsRoot.id+'>div.tabs__content>div:not(.invisible)',
-            activeTabConfig;
+            activeTabConfig,
+            tabNameToParentDivMap = {};
         tabsRoot.appendChild(tabsHeaderRoot);
         tabsRoot.classList.add("tabs");
         tabsContentRoot.classList.add("tabs__content");
@@ -34,6 +35,7 @@ define([], function(){
             }
             tabContentDiv.id = tabsRoot.id + "_" + tabConfig.name;
             tabsContentRoot.appendChild(tabContentDiv);
+            tabNameToParentDivMap[tabConfig.name] = tabContentDiv;
             
             tabHeader.addEventListener("click", function(event){
                var activeHeader = tabsHeaderRoot.querySelector('.tabs__title--active'),
@@ -61,7 +63,12 @@ define([], function(){
         var refreshActiveTab = function(){
             activeTabConfig.clickHandler(document.querySelector(activeContentSelector));
         };
-        return refreshActiveTab;
+
+        var getParentDiv = function(tabName){
+            return tabNameToParentDivMap[tabName];
+        };
+        
+        return {refreshActiveTab, getParentDiv};
     };
 
     return create;

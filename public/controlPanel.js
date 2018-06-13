@@ -1,22 +1,22 @@
-define(['csshelper', 'tabs', 'ui', 'paramController' ], function(csshelper, tabs, ui, paramController){
-    
+define(['csshelper', 'tabs', 'ui', 'paramController' ], function(csshelper, tabConstructor, ui, paramController){
+
+    const TAB_NAME_EDITOR = 'Editor'; 
     var rootDom = document.getElementById('control-panel'),
         editorController,
         theCell,
         store,
-        refreshActiveTab = tabs({tabsRoot: 'control-panel', tabs:[
+        tabs = tabConstructor({tabsRoot: 'control-panel', tabs:[
             {name: "Animations", 
              initHandler: null,
              clickHandler: function(activeContentDiv){
                  var chooseAnimation = makeChooseAnimation(theCell.canvasAnim, store);
                  chooseAnimation(activeContentDiv);
              }},
-            {name: "Editor", 
+            {name: TAB_NAME_EDITOR, 
              initHandler: null,
              clickHandler: function(activeContentDiv){
-                 var parentId = activeContentDiv.id;
                  if (editorController) {
-                     editorController.updateWithCanvasAnim(theCell.canvasAnim, parentId);
+                     editorController.updateWithCanvasAnim(theCell.canvasAnim);
                  }
              }},
             {name: "Parameters", 
@@ -26,18 +26,24 @@ define(['csshelper', 'tabs', 'ui', 'paramController' ], function(csshelper, tabs
              }}
         ]});
     
-    var show = function(cell){
+    var show = async function(cell){
         theCell = cell;
         //TODO create editor view if we have an editorController:
         // For this we need the parentId of the editor for source.lang
-        // if(editorController){
-        //     theCell.canvasAnim.getSourceCode().then(function(source){
-        //         // console.log('lang', source.lang);
-        //         return editorController.provideViewForLang(source.lang, parentId);
-        //     });
-        // } 
+        let editorViewPromise = Promise.resolve(true);
+        if(editorController){
+            const parentId = tabs.getParentDiv(TAB_NAME_EDITOR).id; 
+            editorViewPromise = theCell
+                .canvasAnim
+                .getSourceCode()
+                .then(function(source){
+                    // console.log('lang', source.lang);
+                    return editorController.provideViewForLang(source.lang, parentId);
+                });
+        }
+        await editorViewPromise.then();
         csshelper.removeClass(rootDom, 'invisible');
-        refreshActiveTab();
+        tabs.refreshActiveTab();
     };
 
     var hide = function(){

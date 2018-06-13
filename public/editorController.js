@@ -73,12 +73,12 @@ define(['ui', 'net'], function(ui, net){
         return controller;
     };
 
-    var updateWithCanvasAnim = function(canvasAnim, parentId){
+    var updateWithCanvasAnim = function(canvasAnim){
         currentCanvasAnim = canvasAnim;
         console.log(canvasAnim.animationName); 
         return canvasAnim.getSourceCode().then(function(source){
             // console.log('lang', source.lang);
-            return provideViewForLang(source.lang, parentId)
+            return provideViewForLang(source.lang)
                 .then(function(view){
                     view.setEditorContent(canvasAnim.animationName, source);
                     view.show();
@@ -109,6 +109,9 @@ define(['ui', 'net'], function(ui, net){
             var newView = views[lang].editor;
             updateCurrentView(newView);
             return Promise.resolve(newView);
+        }
+        if(!parentId){
+            throw 'cannot create editor without a parent id';
         }
         return new Promise(function(resolve, reject){
             require([views[lang].libName], function(makeView){

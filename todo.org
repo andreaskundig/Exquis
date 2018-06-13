@@ -52,21 +52,22 @@ so that jsfiddle's javascript editor can be used to write animations or assembla
 avoir des animations par defaut dans des fichiers javascripts chargés
 par index.html
 * TODO parameters changed with the slider are updated in the editor
-
-paramsController 
+** TODO paramsController
+[[file:public/paramController.js::slider.addEventListener('input',%20(event)%20%3D>%20{][file:public/paramController.js::slider.addEventListener('input', (event) => {]] 
 parses the animation code, changes the parameter value, rewrites the code
 (using paramsManager.js)
 and replaces the code in the editor
 using the method editorController.updateWithCanvasAnim(theCell.canvasAnim, parentId);
 
-that method needs to be changed to work without parentId.
+** DONE updateWithCanvasAnim needs to be changed to work without parentId.
 The parentId is needed to create the editor.
 We can do without if we create the editor earlier.
 We want to create it when we open the control panel,
-In the method show in controlPanel.js
+In the method [[file:public/controlPanel.js::var%20show%20%3D%20function(cell){][show]] in controlPanel.js
 where we need a way to access parentId.
 
-parentId is generated in tabs.js, which currently just returns a
+** DONE tabs.getParentDiv
+parentId is generated in [[file:public/tabs.js::return%20create%3B][tabs.js]], which currently just returns a
 method refreshActiveTab It should instead return an object
 {refreshActiveTab, getParentId/Div(tabName)}
 
