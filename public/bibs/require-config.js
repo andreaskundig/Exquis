@@ -4,5 +4,9 @@ requirejs.config({
         // 'bibs/paper-core' : {
         //     exports:'paper'
         // }
+    },
+    paths: {
+        "esprima": "lib/esprima",
+        "escodegen": "lib/escodegen.browser.min"
     }
 });

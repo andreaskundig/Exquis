@@ -86,6 +86,14 @@ define(['ui', 'net'], function(ui, net){
         });
     };
 
+    var updateWithSource = function(source, animationName){
+        return provideViewForLang(source.lang)
+            .then(function(view){
+                view.setEditorContent(animationName, source);
+                view.show();
+            });
+    };
+
     var displayInvalidity = function(err, canvasAnim){
         if(currentCanvasAnim === canvasAnim){
             //console.log(err);
@@ -133,6 +141,7 @@ define(['ui', 'net'], function(ui, net){
             animController: makeAnimationController(),
             textAreaController: makeTextAreaController(),
             updateWithCanvasAnim: updateWithCanvasAnim,
+            updateWithSource: updateWithSource,
             provideViewForLang: provideViewForLang,
             displayInvalidity: (err, canvasAnim) => { if(err) { console.error(err); }}
         };
