@@ -45,8 +45,7 @@ define([], function(){
                activeHeader.classList.remove('tabs__title--active');
                activeContent.classList.add('invisible');
                tabContentDiv.classList.remove('invisible');
-                tabConfig.clickHandler(tabContentDiv);
-                console.log(tabContentDiv);
+               tabConfig.clickHandler(tabContentDiv);
                activeTabConfig = tabConfig;
             });
 

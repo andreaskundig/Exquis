@@ -1,7 +1,7 @@
-define(['paramsManager', 'escodegen'],function(paramsManager, escodegen){
+define(['paramsManager'],function(paramsManager){
 
-    const paramMgr = paramsManager(escodegen);
-    console.log('foo', escodegen);
+    const paramMgr = paramsManager();
+
     // https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro/35385518#35385518
     const htmlToElement = function(html) {
         var template = document.createElement('template');

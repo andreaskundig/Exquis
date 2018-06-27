@@ -1,6 +1,7 @@
 const requirejs = require('requirejs');
 const util = require('util');
 const assert = require('assert');
+const astring = require('astring');
 
 requirejs.config({
     baseUrl: './public'
@@ -27,9 +28,13 @@ define({
         params:{speed:{value:1, min:-10, max:10, step:0.01}}
 });
 `;
-requirejs(['paramsManager', 'escodegen'], function(paramsManager, escodegen){
 
-    const mgr = paramsManager(escodegen);
+
+global.astring = astring;
+
+requirejs(['paramsManager'], function(paramsManager){
+
+    const mgr = paramsManager();
     
     const rootAst = mgr.parseCodeString(program);
     // console.log(JSON.stringify(rootAst, null, 2));
@@ -49,4 +54,6 @@ requirejs(['paramsManager', 'escodegen'], function(paramsManager, escodegen){
     let modParamsO = mgr.extractParamsObject(modParamsAst);
     
     assert.equal(paramsO.speed.value, newSpeedValue);
+
+    console.log("all tests passed");
 });

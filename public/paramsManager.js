@@ -1,13 +1,14 @@
 define(['esprima', 'net'], function(esprima, net){
 
 
-    const makeParser = function(escodegen){
+    const makeParser = function(){
         const parseCodeString = function(codeString){
             return esprima.parse(codeString);
         };
 
         const generateCodeString = function(ast){
-            return escodegen.generate(ast);
+            // return escodegen.generate(ast);
+            return astring.generate(ast);
         };
 
         const findDefineArguments = function(parseTree){
@@ -25,7 +26,8 @@ define(['esprima', 'net'], function(esprima, net){
         };
 
         const extractParamsObject = function(paramsAst) {
-            let codeString = escodegen.generate(paramsAst.value);
+            // let codeString = escodegen.generate(paramsAst.value);
+            let codeString = astring.generate(paramsAst.value);
             eval(`var paramsObject = ${codeString}`);
             return paramsObject;
         };

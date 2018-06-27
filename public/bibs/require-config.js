@@ -6,7 +6,6 @@ requirejs.config({
         // }
     },
     paths: {
-        "esprima": "lib/esprima",
-        "escodegen": "lib/escodegen.browser.min"
+        "esprima": "lib/esprima"
     }
 });
