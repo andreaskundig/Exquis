@@ -16,14 +16,14 @@ define(['paramsManager'],function(paramsManager){
         let params = theCell.canvasAnim.getParams();
         for(let key in params){
             let param = params[key];
-            let labelString = `<p>${key}</p>`;
-            let label = htmlToElement(labelString);
-            activeContentDiv.appendChild(label);
+            let labelString = `<div>${key}</div>`;
+            let keyDiv = htmlToElement(labelString);
+            activeContentDiv.appendChild(keyDiv);
             
             let sliderString = `<input type=range value=${param.value} min=${param.min || 0} 
                                          max=${param.max || 1} step=${param.step || 0.0001}>`;
             let slider = htmlToElement(sliderString);
-            activeContentDiv.appendChild(slider);
+            keyDiv.appendChild(slider);
             slider.addEventListener('input', async (event) => {
                  if (editorController) {
                      const sourceCode = await theCell.canvasAnim.getSourceCode();
@@ -32,15 +32,13 @@ define(['paramsManager'],function(paramsManager){
                      let argsAst = paramMgr.findDefineArguments(rootAst);
                      let paramsAst = paramMgr.extractParamsFromArguments(argsAst);
                      let paramsO = paramMgr.extractParamsObject(paramsAst);
-                     
-                     paramsO.speed.value = event.target.value;
+                     paramsO[key].value = event.target.valueAsNumber;
                      paramMgr.setParamsValue(paramsAst, paramsO);
                      sourceCode.code = paramMgr.generateCodeString(rootAst);
                      
-                     // editorController.updateWithCanvasAnim(theCell.canvasAnim);
-                     editorController.updateWithSource(sourceCode, theCell.canvasAnim.animationName);
+                     editorController.updateWithSource(sourceCode, theCell.canvasAnim);
                  }else{
-                     param.value = event.target.value;
+                     param.value = event.target.valueAsNumber;
                  }
             });
         }

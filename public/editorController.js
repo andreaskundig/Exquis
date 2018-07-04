@@ -86,10 +86,11 @@ define(['ui', 'net'], function(ui, net){
         });
     };
 
-    var updateWithSource = function(source, animationName){
+    var updateWithSource = function(source, canvasAnim){
+        currentCanvasAnim = canvasAnim;
         return provideViewForLang(source.lang)
             .then(function(view){
-                view.setEditorContent(animationName, source);
+                view.setEditorContent(canvasAnim.animationName, source);
                 view.show();
             });
     };
