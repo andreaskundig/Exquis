@@ -21,8 +21,22 @@ define(['esprima', 'net'], function(esprima, net){
         };
 
         const extractParamsFromArguments = function(args){
-            return args[0].properties.find(
-                p => p.key.name == "params");
+            const isParams = p => p.key.name == "params";
+            
+            // define with object as param
+            if(args.length == 1){
+                return args[0].properties.find(isParams);
+            }
+
+            // define where first arg is array of dependencies
+            // and second arg is function
+            if(args.length == 2){
+                const returnStatement = args[1].body.body.find(s => s.type == "ReturnStatement");
+
+                return returnStatement.argument.properties.find(isParams);
+            }
+
+            return null;
         };
 
         const extractParamsObject = function(paramsAst) {
