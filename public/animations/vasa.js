@@ -1,16 +1,16 @@
 define(["bibs/noise","paper","bibs/imageDataUtils", "bibs/shapes"], 
 function(noise, paper, idu, shapes){
-    const squaresPerSide = 5,
-          squares = [];
+    const squaresPerSide = 5;
     const xy = index => [Math.floor(index / squaresPerSide),
                         index % squaresPerSide];
-    let i = 0,
-        j=42;
 
     return {
-        setup: function (context){
+        setup: function (context){ 
+            this.squares = [];
+            this.i = 0;
+            this.j = 42;
             const p = new paper.PaperScope();
-            p.setup(context.canvas);
+            p.setup(context.canvas); 
             const pr = p.view.pixelRatio;
             const [ocx, ocy] = [p.view.center.x, p.view.center.y];
 
@@ -28,17 +28,16 @@ function(noise, paper, idu, shapes){
                               point:topLeft, 
                               fillColor: 'black',
                               size: new p.Size(squareSize,squareSize)}) ;
-                    squares.push(square);
-                }
-            }
+                    this.squares.push(square);
+                } 
+            } 
 
         },
         draw: function (context, borders){
-
-            squares.forEach((square,index) =>{
-                const [x,y] = xy(index) ,
-                      rotNoise = noise.simplex2(x / 10 + i, y / 10 + i),
-                      sideNoise = noise.simplex2(x / 10 + j, y / 10 + j),
+            this.squares.forEach((square,index) =>{
+                const [x,y] = xy(index),
+                      rotNoise = noise.simplex2(x/10 + this.i, y/10 + this.i),
+                      sideNoise = noise.simplex2(x/10 + this.j, y/10 + this.j),
                       rotation = rotNoise * 180 * 0.3,
                       //                  scaling = .8,
                       scaling = sideNoise* 0.49 + 1,
@@ -51,8 +50,8 @@ function(noise, paper, idu, shapes){
                 square.oldScaling = scaling;
             });
             
-            i += 0.003;
-            j += 0.004;
+            this.i += 0.003;
+            this.j += 0.004;
             
         },
         tearDown: function(context){

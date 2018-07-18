@@ -1,8 +1,6 @@
 define(["bibs/noise","paper","bibs/imageDataUtils", "bibs/shapes"], 
 function(noise, paper, idu, shapes){
-    const squaresPerSide = 5,
-          squares = [],
-          calculatedColors = [];
+    const squaresPerSide = 5;
     const xy = index => [Math.floor(index / squaresPerSide),
                         index % squaresPerSide];
     const indexForXY = ([x,y]) => x * squaresPerSide + y;
@@ -37,12 +35,14 @@ function(noise, paper, idu, shapes){
         }) ;
         
     }; 
-    let i = 0,
-        j=42;
 
-    
     return {
         setup: function (context){
+            this.squares = [];
+            this.calculatedColors = [];
+            this.i = 0;
+            this.j = 42;
+            
             const p = new paper.PaperScope();
             p.setup(context.canvas);
             const stepSize = context.canvas.width / squaresPerSide,
@@ -58,7 +58,7 @@ function(noise, paper, idu, shapes){
                           square = p.Path.Rectangle({
                               point:topLeft, 
                               size: new p.Size(squareSize,squareSize)}) ;
-                    squares.push(square);
+                    this.squares.push(square);
                 }
             }
 
@@ -72,10 +72,10 @@ function(noise, paper, idu, shapes){
              } ,{});
             let sizes = [],
                 coloredSquares = [];
-            squares.forEach((square,index) =>{
+            this.squares.forEach((square,index) =>{
                 const [x,y] = xy(index) ,
-                      rotNoise = noise.simplex2(x / 10 + i, y / 10 + i),
-                      sideNoise = noise.simplex2(x / 10 + j, y / 10 + j),
+                      rotNoise = noise.simplex2(x / 10 + this.i, y / 10 + this.i),
+                      sideNoise = noise.simplex2(x / 10 + this.j, y / 10 + this.j),
                       rotation = rotNoise * 180 * 0.3,
                       scaling = sideNoise* 1.1 + 1.5,
                       relScaling = scaling / (square.oldScaling || 1),
@@ -88,7 +88,7 @@ function(noise, paper, idu, shapes){
                 let borderColor = colorIfIntersectsBorder(x, y, 
                                                       square, colors, 
                                                       context.canvas.width),
-                    newColor = borderColor || calculatedColors[index];
+                    newColor = borderColor || this.calculatedColors[index];
                 square.fillColor = newColor;
                 coloredSquares.push([square, borderColor]);
          });
@@ -100,19 +100,19 @@ function(noise, paper, idu, shapes){
                     .map(indexForXY)
                     .filter(i => sizes[i] > size)
                     .sort((a,b) => sizes[b] - sizes[a])
-                    .map(i => squares[i]);
+                    .map(i => this.squares[i]);
                     for(let i = 0; i < neighbors.length; i++){
                         const neighbor = neighbors[i];
                         if(sq.intersects(neighbor)){
-                            calculatedColors[index] = neighbor.fillColor;
+                            this.calculatedColors[index] = neighbor.fillColor;
                             break;
                         }
                     }
                 }
             });
 
-            i += 0.002;
-            j -= 0.003;
+            this.i += 0.002;
+            this.j -= 0.003;
             
         }
     };
