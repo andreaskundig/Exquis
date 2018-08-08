@@ -51,24 +51,33 @@ so that jsfiddle's javascript editor can be used to write animations or assembla
 * faire en sorte que ça tourne sans serveur (ni internet?)
 avoir des animations par defaut dans des fichiers javascripts chargés
 par index.html
-* TODO parameters changed with the slider are updated in the editor
-** TODO paramsController
+* parameters changed with the slider are updated in the editor
+** paramsController
 [[file:public/paramController.js::slider.addEventListener('input',%20(event)%20%3D>%20{][file:public/paramController.js::slider.addEventListener('input', (event) => {]] 
 parses the animation code, changes the parameter value, rewrites the code
 (using paramsManager.js)
 and replaces the code in the editor
 using the method editorController.updateWithCanvasAnim(theCell.canvasAnim, parentId);
 
-** DONE updateWithCanvasAnim needs to be changed to work without parentId.
+** updateWithCanvasAnim needs to be changed to work without parentId.
 The parentId is needed to create the editor.
 We can do without if we create the editor earlier.
 We want to create it when we open the control panel,
 In the method [[file:public/controlPanel.js::var%20show%20%3D%20function(cell){][show]] in controlPanel.js
 where we need a way to access parentId.
 
-** DONE tabs.getParentDiv
+** tabs.getParentDiv
 parentId is generated in [[file:public/tabs.js::return%20create%3B][tabs.js]], which currently just returns a
 method refreshActiveTab It should instead return an object
 {refreshActiveTab, getParentId/Div(tabName)}
 
 * TODO only call teardown if we're going to call a setup afterwards 
+
+* TODO do not reset parameters everytime setup is called
+
+in setup:
+if(!this.state){
+  this.state = {rotation:0}
+}
+
+see if we can keep a state when we recreate the anim and call setup

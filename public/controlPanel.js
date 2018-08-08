@@ -16,7 +16,7 @@ define(['csshelper', 'tabs', 'ui', 'paramController' ], function(csshelper, tabC
              initHandler: null,
              clickHandler: function(activeContentDiv){
                  if (editorController) {
-                     editorController.updateWithCanvasAnim(theCell.canvasAnim);
+                     editorController.updateWithCanvasAnim(theCell.canvasAnim).catch(e => console.error(e));
                  }
              }},
             {name: "Parameters", 

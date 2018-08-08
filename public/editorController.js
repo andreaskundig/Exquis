@@ -97,8 +97,8 @@ define(['ui', 'net'], function(ui, net){
 
     var displayInvalidity = function(err, canvasAnim){
         if(currentCanvasAnim === canvasAnim){
-            //console.log(err);
             if(err){
+                console.log(err);
                 _view.displayCodeValidity(false);
             }else{
                 _view.displayCodeValidity(true);
