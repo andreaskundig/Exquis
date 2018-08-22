@@ -73,11 +73,3 @@ method refreshActiveTab It should instead return an object
 
 * TODO only call teardown if we're going to call a setup afterwards 
 
-* TODO do not reset parameters everytime setup is called
-
-in setup:
-if(!this.state){
-  this.state = {rotation:0}
-}
-
-see if we can keep a state when we recreate the anim and call setup
