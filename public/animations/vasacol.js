@@ -1,6 +1,6 @@
 define(["bibs/noise","paper","bibs/imageDataUtils", "bibs/shapes"], 
 function(noise, paper, idu, shapes){
-    const squaresPerSide = 5;
+    const squaresPerSide = 3;
     const xy = index => [Math.floor(index / squaresPerSide),
                         index % squaresPerSide];
     const indexForXY = ([x,y]) => x * squaresPerSide + y;
@@ -35,6 +35,43 @@ function(noise, paper, idu, shapes){
         }) ;
         
     }; 
+    class Rotator {
+        constructor() {
+            this.i = 0;
+            this.previousValues = [];
+        }
+
+        computeRotation(x, y) {
+            const index = indexForXY([x,y]);
+            const previousRotation = this.previousValues[index];
+            const rotNoise = noise.simplex2(x / 10 + this.i, y / 10 + this.i);
+            const rotation = rotNoise * 180 * 0.3;
+            this.previousValues[index] = rotation;
+            return rotation - previousRotation || 0;
+        }
+
+        next() {
+            this.i += 0.002;
+        }
+    }
+    const theRotator = new Rotator();
+    
+    class Scaler{
+        constructor() {
+            this.j = 42;
+        }
+
+        computeScale(x, y, previousScale) {
+            const sideNoise = noise.simplex2(x / 10 + this.j, y / 10 + this.j);
+            const scaling = sideNoise * 1.1 + 1.5;
+            return scaling / (previousScale || 1);
+        }
+
+        next() {
+            this.j -= 0.003;
+        }
+    }
+    const theScaler = new Scaler(); 
 
     return {
         setup: function (context){
@@ -45,7 +82,7 @@ function(noise, paper, idu, shapes){
             
             const p = new paper.PaperScope();
             p.setup(context.canvas);
-            const stepSize = context.canvas.width / squaresPerSide,
+            const stepSize = context.canvas.width / squaresPerSide /devicePixelRatio ,
                   squareSize = 39,
                   centeringOffset = new p.Point(1,1)
                       .multiply((stepSize - squareSize)/2);
@@ -74,14 +111,12 @@ function(noise, paper, idu, shapes){
                 coloredSquares = [];
             this.squares.forEach((square,index) =>{
                 const [x,y] = xy(index) ,
-                      rotNoise = noise.simplex2(x / 10 + this.i, y / 10 + this.i),
                       sideNoise = noise.simplex2(x / 10 + this.j, y / 10 + this.j),
-                      rotation = rotNoise * 180 * 0.3,
                       scaling = sideNoise* 1.1 + 1.5,
-                      relScaling = scaling / (square.oldScaling || 1),
-                      relRotation = rotation - square.oldRotation || 0 ; 
+                      //relScaling = scaling / (square.oldScaling || 1),
+                      relScaling = theScaler.computeScale(x,y,square.oldScaling),
+                      relRotation = theRotator.computeRotation(x,y) ; 
                 square.rotate(relRotation);
-                square.oldRotation = rotation;
                 square.scale(relScaling);
                 square.oldScaling = scaling;
                 sizes.push(scaling);
@@ -111,7 +146,8 @@ function(noise, paper, idu, shapes){
                 }
             });
 
-            this.i += 0.002;
+            theRotator.next();
+            theScaler.next();
             this.j -= 0.003;
             
         }

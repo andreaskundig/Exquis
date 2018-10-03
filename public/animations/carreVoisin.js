@@ -4,8 +4,8 @@ define(["bibs/canvasBuffer",
         "/animations/carreSinus.js"], 
 function(canvasBuffer, anim1, anim2, anim3){
     return {
-        setup: function (context){
-            anim1.setup(context);
+        setup: function (context, animationState){
+            anim1.setup(context, animationState);
             const w = context.canvas.width;
             const h = context.canvas.height;
       
@@ -14,8 +14,8 @@ function(canvasBuffer, anim1, anim2, anim3){
             this.l3 = canvasBuffer.bufferAnim(anim3, w, h);
 
         },
-        draw: function (context, borders){
-            anim1.draw(context, borders);
+        draw: function (context, borders, animationState){
+            anim1.draw(context, borders, animationState);
             this.l2.draw(borders);
             this.l2.pasteInto(context,'destination-in');
             
