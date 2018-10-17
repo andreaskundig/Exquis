@@ -61,10 +61,10 @@ function(noise, paper, idu, shapes){
             this.j = 42;
         }
 
-        computeScale(x, y, previousScale) {
+        computeScale(x, y) {
             const sideNoise = noise.simplex2(x / 10 + this.j, y / 10 + this.j);
             const scaling = sideNoise * 1.1 + 1.5;
-            return scaling / (previousScale || 1);
+            return scaling;
         }
 
         next() {
@@ -77,8 +77,6 @@ function(noise, paper, idu, shapes){
         setup: function (context){
             this.squares = [];
             this.calculatedColors = [];
-            this.i = 0;
-            this.j = 42;
             
             const p = new paper.PaperScope();
             p.setup(context.canvas);
@@ -93,7 +91,8 @@ function(noise, paper, idu, shapes){
                               .multiply(stepSize)
                               .add(centeringOffset),
                           square = p.Path.Rectangle({
-                              point:topLeft, 
+                              point:topLeft,
+                              fillColor: 'white',
                               size: new p.Size(squareSize,squareSize)}) ;
                     this.squares.push(square);
                 }
@@ -104,17 +103,15 @@ function(noise, paper, idu, shapes){
 
             let colors = Object.keys(borders).reduce((acc, dir) => {
                 let avg = idu.averageColor(borders[dir]);
-                acc[dir] = `rgb(${avg.join(',')})`;
+                acc[dir] = avg[3] == 0 ? null : `rgba(${avg.join(',')})`;
                 return acc;
              } ,{});
             let sizes = [],
                 coloredSquares = [];
             this.squares.forEach((square,index) =>{
                 const [x,y] = xy(index) ,
-                      sideNoise = noise.simplex2(x / 10 + this.j, y / 10 + this.j),
-                      scaling = sideNoise* 1.1 + 1.5,
-                      //relScaling = scaling / (square.oldScaling || 1),
-                      relScaling = theScaler.computeScale(x,y,square.oldScaling),
+                      scaling = theScaler.computeScale(x,y),
+                      relScaling = scaling / (square.oldScaling || 1),
                       relRotation = theRotator.computeRotation(x,y) ; 
                 square.rotate(relRotation);
                 square.scale(relScaling);
@@ -124,7 +121,12 @@ function(noise, paper, idu, shapes){
                                                       square, colors, 
                                                       context.canvas.width),
                     newColor = borderColor || this.calculatedColors[index];
-                square.fillColor = newColor;
+                    if(newColor){
+                      square.fillColor = newColor;
+                      //if(square.fillColor.toCSS().length=='rgb(0,0,0)'.length)
+                     // console.log(square.fillColor.toCSS());
+                    }
+                
                 coloredSquares.push([square, borderColor]);
          });
             sizes.forEach((size,index) =>{
