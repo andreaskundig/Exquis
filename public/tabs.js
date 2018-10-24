@@ -37,15 +37,15 @@ define([], function(){
             tabsContentRoot.appendChild(tabContentDiv);
             tabNameToParentDivMap[tabConfig.name] = tabContentDiv;
             
-            tabHeader.addEventListener("click", function(event){
+            tabHeader.addEventListener("click", async function(event){
                var activeHeader = tabsHeaderRoot.querySelector('.tabs__title--active'),
                    activeContent = document.querySelector(activeContentSelector);
                if (event.target === activeHeader) { return; }
+               await tabConfig.clickHandler(tabContentDiv);
                tabHeader.classList.add('tabs__title--active');
                activeHeader.classList.remove('tabs__title--active');
-               activeContent.classList.add('invisible');
                tabContentDiv.classList.remove('invisible');
-               tabConfig.clickHandler(tabContentDiv);
+               activeContent.classList.add('invisible');
                activeTabConfig = tabConfig;
             });
 

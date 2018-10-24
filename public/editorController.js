@@ -73,17 +73,15 @@ define(['ui', 'net'], function(ui, net){
         return controller;
     };
 
-    var updateWithCanvasAnim = function(canvasAnim){
+    var updateWithCanvasAnim = async function(canvasAnim, parentId){
         currentCanvasAnim = canvasAnim;
         console.log(canvasAnim.animationName); 
-        return canvasAnim.getSourceCode().then(function(source){
-            // console.log('lang', source.lang);
-            return provideViewForLang(source.lang)
-                .then(function(view){
-                    view.setEditorContent(canvasAnim.animationName, source);
-                    view.show();
-                });
-        });
+        const source = await canvasAnim.getSourceCode();
+        // console.log('lang', source.lang);
+        const view = await provideViewForLang(source.lang, parentId);
+        view.setEditorContent(canvasAnim.animationName, source);
+        view.show();
+
     };
 
     var updateWithSource = function(source, canvasAnim){

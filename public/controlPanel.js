@@ -14,10 +14,15 @@ define(['csshelper', 'tabs', 'ui', 'paramController' ], function(csshelper, tabC
              }},
             {name: TAB_NAME_EDITOR, 
              initHandler: null,
-             clickHandler: function(activeContentDiv){
-                 if (editorController) {
-                     editorController.updateWithCanvasAnim(theCell.canvasAnim).catch(e => console.error(e));
-                 }
+             clickHandler: async function(activeContentDiv){
+                 try{
+                     if (editorController) {
+                         await editorController.updateWithCanvasAnim(
+                             theCell.canvasAnim, activeContentDiv.id)
+                     }
+                 } catch (e) {
+                    console.error(e);
+                }
              }},
             {name: "Parameters", 
              initHandler: null,
