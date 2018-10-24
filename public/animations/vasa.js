@@ -11,8 +11,8 @@ function(noise, paper, idu, shapes){
             this.j = 42;
             const p = new paper.PaperScope();
             p.setup(context.canvas); 
-            const pr = p.view.pixelRatio;
-            const [ocx, ocy] = [p.view.center.x, p.view.center.y];
+            context.canvas.width /= devicePixelRatio;
+            context.canvas.height /= devicePixelRatio;
 
             const stepSize = p.view.size.width / squaresPerSide,
                   squareSize = 29,

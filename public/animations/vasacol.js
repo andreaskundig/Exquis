@@ -80,7 +80,9 @@ function(noise, paper, idu, shapes){
             
             const p = new paper.PaperScope();
             p.setup(context.canvas);
-            const stepSize = context.canvas.width / squaresPerSide /devicePixelRatio ,
+            context.canvas.width /= devicePixelRatio;
+            context.canvas.height /= devicePixelRatio;
+            const stepSize = context.canvas.width / squaresPerSide,
                   squareSize = 39,
                   centeringOffset = new p.Point(1,1)
                       .multiply((stepSize - squareSize)/2);
