@@ -17,10 +17,13 @@ define(["csshelper"], function( csshelper){
         return cancelButton;
     };
 
-    var buildPrompt = function(promptText){
+    var buildPrompt = function(promptText, initialValue){
         return new Promise(function(resolve, reject){
             var input = document.createElement("input"),
             buttonRow = document.createElement("div");
+            if(initialValue){
+                input.value = initialValue;
+            }
 
             dialogTitle.innerHTML = "";
             dialogContent.innerHTML = "";

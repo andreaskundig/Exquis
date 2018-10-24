@@ -22,7 +22,7 @@ define(['ui', 'net'], function(ui, net){
                 store.saveAssemblage(exquis.assName, exquis.assemblage());
             },
             saveAs: function(){
-                return ui.buildPrompt("enter file name")
+                return ui.buildPrompt("enter file name", exquis.assName)
                 .then(function(fileName){
                     if(fileName == null){
                         throw "filename is null";
