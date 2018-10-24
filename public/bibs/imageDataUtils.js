@@ -107,19 +107,19 @@ define({
             totals = [0,0,0,0],
             start = pixelStart || 0,
             end = pixelEnd || pixels.length,
-            avgArray;
+            avgArray,
+            totalWeight = 0;
         
         for(var i = start; i < end; i += 4){
-            for(var j = 0; j < 4; j++){
-                totals[j] += pixels[i + j];
-            }
+            let weight = pixels[i + 3];
+            totalWeight += weight;
+                for (var j = 0; j < 4; j++) {
+                    totals[j] += pixels[i + j] * weight;
+                }
         }
         avgArray = totals.map(function(total){
-            return Math.round(total/(end - start) * 4);
+            return Math.round(total/totalWeight);
         });
-        if(avgArray[0]+avgArray[1]+avgArray[2]<27 && avgArray[3]>0){
-            console.log(avgArray+'');
-        }
         return avgArray;
     },
     colorDistance: function(color1, color2){
