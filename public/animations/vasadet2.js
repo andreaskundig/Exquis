@@ -37,7 +37,7 @@ function(noise, paper, idu, shapes){
     }; 
     class Rotator {
         constructor() {
-            this.i = 0.1;
+            this.i = 0;
         }
 
         computeRotation(x, y) {
@@ -45,7 +45,7 @@ function(noise, paper, idu, shapes){
         }
 
         next() {
-            //this.i += 0.002;
+            this.i += 0.1;
         }
     }
     const theRotator = new Rotator();
@@ -89,7 +89,9 @@ function(noise, paper, idu, shapes){
                           square = p.Path.Rectangle({
                               point:topLeft,
                               fillColor: 'white',
-                              size: new p.Size(squareSize,squareSize)}) ;
+                              size: new p.Size(squareSize,squareSize),
+                              applyMatrix: false
+                          }) ;
                     this.squares.push(square);
                 }
             } 
@@ -103,15 +105,12 @@ function(noise, paper, idu, shapes){
                 return acc;
              } ,{});
             let sizes = [],
-                coloredSquares = [];
+                isColoredByBorder = [];
             this.squares.forEach((square,index) =>{
                 const [x,y] = xy(index) ,
-                      scaling = theScaler.computeScale(x,y),
-                      relScaling = scaling / (square.oldScaling || 1),
-                      relRotation = theRotator.computeRotation(x,y) ; 
-                square.rotate(relRotation);
-                square.scale(relScaling);
-                square.oldScaling = scaling;
+                      scaling = theScaler.computeScale(x,y);
+                square.rotation = theRotator.computeRotation(x,y) ;
+                square.scaling = [scaling,scaling];
                 sizes.push(scaling);
                 let borderColor = colorIfIntersectsBorder(x, y, 
                                                       square, colors, 
@@ -122,27 +121,27 @@ function(noise, paper, idu, shapes){
                       //if(square.fillColor.toCSS().length=='rgb(0,0,0)'.length)
                      // console.log(square.fillColor.toCSS());
                     }
-                
-                coloredSquares.push([square, borderColor]);
-         });
-            sizes.forEach((size,index) =>{
+                // keep track of which square has its color determined by borderColor
+                isColoredByBorder.push( true && borderColor);
+             });
+         
+             this.squares.forEach((square, index) => {
                 const [x,y] = xy(index);
-                if(!coloredSquares[index][1]){
-                    const sq = coloredSquares[index][0],
-                    neighbors = neighborsXYs(x,y)
-                    .map(indexForXY)
-                    .filter(i => sizes[i] > size)
-                    .sort((a,b) => sizes[b] - sizes[a])
-                    .map(i => this.squares[i]);
+                if(!isColoredByBorder[index]){
+                    const neighbors = neighborsXYs(x,y)
+                        .map(indexForXY)
+                        .map(i => this.squares[i])
+                        .filter(neighbor => neighbor.scaling.x > square.scaling.x)
+                        .sort((a,b) => b.scaling.x - a.scaling.x);
                     for(let i = 0; i < neighbors.length; i++){
                         const neighbor = neighbors[i];
-                        if(sq.intersects(neighbor)){
+                        if(square.intersects(neighbor)){
                             this.calculatedColors[index] = neighbor.fillColor;
                             break;
                         }
                     }
                 }
-            });
+            })
 
             theRotator.next();
             theScaler.next();
