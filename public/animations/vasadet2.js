@@ -27,14 +27,6 @@ function(noise, paper, idu, shapes){
         }
         return null;
     };
-    const neighborsXYs = (x,y) => {
-        return [[x+1, y], [x, y+1], [x-1, y], [x, y-1]]
-            .filter(([x,y]) => {
-            let ok = x >= 0 && x < squaresPerSide ;
-            return ok &&  y >= 0 && y < squaresPerSide;
-        }) ;
-        
-    }; 
     class Rotator {
         constructor() {
             this.i = 0;
@@ -67,72 +59,103 @@ function(noise, paper, idu, shapes){
     }
     const theScaler = new Scaler(); 
 
-    return {
-        setup: function (context){
-            this.squares = [];
-            this.calculatedColors = [];
+    const squareSize = 59;
+    const createShape = (paper, topLeft, width) => {
+      return paper.Path.Rectangle({
+          point:topLeft,
+          fillColor: 'white',
+          size: new paper.Size(squareSize,squareSize),
+          applyMatrix: false
+      }) ;
+    };
+    
+    class ShapeGrid
+    {
+        
+        constructor(context, options){
+            this.elementsPerSide = options.elementsPerSide || 4;
+            this.elements = [];
+            //this.calculatedColors = [];
             
             const p = new paper.PaperScope();
+            this.paper = p;
             p.setup(context.canvas);
             context.canvas.width /= devicePixelRatio;
             context.canvas.height /= devicePixelRatio;
-            const stepSize = context.canvas.width / squaresPerSide,
-                  squareSize = 39,
-                  centeringOffset = new p.Point(1,1)
-                      .multiply((stepSize - squareSize)/2);
-              
-            for (var x = 0; x < squaresPerSide; x++) {
-                for (var y = 0; y < squaresPerSide; y++) {
+            const stepSize = context.canvas.width / this.elementsPerSide;
+            
+            const createShape = options.createShape;
+            
+            for (var x = 0; x < this.elementsPerSide; x++) {
+                for (var y = 0; y < this.elementsPerSide; y++) {
                     const topLeft = new p.Point(x,y)
-                              .multiply(stepSize)
-                              .add(centeringOffset),
-                          square = p.Path.Rectangle({
-                              point:topLeft,
-                              fillColor: 'white',
-                              size: new p.Size(squareSize,squareSize),
-                              applyMatrix: false
-                          }) ;
-                    this.squares.push(square);
+                              .multiply(stepSize);
+                    this.elements.push(createShape(p, topLeft, stepSize));
                 }
             } 
-
+        }
+        
+        forEach(func){
+            this.elements.forEach((element, index) =>{
+                const [x,y] = xy(index);
+                func(element, x, y, index)
+            })            
+        }
+        
+        getElementByXY(x,y){
+            return this.elements[indexForXY([x,y])];  
+        }
+ 
+        neighborsXYs(x,y){
+            return [[x+1, y], [x, y+1], [x-1, y], [x, y-1]]
+                .filter(([x,y]) => {
+                    let ok = x >= 0 && x < this.elementsPerSide ;
+                    return ok &&  y >= 0 && y < this.elementsPerSide;
+                });
+        }
+        
+        neighbors(x,y){
+            return this.neighborsXYs(x,y)
+           .map(([x,y]) => this.getElementByXY(x,y));
+        }
+    }
+    
+    return {
+        setup: function (context){
+            this.calculatedColors = [];
+            this.grid = new ShapeGrid(context, {createShape});
         },
+        
         draw: function (context, borders){
-
             let colors = Object.keys(borders).reduce((acc, dir) => {
                 let avg = idu.averageColor(borders[dir]);
                 acc[dir] = avg[3] == 0 ? null : `rgba(${avg.join(',')})`;
                 return acc;
              } ,{});
-            let sizes = [],
-                isColoredByBorder = [];
-            this.squares.forEach((square,index) =>{
-                const [x,y] = xy(index) ,
-                      scaling = theScaler.computeScale(x,y);
+            let isColoredByBorder = [];
+            
+            const g = this.grid;
+            g.forEach((square,x,y,index) =>{
+                const scaling = theScaler.computeScale(x,y);
                 square.rotation = theRotator.computeRotation(x,y) ;
                 square.scaling = [scaling,scaling];
-                sizes.push(scaling);
                 let borderColor = colorIfIntersectsBorder(x, y, 
                                                       square, colors, 
                                                       context.canvas.width),
                     newColor = borderColor || this.calculatedColors[index];
                     if(newColor){
                       square.fillColor = newColor;
-                      //if(square.fillColor.toCSS().length=='rgb(0,0,0)'.length)
-                     // console.log(square.fillColor.toCSS());
                     }
                 // keep track of which square has its color determined by borderColor
                 isColoredByBorder.push( true && borderColor);
              });
-         
-             this.squares.forEach((square, index) => {
-                const [x,y] = xy(index);
+             
+             g.forEach((square,x,y,index) => {
                 if(!isColoredByBorder[index]){
-                    const neighbors = neighborsXYs(x,y)
-                        .map(indexForXY)
-                        .map(i => this.squares[i])
+                    const neighbors = g.neighbors(x,y)
                         .filter(neighbor => neighbor.scaling.x > square.scaling.x)
                         .sort((a,b) => b.scaling.x - a.scaling.x);
+             
                     for(let i = 0; i < neighbors.length; i++){
                         const neighbor = neighbors[i];
                         if(square.intersects(neighbor)){
@@ -140,13 +163,13 @@ function(noise, paper, idu, shapes){
                             break;
                         }
                     }
+
+            
                 }
             })
-
             theRotator.next();
             theScaler.next();
             this.j -= 0.003;
-            
         }
     };
 });
