@@ -18,9 +18,10 @@ function(noise, paper, idu, shapes, ShapeGrid){
     };
 
     const computeScale = (x,y,noise) => {
-            var sign = noise % 5 > 1 ? 1 : -1;
-            var sign2 = noise % 3 > 1 ? 1 : -1;
-            return 1.1 + Math.sin(noise) * .15 + y * .01 * sign + x * .001 * sign2;
+            var sign = x % 2  ? -1 : 1;
+            var sign2 = y % 2  ? -1 : 1;
+            var r = Math.random();
+            return 1+   .3 * sign +  .1 * sign2 + r
     }
     const computeRotation = (x,y,seed) => {
         return seed + x *10 - y *40;  
@@ -77,7 +78,7 @@ function(noise, paper, idu, shapes, ShapeGrid){
                     }
                 }
             });
-            this.rotationSeed += 0.31;
+            this.rotationSeed += 0.61;
             this.scaleNoise += 0.02;
         }
     };

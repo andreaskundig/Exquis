@@ -17,13 +17,19 @@ function(noise, paper, idu, shapes, ShapeGrid){
                 .find(n => square.intersects(n));
     };
 
-    const computeScale = (x,y,noise) => {
-            var sign = noise % 5 > 1 ? 1 : -1;
-            var sign2 = noise % 3 > 1 ? 1 : -1;
-            return 1.1 + Math.sin(noise) * .15 + y * .01 * sign + x * .001 * sign2;
+    const computeScale = (x,y,noise,shape) => {
+        shape.count = isNaN(shape.count) ? 0: shape.count + 1;
+        const previousScaling = shape.scaling.x;
+        if(shape.count % 200 > 0){
+            return previousScaling;
+        }
+            var sign = x % 2  ? -1 : 1;
+            var sign2 = y % 2  ? -1 : 1;
+            var r = (0.5 - Math.random()) * .05;
+            return previousScaling +    sign *  sign2 * r
     }
     const computeRotation = (x,y,seed) => {
-        return seed + x *10 - y *40;  
+        return seed+ x *-15 - y *Math.sin(seed/100) *10 +6;  
     }
     
     
@@ -58,7 +64,7 @@ function(noise, paper, idu, shapes, ShapeGrid){
             
             const g = this.grid;
             g.forEach((square,x,y,index) =>{
-                const scaling = computeScale(x,y,this.scaleNoise);
+                const scaling = computeScale(x,y,this.scaleNoise,square);
                 square.rotation = computeRotation(x,y,this.rotationSeed) ;
                 square.scaling = [scaling,scaling];
              });
@@ -77,7 +83,7 @@ function(noise, paper, idu, shapes, ShapeGrid){
                     }
                 }
             });
-            this.rotationSeed += 0.31;
+            this.rotationSeed += 0.61;
             this.scaleNoise += 0.02;
         }
     };
