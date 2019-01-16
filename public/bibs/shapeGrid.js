@@ -37,6 +37,11 @@ define(function () {
             return x * this.elementsPerSide + y;
         }
 
+	xyTouchesBorder(x,y){
+	    const last = this.elementsPerSide - 1;
+	    return x == 0 || y == 0 || x == last || y == last;
+	}
+
         getElementByXY(x, y) {
             return this.elements[this.indexForXY(x, y)];
         }
@@ -61,6 +66,10 @@ define(function () {
             return this.neighborsXYs(x, y)
                 .map(([x, y]) => this.getElementByXY(x, y));
         }
+
+	scale(){
+	    this.paper.view.scale.apply(this.paper.view, arguments);
+	}
     }
 
     return ShapeGrid;

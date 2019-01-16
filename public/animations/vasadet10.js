@@ -17,6 +17,11 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
                 .find(n => square.intersects(n));
     };
             
+    const touchesBorder = (x,y) => {
+        const last = elementsPerSide - 1;
+        return x == 0 || y == 0 || x == last || y == last;
+    };
+    
     var limit = [0 , elementsPerSide -1 ];
     var limits = [limit, limit];
     var direction = [8, 5];
@@ -28,12 +33,21 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
     const computeScale = (x,y) => {
         const center = w.coordinates
         const distanceFromCenter = Math.abs( x + y - center[0] - center[1]);
-        return 1 + distanceFromCenter/20;
+        return 1 + distanceFromCenter/40;
     }
-
+    const computeRotation = (x,y,seed) => {
+        if(touchesBorder(x,y)){
+            return 0;
+        }
+        //return 0;
+        return (seed- x *1.5 - y  *1.0 );  
+    }
+    
+    const xSideScale = .5;
+    const ySideScale = 1.6;
     const createShape = (paper, topLeft, width) => {
       const side = 150/elementsPerSide;
-      const shapeSize = new paper.Size(side * 1,side*1).multiply(0.9);
+      const shapeSize = new paper.Size(side * xSideScale,side*ySideScale);
       const shapeTopLeft = topLeft.add(side/2).subtract(shapeSize.divide(2));
       return paper.Path.Rectangle({
           point:shapeTopLeft,
@@ -43,7 +57,6 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
       }) ;
     };
     
-    
     return {
         setup: function (context){
             this.calculatedColors = [];
@@ -51,7 +64,11 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
                 createShape, 
                 elementsPerSide
             });
-            this.grid.scale(1.3);
+            this.rotationSeed = 0;
+            const scale = elementsPerSide/(elementsPerSide-2);
+
+            this.grid.scale(scale * Math.max(1,xSideScale), 
+                            scale * Math.max(1,ySideScale));
         },
         
         draw: function (context, borders){
@@ -65,6 +82,7 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
             const g = this.grid;
             g.forEach((square,x,y,index) =>{
                 const scaling = computeScale(x,y);
+                square.rotation = computeRotation(x,y,this.rotationSeed) ;
                 square.scaling = [scaling,scaling];
              });
 
@@ -82,6 +100,7 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
                     }
                 }
             });
+            this.rotationSeed += 0.61;
         }
     };
 });

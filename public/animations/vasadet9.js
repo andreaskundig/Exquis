@@ -28,9 +28,9 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
     const computeScale = (x,y) => {
         const center = w.coordinates
         const distanceFromCenter = Math.abs( x + y - center[0] - center[1]);
-        return 1 + distanceFromCenter/20;
+        return 1 + distanceFromCenter/40;
     }
-
+    
     const createShape = (paper, topLeft, width) => {
       const side = 150/elementsPerSide;
       const shapeSize = new paper.Size(side * 1,side*1).multiply(0.9);
@@ -51,7 +51,7 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
                 createShape, 
                 elementsPerSide
             });
-            this.grid.scale(1.3);
+            this.grid.scale(elementsPerSide/(elementsPerSide-2));
         },
         
         draw: function (context, borders){
