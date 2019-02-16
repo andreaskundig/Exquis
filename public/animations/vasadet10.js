@@ -16,11 +16,6 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
                 .sort((a,b) => b.scaling.x - a.scaling.x)
                 .find(n => square.intersects(n));
     };
-            
-    const touchesBorder = (x,y) => {
-        const last = elementsPerSide - 1;
-        return x == 0 || y == 0 || x == last || y == last;
-    };
     
     var limit = [0 , elementsPerSide -1 ];
     var limits = [limit, limit];
@@ -35,11 +30,10 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
         const distanceFromCenter = Math.abs( x + y - center[0] - center[1]);
         return 1 + distanceFromCenter/40;
     }
-    const computeRotation = (x,y,seed) => {
-        if(touchesBorder(x,y)){
+    const computeRotation = (x,y,touchesBorder, seed) => {
+        if(touchesBorder){
             return 0;
         }
-        //return 0;
         return (seed- x *1.5 - y  *1.0 );  
     }
     
@@ -82,7 +76,9 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
             const g = this.grid;
             g.forEach((square,x,y,index) =>{
                 const scaling = computeScale(x,y);
-                square.rotation = computeRotation(x,y,this.rotationSeed) ;
+                const touchesBorder = g.xyTouchesBorder(x,y);
+                square.rotation = computeRotation(x,y,touchesBorder, 
+                                                  this.rotationSeed) ;
                 square.scaling = [scaling,scaling];
              });
 

@@ -3,6 +3,7 @@ define(function () {
         constructor(context, options) {
             this.elementsPerSide = options.elementsPerSide || 4;
             this.elements = [];
+            this.context = context;
 
             const p = new paper.PaperScope();
             this.paper = p;
@@ -11,7 +12,7 @@ define(function () {
             context.canvas.height /= devicePixelRatio;
             const stepSize = context.canvas.width / this.elementsPerSide;
 
-            const createShape = options.createShape;
+            const createShape = options.createShape || this.createBlackRectangle.bind(this);
 
             for (var x = 0; x < this.elementsPerSide; x++) {
                 for (var y = 0; y < this.elementsPerSide; y++) {
@@ -19,6 +20,18 @@ define(function () {
                     this.elements.push(createShape(p, topLeft, stepSize));
                 }
             }
+        }
+
+        createBlackRectangle(paper, topLeft, width) {
+            const w = this.context.canvas.width / this.elementsPerSide;
+            const h = this.context.canvas.height / this.elementsPerSide;
+            const shapeSize = new paper.Size(w, h);
+            return paper.Path.Rectangle({
+                point: topLeft,
+                fillColor: 'black',
+                size: shapeSize,
+                applyMatrix: false
+            });
         }
 
         forEach(func) {
@@ -37,10 +50,9 @@ define(function () {
             return x * this.elementsPerSide + y;
         }
 
-	xyTouchesBorder(x,y){
-	    const last = this.elementsPerSide - 1;
-	    return x == 0 || y == 0 || x == last || y == last;
-	}
+        xyTouchesBorder(x, y) {
+            return !!this.neighboringBorder(x,y);
+        }
 
         getElementByXY(x, y) {
             return this.elements[this.indexForXY(x, y)];
@@ -67,9 +79,9 @@ define(function () {
                 .map(([x, y]) => this.getElementByXY(x, y));
         }
 
-	scale(){
-	    this.paper.view.scale.apply(this.paper.view, arguments);
-	}
+        scale() {
+            this.paper.view.scale.apply(this.paper.view, arguments);
+        }
     }
 
     return ShapeGrid;
