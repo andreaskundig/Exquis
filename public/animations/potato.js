@@ -1,49 +1,47 @@
-define(["bibs/noise","paper","bibs/imageDataUtils", "bibs/shapes",
-"bibs/shapeGrid","bibs/wanderingPoint"], 
-function(noise, paper, idu, shapes, ShapeGrid,wp){
-    const elementsPerSide = 15;
-    
-    const chooseColor = (x,y,g, borders) => {
-        const borderName = g.neighboringBorder(x,y);
-        if(!borderName){
-            return null;
-        }
-        let avg = idu.averageColor(borders[borderName]);
-        return `rgba(${avg.join(',')})`;
-    }
-    
+define(["bibs/imageDataUtils", "bibs/shapeGrid","bibs/wanderingPoint"], 
+function( idu, ShapeGrid,wp){
     return {
         setup: function (context){
+            const elementsPerSide = 10;
             this.grid = new ShapeGrid(context, {elementsPerSide});
-            this.rotationSeed = 0;
-            const startCoordinates = [Math.random() > 0.5 ? 0 : elementsPerSide - 1,
-                                      Math.floor(Math.random()*elementsPerSide)];
-            if(Math.random()>0.5){ startCoordinates.reverse(); }
-            const pc = {x: startCoordinates[0], y: startCoordinates[1]};
-            this.potatoCoordinates = pc;
-            this.potato = this.grid.getElementByXY(pc.x, pc.y);
-            
+            this.step = 0;
         },
-        
         draw: function (context, borders){
-            const g = this.grid;
-            const p = this.potatoCoordinates;
-            const color = chooseColor(p.x, p.y, g, borders) || this.previousPotato.fillColor;
-            this.potato.fillColor = color;
-            
-            const npc = this.nextPotatoCoordinates(p,g);
-            this.potatoCoordinates = npc;
-            this.previousPotato = this.potato
-            this.potato = g.getElementByXY(npc.x, npc.y);
-
-           
-            this.rotationSeed += 0.61;
+            const previous = this.previousPotato;
+            const potato = this.next(previous);
+            potato.fillColor =
+                this.chooseColor(borders, potato, previous);
+            this.previousPotato = potato;
+            this.step++;
         },
-        nextPotatoCoordinates: (previousCoordinates,g) => {
-            const p = previousCoordinates
-            const neighbors = g.neighborsXYs(p.x, p.y);
+        chooseColor: function(borders, potato, previousPotato){
+            const g = this.grid;
+            const xy = g.coordinates(potato);
+            const borderName = g.neighboringBorder(...xy);
+            if(this.step % 5 || !borderName){
+                return previousPotato && previousPotato.fillColor;
+            }
+            let avg = idu.averageColor(borders[borderName]);
+            return `rgba(${avg.join(',')})`;
+        },
+        next: function(current){
+            const g = this.grid;
+            if(!current){
+                //return this.grid.getElementByXY(0,0);
+                return this.first(g.elementsPerSide);
+            }
+            const xy = g.coordinates(current);
+            const neighbors = g.neighborsXYs(...xy);
             const ni = Math.floor(Math.random()*neighbors.length);
-            return { x: neighbors[ni][0],y: neighbors[ni][1]};
+            return g.getElementByXY(...neighbors[ni]);
+        },
+        first: function (count){
+            const g = this.grid;
+            const startCoordinates =
+                  [Math.round(Math.random()) * (count-1),
+                   Math.round(Math.random() * (count-1))];
+            if(Math.random()>0.5){ startCoordinates.reverse(); }
+            return g.getElementByXY(...startCoordinates);
         }
     };
 });

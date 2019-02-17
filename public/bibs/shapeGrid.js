@@ -4,20 +4,25 @@ define(function () {
             this.elementsPerSide = options.elementsPerSide || 4;
             this.elements = [];
             this.context = context;
-
+            this.coordinatesByShape = new Map();
+            
             const p = new paper.PaperScope();
             this.paper = p;
             p.setup(context.canvas);
             context.canvas.width /= devicePixelRatio;
             context.canvas.height /= devicePixelRatio;
-            const stepSize = context.canvas.width / this.elementsPerSide;
+            const stepSize = context.canvas.width/this.elementsPerSide;
 
-            const createShape = options.createShape || this.createBlackRectangle.bind(this);
-
+            let createShape = options.createShape;
+            if(!createShape){
+                createShape = this.createBlackRectangle.bind(this);
+            }
             for (var x = 0; x < this.elementsPerSide; x++) {
                 for (var y = 0; y < this.elementsPerSide; y++) {
-                    const topLeft = new p.Point(x, y).multiply(stepSize);
-                    this.elements.push(createShape(p, topLeft, stepSize));
+                    const topLeft = new p.Point(x,y).multiply(stepSize);
+                    const shape = createShape(p,topLeft,stepSize);
+                    this.elements.push(shape);
+                    this.coordinatesByShape.set(shape, [x,y]);
                 }
             }
         }
@@ -81,6 +86,10 @@ define(function () {
 
         scale() {
             this.paper.view.scale.apply(this.paper.view, arguments);
+        }
+
+        coordinates(shape){
+            return this.coordinatesByShape.get(shape);
         }
     }
 
