@@ -4,7 +4,6 @@ function( idu, ShapeGrid,wp){
         setup: function (context){
             const elementsPerSide = 10;
             this.grid = new ShapeGrid(context, {elementsPerSide});
-            this.step = 0;
         },
         draw: function (context, borders){
             const previous = this.previousPotato;
@@ -12,13 +11,12 @@ function( idu, ShapeGrid,wp){
             potato.fillColor =
                 this.chooseColor(borders, potato, previous);
             this.previousPotato = potato;
-            this.step++;
         },
         chooseColor: function(borders, potato, previousPotato){
             const g = this.grid;
             const xy = g.coordinates(potato);
             const borderName = g.neighboringBorder(...xy);
-            if(this.step % 5 || !borderName){
+            if(!borderName){
                 return previousPotato && previousPotato.fillColor;
             }
             let avg = idu.averageColor(borders[borderName]);
@@ -27,21 +25,12 @@ function( idu, ShapeGrid,wp){
         next: function(current){
             const g = this.grid;
             if(!current){
-                //return this.grid.getElementByXY(0,0);
-                return this.first(g.elementsPerSide);
+                return this.grid.getElementByXY(0,0);
             }
             const xy = g.coordinates(current);
             const neighbors = g.neighborsXYs(...xy);
             const ni = Math.floor(Math.random()*neighbors.length);
             return g.getElementByXY(...neighbors[ni]);
-        },
-        first: function (count){
-            const g = this.grid;
-            const startCoordinates =
-                  [Math.round(Math.random()) * (count-1),
-                   Math.round(Math.random() * (count-1))];
-            if(Math.random()>0.5){ startCoordinates.reverse(); }
-            return g.getElementByXY(...startCoordinates);
         }
     };
 });
