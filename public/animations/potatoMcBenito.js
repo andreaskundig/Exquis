@@ -1,36 +1,45 @@
 define(["bibs/imageDataUtils", "bibs/shapeGrid","bibs/wanderingPoint"], 
-function( idu, ShapeGrid,wp){
+function( idu, ShapeGrid,wp){ 
     return {
         setup: function (context){
             const elementsPerSide = 10;
             this.grid = new ShapeGrid(context, {elementsPerSide});
+            this.step = 0;
+            this.direction = [1,0]
         },
         draw: function (context, borders){
+                        const g = this.grid;
             const previous = this.previousPotato;
-            const potato = this.next(previous);
+            const potato = this.next(previous, this.direction);
             potato.fillColor =
                 this.chooseColor(borders, potato, previous);
+            const shouldChangeDirection = this.step % (g.elementsPerSide +3) == 0;
+            if(shouldChangeDirection){
+                this.direction.reverse();
+            }
             this.previousPotato = potato;
+            this.step++;
         },
         chooseColor: function(borders, potato, previousPotato){
             const g = this.grid;
             const xy = g.coordinates(potato);
             const borderName = g.neighboringBorder(...xy);
-            if(!borderName || Math.random() > .25){
+            const topOrLeft = xy[0] == 0 ||  xy[1] == 0;
+            if( !topOrLeft){
                 return previousPotato && previousPotato.fillColor;
             }
             let avg = idu.averageColor(borders[borderName]);
             return `rgba(${avg.join(',')})`;
         },
-        next: function(current){
+        next: function(current, direction){
             const g = this.grid;
             if(!current){
                 return this.grid.getElementByXY(0,0);
             }
             const xy = g.coordinates(current);
-            const neighbors = g.neighborsXYs(...xy);
-            const ni = Math.floor(Math.random()*neighbors.length);
-            return g.getElementByXY(...neighbors[ni]);
+            const nextXy = xy.map(
+                (c,i) => Math.abs((c+direction[i]) % g.elementsPerSide));
+            return g.getElementByXY(...nextXy);
         }
     };
 });
