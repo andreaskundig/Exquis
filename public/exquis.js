@@ -65,7 +65,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 return evileval.loadJsAnim(url).then(
                     function(evaluatedAnimationClone){
                         this.animationState = {};
-                    console.log('created animationState', this.animationState);
+                    // console.log('created animationState', this.animationState);
                         this.setAnimation(evaluatedAnimationClone, url);
                         this.codeCacheUri = null;
                         return this;
@@ -87,7 +87,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     context.canvas.width = 150;
                     context.canvas.height = 150;
 
-                    console.log('animationState', this.animationState);
+                    // console.log('animationState', this.animationState);
                     this.animationCloneToSetup.setup(context, this.animationState);
                     this.currentCode = this.animationCloneToSetup;
                 };

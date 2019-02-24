@@ -1,11 +1,11 @@
 define(["bibs/imageDataUtils"],function(idu){
     return {
-
+ 
 	setup: function(context){
 	    this.step = 0;
-	    this.sweeps = 5; 
-	    this.increments = 7;
-	    this.swSize = context.canvas.width / this.sweeps;
+	    this.sweeps = 4; 
+	    this.increments = 20;
+	    this.swSize = Math.ceil(context.canvas.width / this.sweeps);
 	    this.incSize = Math.ceil(context.canvas.width / this.increments);
 	    this.borderNames = ['north', 'east']//, 'south','west']; 
 	    this.bords = this.borderNames.length; 
@@ -26,9 +26,9 @@ define(["bibs/imageDataUtils"],function(idu){
         this.step++;
 	},
 	getColor: function(index, size, imageData){
-        const px = Math.round(size * 4);
-        //console.log(index, size, index * px, (index + 1) * px);
-        const avg = idu.averageColor(imageData, index * px, (index + 1) * px);
+        const from = index * size * 4;
+        const to = Math.min((index + 1) * size * 4, imageData.data.length -1);
+        const avg = idu.averageColor(imageData, from, to);
 		return `rgba(${avg.join(',')})`;
 	},
 	makeRectangle: function(incIndex,  sweepIndex, border){

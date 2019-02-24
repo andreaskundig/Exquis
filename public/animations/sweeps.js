@@ -3,14 +3,14 @@ define(["bibs/imageDataUtils"],function(idu){
 
 	setup: function(context){
 	    this.step = 0;
-	    this.sweeps = 5;
-	    this.increments = 15;
-	    this.swSize = context.canvas.width / this.sweeps;
+	    this.sweeps = 4;
+	    this.increments = 20;
+	    this.swSize = Math.ceil(context.canvas.width / this.sweeps);
 	    this.incSize = Math.ceil(context.canvas.width / this.increments);
 	    this.borderNames = ['north', 'east', 'south','west']
 	},
 	draw: function(context, borders){
-		const incI = Math.floor(this.step % this.increments);
+		const incI = this.step % this.increments;
 		const swI = Math.floor(this.step / this.increments) % this.sweeps;
 		const bordI = Math.floor(this.step / this.increments / this.sweeps) % 4
 		const border = this.borderNames[bordI];//'south';
@@ -43,8 +43,9 @@ define(["bibs/imageDataUtils"],function(idu){
 	    
 	},
 	getColor: function(index, size, imageData){
-        const px = size * 4;
-        const avg = idu.averageColor(imageData, index * px, (index + 1) * px);
+        const from = index * size * 4;
+        const to = Math.min((index + 1) * size * 4, imageData.data.length -1);
+        const avg = idu.averageColor(imageData, from, to);
 		return `rgba(${avg.join(',')})`;
 	}
 }});
