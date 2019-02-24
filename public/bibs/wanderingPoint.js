@@ -38,27 +38,32 @@ define(function(){
 
     var next = function(limits, direction, startPoint, speed){
         var totalTravelledPercentage = 0;
-        var nextPoint = null;
+        var point = null;
+        var collisions = null;
         direction = direction.slice();
         while (totalTravelledPercentage < 0.999999){
-            if(nextPoint){
+            if(point){
                 // we've been through the loop once
                 // so we must have hit a wall that stopped us
                 // from having totalTravelledPercentage == 1
                 direction[completion.limitingDimension] *= -1;
-                startPoint = nextPoint;
+                startPoint = point;
+                collisions = collisions || [];
+                collisions.push(point);
             }
             var remainingDist = 1 - totalTravelledPercentage;
-            var nextUnconstrained = movePoint(startPoint, direction, speed,
+            var nextUnconstrained = movePoint(startPoint, direction,
+                                              speed,
                                               remainingDist);
-            var completion = measureCompletion(startPoint, nextUnconstrained, 
+            var completion = measureCompletion(startPoint,
+                                               nextUnconstrained, 
                                                limits);
             var additionalDist = remainingDist * completion.percentage;
-            nextPoint = movePoint(startPoint, direction, speed, additionalDist);
+            point = movePoint(startPoint, direction, speed, additionalDist);
             totalTravelledPercentage += additionalDist;
         };
 
-        return {point: nextPoint, direction: direction};
+        return {point: point, direction, collisions};
     };
 
     var makeWanderer = function(limits, direction, startPoint, speed){
@@ -89,10 +94,12 @@ define(function(){
             direction: direction,
             speed: speed,
             move: function(){
-                var nextState = next(this.limits, normalize(this.direction),
+                var nextState = next(this.limits,
+                                     normalize(this.direction),
                                      this.coordinates, this.speed);
                 this.coordinates = nextState.point;
                 this.direction = nextState.direction;
+                this.collisions = nextState.collisions;
             }
         };
     };
