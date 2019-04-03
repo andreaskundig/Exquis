@@ -4,10 +4,10 @@ define(["bibs/imageDataUtils"],function(idu){
 	setup: function(context){
 	    this.step = 0;
 	    this.sweeps = 4; 
-	    this.increments = 20;
+	    this.increments = 20; 
 	    this.swSize = Math.ceil(context.canvas.width / this.sweeps);
 	    this.incSize = Math.ceil(context.canvas.width / this.increments);
-	    this.borderNames = ['north', 'east']//, 'south','west']; 
+	    this.borderNames = ['north', 'east', 'south','west']; 
 	    this.bords = this.borderNames.length; 
 	},
 	draw: function(context, borders){

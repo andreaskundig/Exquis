@@ -10,6 +10,9 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         cell.context = context;
         cell.hint = createCellDiv("hint invisible", row, col, height, width);
         cell.hint.style.border = '1px solid rgba(200, 200, 200, 0.5)';
+        cell.hint.style.width = (width - 2) + "px";
+        cell.hint.style.height = (height - 2) + "px";
+
         cell.ui = makeCellUi(row, col, height, width);
         return cell;
     };
@@ -18,6 +21,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         return {
             creation: Date.now(),
             currentCode: null,
+            cellWidth: context.canvas.width,
+            cellHeight: context.canvas.height,
             context: context, //might be useful to debug
             borders : function(){
                 return {
@@ -84,8 +89,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     context.setTransform(1, 0, 0, 1, 0, 0);
                     // because using paper.js resizes the canvas
                     // dependending on screen dpi 
-                    context.canvas.width = 150;
-                    context.canvas.height = 150;
+                    context.canvas.width = this.cellWidth;
+                    context.canvas.height = this.cellHeight;
 
                     // console.log('animationState', this.animationState);
                     this.animationCloneToSetup.setup(context, this.animationState);
@@ -205,17 +210,14 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         csshelper.removeClassForSelector('invisible','.cellUi, .hint');
     };
     
-    var init = function (assName, animUris, makeEditorController, store) {
-        var container = document.getElementById("container"),
-            exquis = {},
-            controlPanel = makeControlPanel(store);
+    var init = function (assName, animUris, makeEditorController, store, 
+        {cellWidth=150, cellHeight=150}) {
+        const exquis = {};
+        const controlPanel = makeControlPanel(store);
         exquis.assName = assName;
 
-        var cellWidth = 150,
-            cellHeight = 150,
-            dashboardWidth = animUris[0].length * cellWidth,
-            dashboard = document.getElementById('dashboard'),
-            assemblageController = makeAssemblageController(exquis, store);
+        const dashboardWidth = animUris[0].length * cellWidth;
+        const assemblageController = makeAssemblageController(exquis, store);
 
         menubar.init(dashboardWidth);
         menubar.addCloseListener(hideHints);

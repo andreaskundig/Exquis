@@ -3,8 +3,8 @@ define(["bibs/imageDataUtils"],function(idu){
 
 	setup: function(context){
 	    this.step = 0;
-	    this.sweeps = 4;
-	    this.increments = 20;
+	    this.sweeps = 4; 
+	    this.increments = 14;
 	    this.swSize = Math.ceil(context.canvas.width / this.sweeps);
 	    this.incSize = Math.ceil(context.canvas.width / this.increments);
 	    this.borderNames = ['north', 'east', 'south','west']
@@ -19,7 +19,7 @@ define(["bibs/imageDataUtils"],function(idu){
         }
         const r = this.makeRectangle(incI, swI, border);
 		context.fillRect(r.x, r.y, r.w, r.h);
-
+ 
         this.step++;
 	},
 	makeRectangle: function(incIndex,  sweepIndex, border){
@@ -28,16 +28,17 @@ define(["bibs/imageDataUtils"],function(idu){
 	    const totalSize = this.sweeps * sweepSize;
 	    const incCoord = incIndex * incSize;
 	    const sweepCoord = sweepIndex * sweepSize ;
+	    const sweepCoordDesc = (this.sweeps - sweepIndex) * sweepSize; 
 	    switch(border){
 	        case 'north':
 	            return {x: sweepCoord, w: sweepSize, y: incCoord, h: incSize};
 	        case 'west':
-	            return {x: incCoord, w: incSize, y: sweepCoord, h: sweepSize};
+	            return {x: incCoord, w: incSize, y: sweepCoordDesc, h: sweepSize};
 	        case 'east':
 	            return {x: totalSize - incSize - incCoord, w: incSize, 
 	                    y: sweepCoord, h: sweepSize};
 	        case 'south':
-	            return {x: sweepCoord, w: sweepSize, 
+	            return {x: sweepCoordDesc, w: sweepSize, 
 	                    y:  totalSize - incSize - incCoord, h: incSize};
 	    }
 	    
