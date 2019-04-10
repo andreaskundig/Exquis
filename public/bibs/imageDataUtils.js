@@ -83,6 +83,7 @@ define({
             copyPointA   = point0,
             copyPointB   = point4,
             pastePoint   = point1;
+
         if(speed < 0){
             changePointA = point2;
             changePointB = point5;
@@ -118,7 +119,7 @@ define({
                 }
         }
         avgArray = totals.map(function(total){
-            return Math.round(total/totalWeight);
+            return totalWeight == 0 ?  0 : Math.round(total/totalWeight);
         });
         return avgArray;
     },
@@ -157,6 +158,10 @@ define({
         return result;
     },
     copyContextPixels: function(context, fromRectangle, toPoint){
+        if(['x','y','width','height'].find(k => isNaN(fromRectangle[k]))){
+            console.error('fromRectangle', fromRectangle);
+            return;
+        }
         var currentImage = context.getImageData(fromRectangle.x, 
                                                 fromRectangle.y, 
                                                 fromRectangle.width, 
