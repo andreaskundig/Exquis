@@ -2,8 +2,8 @@ define(["bibs/imageDataUtils", "bibs/shapes"],
 function(idu, shapes){
   return {
       setup: function (context){
-          this.side = 150;
-          this.depth = 112;
+          this.side = context.canvas.width;
+          this.depth = context.canvas.width * 112 / 150;
           this.breadth = this.side - this.depth;
           this.speed = 3;
       },

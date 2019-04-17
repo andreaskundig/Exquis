@@ -1,8 +1,8 @@
 define(["bibs/gameOfLife"], function(gameLife){
     return {setup: function(context){
-                var width = 75;
-                var height = 75;
-                //var gameLife = lib.gameLife;
+                var width = context.canvas.width / 2;
+                var height = context.canvas.height / 2;
+                //var gameLife = lib.gameLife; 
                 //var start = glider_1.concat(glider_2, glider_3, glider_4, glider_5)
                 var start = gameLife.makeGliderNoise(width/3, height/3, 20);
                 //console.log(start)

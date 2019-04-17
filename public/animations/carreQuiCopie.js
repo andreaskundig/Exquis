@@ -1,9 +1,9 @@
 define(["bibs/wanderingPoint","bibs/imageDataUtils"], function(wp,idu){return {
     setup: function (context){
         // setup wandering point
-        const limit = [-155, 155 ];
+        const limit = [-context.canvas.width -5, context.canvas.height + 5];
         const direction = [1, .9];
-        const startPoint = [0, 150];
+        const startPoint = [0, context.canvas.width];
         const speed = 15;
         this.w = wp.makeWanderer([limit, limit],direction,startPoint,speed);
         this.copyHorizontal = true;
@@ -24,7 +24,7 @@ define(["bibs/wanderingPoint","bibs/imageDataUtils"], function(wp,idu){return {
         var x = Math.round(this.w.coordinates[0]);
         var y = Math.round(this.w.coordinates[1]);
         context.fillStyle = "rgb(255,190,255)";
-        const recSize = 150;
+        const recSize = context.canvas.width;
         const canSize = context.canvas.width;
         const copySpeed = 6;
         let visible = -recSize + copySpeed < x &&

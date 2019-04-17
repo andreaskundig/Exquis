@@ -2,6 +2,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
     setup: function(context){
         this.toRadians =  Math.PI / 180; 
         this.rotation = 1 ;
+        this.halfSize = context.canvas.width / 2;
         this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
                                               context.canvas.height);
     },
@@ -16,10 +17,10 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         this.buffer.copyToBuffer(context, {x:0, y:0});
 
         context.save();
-        context.translate(75, 75);
+        context.translate(this.halfSize, this.halfSize);
         context.rotate(this.rotation* this.toRadians);
         context.scale(.99,.99)
-        context.translate(-75, -75);
+        context.translate(-this.halfSize, -this.halfSize);
     
         this.buffer.pasteInto(context);
         context.restore();

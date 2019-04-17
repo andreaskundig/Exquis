@@ -1,9 +1,9 @@
 define(["bibs/noise"], function(noise){
 return {draw: function (context, borders){
             // paste current image one pixel down
-            context.clearRect(0, 0, 150, 150);
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
             // east
-            var scale = 50;
+            var scale = context.canvas.width / 3;
 
             for (var x = 0; x < context.canvas.width / scale; x++) {
                 for (var y = 0; y < context.canvas.height / scale; y++) {

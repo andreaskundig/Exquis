@@ -1,6 +1,6 @@
 define(["bibs/wanderingPoint"], function(wp){return {
     setup: function (context){
-        var limit = [-155 , 155 ];
+        var limit = [-context.canvas.width - 5 , context.canvas.width + 5 ];
         this.w = wp.makeWanderer([limit, limit]);
     },
     draw: function (context, borders){
@@ -11,7 +11,7 @@ define(["bibs/wanderingPoint"], function(wp){return {
         var x = this.w.coordinates[0];
         var y = this.w.coordinates[1];
         context.fillStyle = "rgb(255,190,255)";
-        context.fillRect(x, y, 150, 150);
+        context.fillRect(x, y, context.canvas.width, context.canvas.height);
         
     }
 };});

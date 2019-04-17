@@ -20,7 +20,7 @@ define(["bibs/wanderingPoint"], function(wp){return {
         var x = this.w.coordinates[0];
         var y = this.w.coordinates[1];
         context.fillStyle = "rgb(255,190,255)";
-        context.fillRect(x, y, 150, 150);
+        context.fillRect(x, y, context.canvas.width, context.canvas.height);
         
     }
 };});

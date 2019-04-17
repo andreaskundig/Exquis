@@ -17,15 +17,17 @@ function(idu, shapes){
    lastAvgCol = {},
    lastDists = {north:[], east:[], south:[], west:[]},
 
-   directions ={north:{horizontal:false, speedSign:1},
+    directions ={north:{horizontal:false, speedSign:1},
        east:{horizontal:true, speedSign:-1},
        south:{horizontal:false, speedSign:-1},
        west:{horizontal:true, speedSign:1}
-   },
-    rect = idu.rectangle(0, 0, 150, 150);
+    },
+    rect;
 
   return {
-      setup: function(){},
+      setup: function(context){
+          rect = idu.rectangle(0, 0, context.canvas.width, context.canvas.height);
+      },
       draw: function (context, borders){
           //console.log(Math.sqrt(colSqDistance([255,255,255],[0,0,0])));
           var currentAvgCol = {},
@@ -61,11 +63,11 @@ function(idu, shapes){
           
 
               // closure that binds the arguments context, borders, filter
-              pushAvg = function(rec, horiz, speed){
+        const  pushAvg = function(rec, horiz, speed){
  //                 idu.pushLine(context, borders, rec, horiz, speed, 
  //                 idu.avgColorFilter);
                   idu.pushLine(context, borders, rec, horiz, speed);
-              },
+              };
 
           pushAvg(rect, direction.horizontal, direction.speedSign * speedAmpl);
       }
