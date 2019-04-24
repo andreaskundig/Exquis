@@ -8,7 +8,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             context = canvas.getContext("2d"), 
             cell = {};
         cell.context = context;
-        cell.hint = createCellDiv("hint invisible", row, col, height, width);
+        cell.hint = createCellDiv("hint", row, col, height, width);
         cell.hint.style.border = '1px solid rgba(200, 200, 200, 0.5)';
         cell.hint.style.width = (width - 2) + "px";
         cell.hint.style.height = (height - 2) + "px";
@@ -160,37 +160,21 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         cellDiv.className = className;
         cellDiv.style.top = (height * row)+"px";
         cellDiv.style.left = (width * col)+"px";
-        
+        cellDiv.style.height = height+"px";
+        cellDiv.style.width = width+"px";
+
         document.getElementById('dashboard').appendChild(cellDiv);
         return cellDiv;
     };
-
-    var makeIcon = function(classNames, id){
-        var icon = document.createElement('span');
-        icon.style.cursor = "pointer"; 
-        icon.className = classNames;
-        if(id){
-            icon.id = id;
-        }
-        return icon;
-    };
     
-    var controlPanelIconSuffix = "-control-panel-icon";
     var makeCellUi = function(row, col, height, width){
         var cellUi = createCellDiv("cellUi", row, col, height, width);
-
-
-        var controlPanelIcon = makeIcon("fa fa-cog fa-lg",
-                                        cellUi.id + controlPanelIconSuffix);
-        cellUi.appendChild(controlPanelIcon);
-        
         return cellUi;
     };
 
     var addControlPanelIconHandler = function(cell, controlPanel){
-        var controlPanelIcon = document.getElementById(cell.ui.id + controlPanelIconSuffix);
         
-        controlPanelIcon.addEventListener('click', function(){
+        cell.ui.addEventListener('click', function(){
             csshelper.addClassForSelector('invisible','.hint');
             cell.hint.classList.remove('invisible');
             controlPanel.show(cell);
