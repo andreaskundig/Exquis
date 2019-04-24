@@ -6,8 +6,8 @@ function(canvasBuffer,wp){ return {
         this.rotation = 70 ;
         this.buffer = canvasBuffer.makeBuffer(context.canvas.width,
                                               context.canvas.height);
-        var limit = [-200 , 340];
-        this.w = wp.makeWanderer([limit],[3],[370],0.2);
+        var limit = [-200 , 340].map(l => l/150 * context.canvas.width);
+        this.w = wp.makeWanderer([limit],[3],[370/150*context.canvas.width],0.2);
                                               
                                    
     },

@@ -1,6 +1,6 @@
 define(
 {setup: function(context){
-     this.start = new Date();
+     this.start = new Date(Math.random()*1000000);
      this.frameCount = 0;
 },
  draw: function(context, borders){

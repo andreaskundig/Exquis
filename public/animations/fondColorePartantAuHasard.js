@@ -2,11 +2,11 @@ define(["bibs/wanderingPoint"], function(wp){ return {
         setup: function (context){
             var limit = [0 , 255 ];
             var limits = [limit, limit, limit];
-            var direction = [8, 5, 1];
+            var direction = [1, 2, 1];
             var startPoint = [Math.round(255*Math.random()), 
                               Math.round(255*Math.random()),
                               Math.round(255*Math.random())];
-            var speed = 3  ;
+            var speed = 1  ;
             this.w = wp.makeWanderer(limits, direction, startPoint, speed);
         },
         draw: function (context, borders){
