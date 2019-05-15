@@ -47,6 +47,33 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                 return this.currentCode.params;
             },
 
+            setAnimation: function(animationCloneToSetup, uri){
+                if(this.currentCode && this.currentCode.tearDown){
+                    this.currentCode.tearDown(context);
+                }
+                this.animationCloneToSetup = animationCloneToSetup;
+                //TODO extract the next two lines to a separate method
+                this.animationName = net.extractAnimationNameFromUri(uri),
+                this.originalUrl = uri;
+                this.setup = function(){
+                    // force reset matrix
+                    context.setTransform(1, 0, 0, 1, 0, 0);
+                    // because using paper.js resizes the canvas
+                    // dependending on screen dpi 
+                    context.canvas.width = this.cellWidth;
+                    context.canvas.height = this.cellHeight;
+
+                    // console.log('animationState', this.animationState);
+                    this.animationCloneToSetup.setup(context, this.animationState);
+                    this.currentCode = this.animationCloneToSetup;
+                };
+
+                this.setup();
+            },
+            
+            //TODO add the following functions in a further step
+            // maybe as a subclass :O
+            // then export the makeCanvasAnim function for use in observablehq
             addCodeStringToEvaluate: function(codeString){
                 this.evaluateCode = function(){
                     return new Promise((resolve, reject) => {
@@ -77,29 +104,6 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     }.bind(this));
             },
 
-            setAnimation: function(animationCloneToSetup, uri){
-                if(this.currentCode && this.currentCode.tearDown){
-                    this.currentCode.tearDown(context);
-                }
-                this.animationCloneToSetup = animationCloneToSetup;
-                this.animationName = net.extractAnimationNameFromUri(uri),
-                this.originalUrl = uri;
-                this.setup = function(){
-                    // force reset matrix
-                    context.setTransform(1, 0, 0, 1, 0, 0);
-                    // because using paper.js resizes the canvas
-                    // dependending on screen dpi 
-                    context.canvas.width = this.cellWidth;
-                    context.canvas.height = this.cellHeight;
-
-                    // console.log('animationState', this.animationState);
-                    this.animationCloneToSetup.setup(context, this.animationState);
-                    this.currentCode = this.animationCloneToSetup;
-                };
-
-                this.setup();
-            },
-            
             getSourceCode: function(){
                 if(this.currentCode.source){
                     // if the source code is not javascript
