@@ -6,16 +6,26 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
     var makeCell = function(row, col, height, width){
         var canvas = makeCanvas(row, col, height, width), 
             context = canvas.getContext("2d"), 
-            cell = {};
+            cell = {row, col};
         cell.context = context;
+        return cell;
+    };
+
+    const addCellUItoCell = function(cell){
+        const {row, col}  = cell;
+        const {height, width} = cell.context.canvas;
+        cell.ui = makeCellUi(row, col, height, width);
+    }
+
+    const addHintToCell = function(cell){
+        const {row, col}  = cell;
+        const {height, width} = cell.context.canvas;
+
         cell.hint = createCellDiv("hint", row, col, height, width);
         cell.hint.style.border = '1px solid rgba(200, 200, 200, 0.5)';
         cell.hint.style.width = (width - 2) + "px";
         cell.hint.style.height = (height - 2) + "px";
-
-        cell.ui = makeCellUi(row, col, height, width);
-        return cell;
-    };
+    }
 
     var makeCanvasAnimation = function(context){
         return {
@@ -154,7 +164,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         canvas.style.top = (height * row)+"px";
         canvas.style.left = (width * col)+"px";
 
-        document.getElementById('dashboard').appendChild(canvas);
+        let parent = document.getElementById("dashboard");
+        if(parent){
+            parent.appendChild(canvas);
+        }
         return canvas;
     };
 
@@ -166,8 +179,11 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         cellDiv.style.left = (width * col)+"px";
         cellDiv.style.height = height+"px";
         cellDiv.style.width = width+"px";
-
-        document.getElementById('dashboard').appendChild(cellDiv);
+        
+        let parent = document.getElementById("dashboard");
+        if(parent){
+            parent.appendChild(cellDiv);
+        }
         return cellDiv;
     };
     
@@ -226,6 +242,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         
         exquis.cells = iter2d.map2dArray(animUris,function(animUri,row,col){
             var cell = makeCell(row, col, cellHeight, cellWidth);
+            addHintToCell(cell);
+            addCellUItoCell(cell);
 
             cell.canvasAnim = makeCanvasAnimation(cell.context);
             addControlPanelIconHandler(cell, controlPanel);
