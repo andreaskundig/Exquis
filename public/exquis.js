@@ -1,15 +1,7 @@
 "use strict";
 
-define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel", "assemblageController"], function(
-    iter2d, csshelper, evileval, net, ui, menubar, makeControlPanel, makeAssemblageController){
-
-    var makeCell = function(row, col, height, width){
-        var canvas = makeCanvas(row, col, height, width), 
-            context = canvas.getContext("2d"), 
-            cell = {row, col};
-        cell.context = context;
-        return cell;
-    };
+define(["iter2d", "csshelper", "evileval", "net", "menubar", "controlPanel", "assemblageController", "factory"], function(
+    iter2d, csshelper, evileval, net, menubar, makeControlPanel, makeAssemblageController, factory){
 
     const addCellUItoCell = function(cell){
         const {row, col}  = cell;
@@ -21,66 +13,15 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         const {row, col}  = cell;
         const {height, width} = cell.context.canvas;
 
-        cell.hint = createCellDiv("hint", row, col, height, width);
+        cell.hint = factory.createCellDiv("hint", row, col, height, width);
         cell.hint.style.border = '1px solid rgba(200, 200, 200, 0.5)';
         cell.hint.style.width = (width - 2) + "px";
         cell.hint.style.height = (height - 2) + "px";
     }
 
-    var makeCanvasAnimation = function(context){
-        return {
-            creation: Date.now(),
-            currentCode: null,
-            cellWidth: context.canvas.width,
-            cellHeight: context.canvas.height,
-            context: context, //might be useful to debug
-            borders : function(){
-                return {
-                    north: context.getImageData(0, 0, context.canvas.width, 1),
-                    south: context.getImageData(0, context.canvas.height - 1,
-                                                context.canvas.width, 1),
-                    east: context.getImageData(context.canvas.width - 1, 0,
-                                               1 , context.canvas.height),
-                    west: context.getImageData(0, 0, 1, context.canvas.height)
-                };
-            },
+    const addCodeHandling = canvasAnim => {
+         return Object.assign(canvasAnim,{
 
-            draw : function(borders){
-                if(!this.currentCode || !this.currentCode.draw){
-                    return;
-                }
-
-                this.currentCode.draw(context, borders, this.animationState);
-            },
-
-            getParams : function(){
-                return this.currentCode.params;
-            },
-
-            setAnimation: function(animationCloneToSetup, uri){
-                if(this.currentCode && this.currentCode.tearDown){
-                    this.currentCode.tearDown(context);
-                }
-                this.animationCloneToSetup = animationCloneToSetup;
-                //TODO extract the next two lines to a separate method
-                this.animationName = net.extractAnimationNameFromUri(uri),
-                this.originalUrl = uri;
-                this.setup = function(){
-                    // force reset matrix
-                    context.setTransform(1, 0, 0, 1, 0, 0);
-                    // because using paper.js resizes the canvas
-                    // dependending on screen dpi 
-                    context.canvas.width = this.cellWidth;
-                    context.canvas.height = this.cellHeight;
-
-                    // console.log('animationState', this.animationState);
-                    this.animationCloneToSetup.setup(context, this.animationState);
-                    this.currentCode = this.animationCloneToSetup;
-                };
-
-                this.setup();
-            },
-            
             //TODO add the following functions in a further step
             // maybe as a subclass :O
             // then export the makeCanvasAnim function for use in observablehq
@@ -90,8 +31,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                         var codeAsUri = evileval.toDataUri(codeString);
                         evileval.loadJsAnim(codeAsUri)
                             .then((evaluatedAnimationClone) => {
+                                const animationName =
+                                  net.extractAnimationNameFromUri(this.originalUrl);
                                 this.setAnimation(evaluatedAnimationClone,
-                                                  this.originalUrl);
+                                                  this.originalUrl, animationName);
                                 this.codeCacheUri = codeAsUri;
                                 resolve();
                             })
@@ -108,7 +51,10 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                     function(evaluatedAnimationClone){
                         this.animationState = {};
                     // console.log('created animationState', this.animationState);
-                        this.setAnimation(evaluatedAnimationClone, url);
+                    
+                        const animationName =
+                           net.extractAnimationNameFromUri(url);
+                        this.setAnimation(evaluatedAnimationClone, url, animationName);
                         this.codeCacheUri = null;
                         return this;
                     }.bind(this));
@@ -144,7 +90,7 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
                         }.bind(this));
                 }
             }
-        };
+         })
     };
 
     var relativeCoordinates = {
@@ -154,41 +100,8 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
         east : {row: 0, col: 1, opposite: "west"}
     };
 
-
-    var makeCanvas = function(row, col, height, width){
-        var canvas = document.createElement('canvas');
-        canvas.id = "canvas-" + row + "-" + col;
-        canvas.className = "cell";
-        canvas.width = width;
-        canvas.height = height;
-        canvas.style.top = (height * row)+"px";
-        canvas.style.left = (width * col)+"px";
-
-        let parent = document.getElementById("dashboard");
-        if(parent){
-            parent.appendChild(canvas);
-        }
-        return canvas;
-    };
-
-    var createCellDiv = function(className, row, col, height, width){
-        var cellDiv = document.createElement('div');
-        cellDiv.id = className + "-" + row + "-" + col;
-        cellDiv.className = className;
-        cellDiv.style.top = (height * row)+"px";
-        cellDiv.style.left = (width * col)+"px";
-        cellDiv.style.height = height+"px";
-        cellDiv.style.width = width+"px";
-        
-        let parent = document.getElementById("dashboard");
-        if(parent){
-            parent.appendChild(cellDiv);
-        }
-        return cellDiv;
-    };
-    
     var makeCellUi = function(row, col, height, width){
-        var cellUi = createCellDiv("cellUi", row, col, height, width);
+        var cellUi = factory.createCellDiv("cellUi", row, col, height, width);
         return cellUi;
     };
 
@@ -239,19 +152,21 @@ define(["iter2d", "csshelper", "evileval", "net", "ui", "menubar", "controlPanel
             }
         };
         document.addEventListener('click', possiblyHideControlPanel, true);
-        
-        exquis.cells = iter2d.map2dArray(animUris,function(animUri,row,col){
-            var cell = makeCell(row, col, cellHeight, cellWidth);
-            addHintToCell(cell);
-            addCellUItoCell(cell);
+       
+        const colCount = animUris.length;
+        const rowCount = animUris[0].length;
+        exquis.cells = factory.makeCells( colCount, rowCount, cellHeight, cellWidth);
 
-            cell.canvasAnim = makeCanvasAnimation(cell.context);
-            addControlPanelIconHandler(cell, controlPanel);
-            cell.canvasAnim.loadAnim(animUri);
-            return cell;
+        animUris.forEach((animUriCol, colIndex) => {
+            animUriCol.forEach((animUri, rowIndex)=>{
+                const cell = exquis.cells[colIndex][rowIndex];
+                addHintToCell(cell);
+                addCellUItoCell(cell);
+                addControlPanelIconHandler(cell, controlPanel);
+                addCodeHandling(cell.canvasAnim);
+                cell.canvasAnim.loadAnim(animUri);
+           }) 
         });
-        
-        // addHintListeners(exquis.cells);
         
         exquis.assemblage = function(){
             var animationNames = iter2d.map2dArray(
