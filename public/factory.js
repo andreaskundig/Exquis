@@ -86,6 +86,7 @@ define([], function(){
                     context.canvas.height = this.cellHeight;
 
                     // console.log('animationState', this.animationState);
+                    this.animationState = this.animationState || {};
                     this.animationCloneToSetup.setup(context, this.animationState);
                     this.currentCode = this.animationCloneToSetup;
                 };
