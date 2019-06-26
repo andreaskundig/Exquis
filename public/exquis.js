@@ -155,7 +155,9 @@ define(["iter2d", "csshelper", "evileval", "net", "menubar", "controlPanel", "as
        
         const colCount = animUris.length;
         const rowCount = animUris[0].length;
-        exquis.cells = factory.makeCells( colCount, rowCount, cellHeight, cellWidth);
+        
+        let parent = document.getElementById("dashboard");
+        exquis.cells = factory.makeCells( colCount, rowCount, cellHeight, cellWidth, parent);
 
         animUris.forEach((animUriCol, colIndex) => {
             animUriCol.forEach((animUri, rowIndex)=>{

@@ -1,15 +1,14 @@
 define([], function(){
 
-    const makeCanvas = function(row, col, height, width){
+    const makeCanvas = function(row, col, height, width, parent){
         var canvas = document.createElement('canvas');
         canvas.id = "canvas-" + row + "-" + col;
-        canvas.className = "cell";
+        //canvas.className = "cell";
         canvas.width = width;
         canvas.height = height;
-        canvas.style.top = (height * row)+"px";
-        canvas.style.left = (width * col)+"px";
+        //canvas.style.top = (height * row)+"px";
+        //canvas.style.left = (width * col)+"px";
 
-        let parent = document.getElementById("dashboard");
         if(parent){
             parent.appendChild(canvas);
         }
@@ -32,10 +31,12 @@ define([], function(){
         return cellDiv;
     };
   
-    const makeCell = function(row, col, height, width){
-        var canvas = makeCanvas(row, col, height, width), 
+    const makeCell = function(row, col, height, width, parent){
+        var canvas = makeCanvas(row, col, height, width, parent), 
             context = canvas.getContext("2d"), 
             cell = {row, col};
+        canvas.style.gridRow = row + ' / 1';
+        canvas.style.gridColumn = col + ' / 1';
         cell.context = context;
         return cell;
     };
@@ -97,13 +98,16 @@ define([], function(){
         };
     };
 
-    const makeCells = (rowCount, colCount, cellHeight, cellWidth) => {
+    const makeCells = (rowCount, colCount, cellHeight, cellWidth, parent) => {
         const cells = [];
+        parent.style.display = 'grid';
+        parent.style.gridTemplateColumns= '1fr 1fr 1fr';
+        parent.style.gridTemplateRows= '1fr 1fr 1fr';
         for(let colIndex = 0; colIndex < colCount; colIndex++){
             let col = [];
             cells.push(col);
             for(let rowIndex = 0; rowIndex < rowCount; rowIndex++){
-                var cell = makeCell(rowIndex, colIndex, cellHeight, cellWidth);
+                var cell = makeCell(rowIndex, colIndex, cellHeight, cellWidth, parent);
                 cell.canvasAnim = makeCanvasAnimation(cell.context);
                 col.push(cell);
             }
