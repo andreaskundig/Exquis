@@ -128,7 +128,7 @@ h2, h3 {
          left: 0;
          z-index: 999;
 	 background-color: rgba(100, 100, 100, 0.5); }
-.cell, .cellUi { position:absolute}
+.cellUi { position:absolute}
 .cellUi > span{position: relative;margin: 5px;float: left;}
 .hint { position:absolute;border: 1px solid rgba(0,0,0,0);}
 .visible-grid, .visible-cell{ border: 1px solid rgba(200, 200, 200, 0.5); }

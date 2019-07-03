@@ -4,10 +4,11 @@ define([], function(){
         var canvas = document.createElement('canvas');
         canvas.id = "canvas-" + row + "-" + col;
         //canvas.className = "cell";
+        canvas.style.position = "absolute";
         canvas.width = width;
         canvas.height = height;
-        //canvas.style.top = (height * row)+"px";
-        //canvas.style.left = (width * col)+"px";
+        canvas.style.top = (height * row)+"px";
+        canvas.style.left = (width * col)+"px";
 
         if(parent){
             parent.appendChild(canvas);
@@ -35,8 +36,8 @@ define([], function(){
         var canvas = makeCanvas(row, col, height, width, parent), 
             context = canvas.getContext("2d"), 
             cell = {row, col};
-        canvas.style.gridRow = row + ' / 1';
-        canvas.style.gridColumn = col + ' / 1';
+        //canvas.style.gridRow = row + ' / 1';
+        //canvas.style.gridColumn = col + ' / 1';
         cell.context = context;
         return cell;
     };
@@ -100,9 +101,8 @@ define([], function(){
 
     const makeCells = (rowCount, colCount, cellHeight, cellWidth, parent) => {
         const cells = [];
-        parent.style.display = 'grid';
-        parent.style.gridTemplateColumns= '1fr 1fr 1fr';
-        parent.style.gridTemplateRows= '1fr 1fr 1fr';
+        parent.style.position = 'relative';
+       // parent.style.width= `${colCount * cellWidth}`;
         for(let colIndex = 0; colIndex < colCount; colIndex++){
             let col = [];
             cells.push(col);
