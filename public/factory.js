@@ -4,11 +4,11 @@ define([], function(){
         var canvas = document.createElement('canvas');
         canvas.id = "canvas-" + row + "-" + col;
         //canvas.className = "cell";
-        canvas.style.position = "absolute";
+        //canvas.style.position = "absolute";
         canvas.width = width;
         canvas.height = height;
-        canvas.style.top = (height * row)+"px";
-        canvas.style.left = (width * col)+"px";
+        //canvas.style.top = (height * row)+"px";
+        //canvas.style.left = (width * col)+"px";
 
         if(parent){
             parent.appendChild(canvas);
@@ -101,8 +101,9 @@ define([], function(){
 
     const makeCells = (rowCount, colCount, cellHeight, cellWidth, parent) => {
         const cells = [];
-        parent.style.position = 'relative';
-       // parent.style.width= `${colCount * cellWidth}`;
+        //parent.style.position = 'relative';
+        parent.style.width= `${colCount * cellWidth}px`;
+        parent.style.lineHeight= 0;
         for(let colIndex = 0; colIndex < colCount; colIndex++){
             let col = [];
             cells.push(col);
