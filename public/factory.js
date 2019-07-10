@@ -100,6 +100,10 @@ define([], function(){
     };
 
     const makeCells = (rowCount, colCount, cellHeight, cellWidth, parent) => {
+        if(parent){
+            parent.innerHTML = "";
+        }
+
         const cells = [];
         //parent.style.position = 'relative';
         parent.style.width= `${colCount * cellWidth}px`;
@@ -116,11 +120,57 @@ define([], function(){
         return cells;
     };
 
+    const relativeCoordinates = {
+        north : {row: -1, col: 0, opposite: "south"},
+        south : {row: 1, col: 0, opposite: "north"},
+        west : {row: 0, col: -1, opposite: "east"},
+        east : {row: 0, col: 1, opposite: "west"}
+    };
+
+    var draw = async function (cells, displayInvalidity) {
+
+        var allBorders = cells.map( row => row.map(cell => cell.canvasAnim.borders()));
+
+        cells.forEach((row, rowIndex) => {
+            row.forEach(async (cell, colIndex) => {
+
+                var neighborBorders = {},
+                    canvasAnim = cell.canvasAnim;
+                ["north", "south", "east", "west"].forEach(function (side) {
+                    var offset = relativeCoordinates[side];
+                    var nRows = cells.length;
+                    var siderow = (rowIndex + offset.row + nRows) % nRows;
+                    var nCols = cells[rowIndex].length;
+                    var sidecol = (colIndex + offset.col + nCols) % nCols;
+                    var opp = offset.opposite;
+                    if (!allBorders[siderow][sidecol]) {
+                        // TODO decide what to do in case of no neighbour
+                        console.log(rowIndex, colIndex, siderow, sidecol);
+                    }
+                    neighborBorders[side] = allBorders[siderow][sidecol][opp];
+                });
+
+                try {
+                    if (canvasAnim.evaluateCode) {
+                        await canvasAnim.evaluateCode();
+                        delete (canvasAnim.evaluateCode);
+                        displayInvalidity && displayInvalidity(null, cell.canvasAnim);
+                    }
+
+                    canvasAnim.draw(neighborBorders);
+                } catch (e) {
+                    displayInvalidity && displayInvalidity(e, cell.canvasAnim);
+                }
+            });
+        });
+    };
+
     return {
         makeCanvas,
         createCellDiv,
         makeCell,
         makeCells,
-        makeCanvasAnimation
+        makeCanvasAnimation,
+        draw
     };
 });
