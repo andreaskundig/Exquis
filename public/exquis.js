@@ -1,7 +1,7 @@
 "use strict";
 
-define(["iter2d", "csshelper", "evileval", "net", "menubar", "controlPanel", "assemblageController", "factory"], function(
-    iter2d, csshelper, evileval, net, menubar, makeControlPanel, makeAssemblageController, factory){
+define([ "csshelper", "evileval", "net", "menubar", "controlPanel", "assemblageController", "factory"], function(
+    csshelper, evileval, net, menubar, makeControlPanel, makeAssemblageController, factory){
 
     const addCellUItoCell = function(cell){
         const {row, col}  = cell;
@@ -152,19 +152,17 @@ define(["iter2d", "csshelper", "evileval", "net", "menubar", "controlPanel", "as
         let parent = document.getElementById("dashboard");
         exquis.cells = factory.makeCells( colCount, rowCount, cellHeight, cellWidth, parent);
 
-        animUris.forEach((animUriRow, rowIndex) => {
-            animUriRow.forEach((animUri, colIndex)=>{
-                const cell = exquis.cells[colIndex][rowIndex];
-                addHintToCell(cell);
-                addCellUItoCell(cell);
-                addControlPanelIconHandler(cell, controlPanel);
-                addCodeHandling(cell.canvasAnim);
-                cell.canvasAnim.loadAnim(animUri);
-           }) 
+        factory.forEach2d(animUris, (animUri, rowIndex, colIndex) => {
+            const cell = exquis.cells[rowIndex][colIndex];
+            addHintToCell(cell);
+            addCellUItoCell(cell);
+            addControlPanelIconHandler(cell, controlPanel);
+            addCodeHandling(cell.canvasAnim);
+            cell.canvasAnim.loadAnim(animUri);
         });
         
         exquis.assemblage = function(){
-            var animationNames = iter2d.map2dArray(
+            var animationNames = factory.map2d(
                 this.cells, 
                 function(cell, row, col){
                     return cell.canvasAnim.animationName;

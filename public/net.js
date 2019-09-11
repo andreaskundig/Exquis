@@ -1,6 +1,6 @@
 "use strict";
 
-define(["iter2d", "evileval"], function(iter2d, evileval){
+define([], function(){
     var insertJavascriptTag = function(scriptUrl){
         var scriptContainer = document.getElementsByTagName('head')[0];
         

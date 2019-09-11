@@ -1,5 +1,27 @@
 define([], function(){
 
+    const map2d = function (array2d, func) {
+        var result = [];
+
+        for (var row = 0; row < array2d.length; row++) {
+            result.push([]);
+            var cols = array2d[row];
+            for (var col = 0; col < cols.length; col++) {
+                result[row][col] = func(cols[col], row, col);
+            };
+        };
+
+        return result;
+    };
+
+    const forEach2d = function (array2d, func) {
+        array2d.forEach(function (cols, row) {
+            cols.forEach(function (el, col) {
+                func(el, row, col);
+            });
+        });
+    };
+    
     const makeCanvas = function(row, col, height, width, parent){
         var canvas = document.createElement('canvas');
         canvas.id = "canvas-" + row + "-" + col;
@@ -108,13 +130,13 @@ define([], function(){
         //parent.style.position = 'relative';
         parent.style.width= `${colCount * cellWidth}px`;
         parent.style.lineHeight= 0;
-        for(let colIndex = 0; colIndex < colCount; colIndex++){
-            let col = [];
-            cells.push(col);
-            for(let rowIndex = 0; rowIndex < rowCount; rowIndex++){
+        for(let rowIndex = 0; rowIndex < rowCount; rowIndex++){
+            let row = [];
+            cells.push(row);
+            for(let colIndex = 0; colIndex < colCount; colIndex++){
                 var cell = makeCell(rowIndex, colIndex, cellHeight, cellWidth, parent);
                 cell.canvasAnim = makeCanvasAnimation(cell.context);
-                col.push(cell);
+                row.push(cell);
             }
         }
         return cells;
@@ -131,37 +153,34 @@ define([], function(){
 
         var allBorders = cells.map( row => row.map(cell => cell.canvasAnim.borders()));
 
-        cells.forEach((row, rowIndex) => {
-            row.forEach(async (cell, colIndex) => {
-
-                var neighborBorders = {},
-                    canvasAnim = cell.canvasAnim;
-                ["north", "south", "east", "west"].forEach(function (side) {
-                    var offset = relativeCoordinates[side];
-                    var nRows = cells.length;
-                    var siderow = (rowIndex + offset.row + nRows) % nRows;
-                    var nCols = cells[rowIndex].length;
-                    var sidecol = (colIndex + offset.col + nCols) % nCols;
-                    var opp = offset.opposite;
-                    if (!allBorders[siderow][sidecol]) {
-                        // TODO decide what to do in case of no neighbour
-                        console.log(rowIndex, colIndex, siderow, sidecol);
-                    }
-                    neighborBorders[side] = allBorders[siderow][sidecol][opp];
-                });
-
-                try {
-                    if (canvasAnim.evaluateCode) {
-                        await canvasAnim.evaluateCode();
-                        delete (canvasAnim.evaluateCode);
-                        displayInvalidity && displayInvalidity(null, cell.canvasAnim);
-                    }
-
-                    canvasAnim.draw(neighborBorders);
-                } catch (e) {
-                    displayInvalidity && displayInvalidity(e, cell.canvasAnim);
+        forEach2d(cells, async (cell, rowIndex, colIndex) => {
+            var neighborBorders = {},
+                canvasAnim = cell.canvasAnim;
+            ["north", "south", "east", "west"].forEach(function (side) {
+                var offset = relativeCoordinates[side];
+                var nRows = cells.length;
+                var siderow = (rowIndex + offset.row + nRows) % nRows;
+                var nCols = cells[rowIndex].length;
+                var sidecol = (colIndex + offset.col + nCols) % nCols;
+                var opp = offset.opposite;
+                if (!allBorders[siderow][sidecol]) {
+                    // TODO decide what to do in case of no neighbour
+                    console.log(rowIndex, colIndex, siderow, sidecol);
                 }
+                neighborBorders[side] = allBorders[siderow][sidecol][opp];
             });
+
+            try {
+                if (canvasAnim.evaluateCode) {
+                    await canvasAnim.evaluateCode();
+                    delete (canvasAnim.evaluateCode);
+                    displayInvalidity && displayInvalidity(null, cell.canvasAnim);
+                }
+
+                canvasAnim.draw(neighborBorders);
+            } catch (e) {
+                displayInvalidity && displayInvalidity(e, cell.canvasAnim);
+            }
         });
     };
 
@@ -171,6 +190,8 @@ define([], function(){
         makeCell,
         makeCells,
         makeCanvasAnimation,
+        map2d,
+        forEach2d,
         draw
     };
 });
