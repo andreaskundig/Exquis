@@ -1,5 +1,5 @@
 define({
-	setup: function(context){
+	setup: function({context}){
 		this.toRadians = function(degrees){
 			return  degrees * Math.PI / 180; 
 		};
@@ -7,7 +7,7 @@ define({
 		this.halfWidth = context.canvas.width / 2;
 		this.halfHeight = context.canvas.height / 2;
 	},
-	draw: function(context, borders){
+	draw: function({context, borders}){
 		context.fillStyle = "rgb(150,10,20)";
 		context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 

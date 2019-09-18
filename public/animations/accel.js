@@ -1,9 +1,9 @@
 define(
-{setup: function(context){
+{setup: function({context}){
      this.start = new Date(Math.random()*1000000);
      this.frameCount = 0;
 },
- draw: function(context, borders){
+ draw: function({context, borders}){
      this.frameCount++;
      var now = new Date();
      var elapsed = now - this.start;

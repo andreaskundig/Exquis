@@ -52,7 +52,7 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
     };
     
     return {
-        setup: function (context){
+        setup: function({context}){
             this.calculatedColors = [];
             this.grid = new ShapeGrid(context, {
                 createShape, 
@@ -65,7 +65,7 @@ function(noise, paper, idu, shapes, ShapeGrid,wp){
                             scale * Math.max(1,ySideScale));
         },
         
-        draw: function (context, borders){
+        draw: function({context, borders}){
             w.move();
             let colors = Object.keys(borders).reduce((acc, dir) => {
                 let avg = idu.averageColor(borders[dir]);

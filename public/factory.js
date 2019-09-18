@@ -87,7 +87,14 @@ define([], function(){
                     return;
                 }
 
-                this.currentCode.draw(context, borders, this.animationState);
+                const env = {
+                    context,
+                    borders,
+                    animationState: this.animationState
+                };
+
+                // this.currentCode.draw(context, borders, this.animationState);
+                this.currentCode.draw(env);
             },
 
             getParams : function(){
@@ -111,7 +118,10 @@ define([], function(){
 
                     // console.log('animationState', this.animationState);
                     this.animationState = this.animationState || {};
-                    this.animationCloneToSetup.setup(context, this.animationState);
+                    if(this.animationCloneToSetup.setup){
+                        const env = {context, animationState: this.animationState};
+                        this.animationCloneToSetup.setup(env);
+                    }
                     this.currentCode = this.animationCloneToSetup;
                 };
 

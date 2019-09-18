@@ -23,15 +23,15 @@ function(noise, paper, idu, shapes, ShapeGrid){
         if(shape.count % 200 > 0){
             return previousScaling;
         }
-            var sign = x % 2  ? -1 : 1;
-            var sign2 = y % 2  ? -1 : 1;
-            var r = (0.5 - Math.random()) * .05;
-            return previousScaling +    sign *  sign2 * r
-    }
-    const computeRotation = (x,y,seed) => {
-        return seed+ x *-15 - y *Math.sin(seed/100) *10 +6;  
+        var sign = x % 2  ? -1 : 1;
+        var sign2 = y % 2  ? -1 : 1;
+        var r = (0.5 - Math.random()) * .05;
+        return previousScaling + sign * sign2 * r
     }
     
+    const computeRotation = (x,y,seed) => {
+        return seed + x * -15 - y * Math.sin(seed/100) * 10 + 6;  
+    }
     
     const createShape = (paper, topLeft, width) => {
       const side = 150/4;
@@ -42,20 +42,18 @@ function(noise, paper, idu, shapes, ShapeGrid){
           fillColor: 'white',
           size: shapeSize,
           applyMatrix: false
-      }) ;
+      });
     };
     
-    
     return {
-        setup: function (context){
+        setup: function({context}){
             this.calculatedColors = [];
             this.grid = new ShapeGrid(context, {createShape});
             this.rotationSeed = 0;
             this.scaleNoise = 1;
-
         },
         
-        draw: function (context, borders){
+        draw: function({context, borders}){
             let colors = Object.keys(borders).reduce((acc, dir) => {
                 let avg = idu.averageColor(borders[dir]);
                 acc[dir] = avg[3] == 0 ? null : `rgba(${avg.join(',')})`;

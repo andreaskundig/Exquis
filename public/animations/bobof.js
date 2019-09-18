@@ -1,5 +1,5 @@
 define({
-        draw: function (context, borders){
+        draw: function({context, borders}){
             context.fillStyle = "rgb(100,250,0)";
             context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 bobo
@@ -15,7 +15,7 @@ bobo
 
             context.restore();
         },
-        setup: function (context){
+        setup: function({context}){
             this.toRadians =  Math.PI / 180; 
 
             this.rotation = 0;

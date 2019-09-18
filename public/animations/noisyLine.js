@@ -1,5 +1,5 @@
 define(["bibs/noise"], function(noise){
-return {draw: function (context, borders){
+return {draw: function({context, borders}){
             this.frameCount += 1;
             if( this.frameCount % 2 == 0) {
 	        context.fillStyle = "rgba( 255, 255, 255, 0.35)";
@@ -28,7 +28,7 @@ return {draw: function (context, borders){
 	        };
             };
         },
-        setup: function (context){
+        setup: function({context}){
             this.frameCount = 0;
 
             this.xstartNoise = Math.floor( Math.random() * 20);

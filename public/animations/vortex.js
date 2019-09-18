@@ -1,5 +1,5 @@
 define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
-    setup: function(context){
+    setup: function({context}){
         this.toRadians =  Math.PI / 180; 
         
         this.rotation = 0;
@@ -17,7 +17,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
         
         this.initStepper();
     },
-    draw: function(context, borders){
+    draw: function({context, borders}){
         if(!this.isStepping()){
             return;
         }

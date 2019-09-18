@@ -1,10 +1,10 @@
 define(["bibs/wanderingPoint","bibs/imageDataUtils"], function(wp,idu){return {
-    setup: function (context){
+    setup: function({context}){
         this.size = 35;
         this.limit = [0 , context.canvas.width - this.size];
         this.w = wp.makeWanderer([this.limit, this.limit],[-101,65],[0,0],1);
     },
-    draw: function (context, borders){
+    draw: function({context, borders}){
 
         for(let i=0; i<5;i++){
            this.w.move();

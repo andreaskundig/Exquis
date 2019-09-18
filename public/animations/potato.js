@@ -1,11 +1,11 @@
 define(["bibs/imageDataUtils", "bibs/shapeGrid","bibs/wanderingPoint"], 
 function( idu, ShapeGrid,wp){
     return {
-        setup: function (context){
+        setup: function({context}){
             const elementsPerSide = 10;
             this.grid = new ShapeGrid(context, {elementsPerSide});
         },
-        draw: function (context, borders){
+        draw: function({context, borders}){
             const previous = this.previousPotato;
             const potato = this.next(previous);
             potato.fillColor =

@@ -1,5 +1,5 @@
 define(["bibs/noise", "bibs/imageDataUtils"], function(noise, idu){
-return {draw: function (context, borders){
+return {draw: function({context, borders}){
             // paste current image one pixel down
             //context.clearRect(0, 0, 150, 150);
             // east
@@ -20,7 +20,7 @@ return {draw: function (context, borders){
 
             this.i += 0.01;
         },
-        setup: function (context){
+        setup: function({context}){
             this.i = 0;
         }};
 });

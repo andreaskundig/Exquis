@@ -1,13 +1,13 @@
 define(["bibs/imageDataUtils", "bibs/shapeGrid","bibs/wanderingPoint"], 
 function( idu, ShapeGrid,wp){ 
     return {
-        setup: function (context){
+        setup: function({context}){
             const elementsPerSide = 10;
             this.grid = new ShapeGrid(context, {elementsPerSide});
             this.step = 0;
             this.direction = [1,0]
         },
-        draw: function (context, borders){
+        draw: function({context, borders}){
                         const g = this.grid;
             const previous = this.previousPotato;
             const potato = this.next(previous, this.direction);

@@ -41,7 +41,7 @@ function(noise, paper, idu, shapes, ShapeGrid){
     
     
     return {
-        setup: function (context){
+        setup: function({context}){
             this.calculatedColors = [];
             this.grid = new ShapeGrid(context, {createShape});
             this.rotationSeed = 0;
@@ -49,7 +49,7 @@ function(noise, paper, idu, shapes, ShapeGrid){
 
         },
         
-        draw: function (context, borders){
+        draw: function({context, borders}){
             let colors = Object.keys(borders).reduce((acc, dir) => {
                 let avg = idu.averageColor(borders[dir]);
                 acc[dir] = avg[3] == 0 ? null : `rgba(${avg.join(',')})`;

@@ -1,10 +1,10 @@
 define(["bibs/imageDataUtils", "bibs/shapes"],
 function(idu, shapes){
   return {
-      setup: function (context){
+      setup: function({context}){
           this.start = Date.now();
       },
-      draw: function (context, borders){
+      draw: function({context, borders}){
           var now = Date.now();
           let fps = 0;
           if(this.lastTime){

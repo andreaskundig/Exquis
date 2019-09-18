@@ -1,6 +1,6 @@
 define(["bibs/canvasBuffer","bibs/wanderingPoint"], 
 function(canvasBuffer,wp){ return {
-    setup: function(context){
+    setup: function({context}){
         this.toRadians =  Math.PI / 180; 
         
         this.rotation = 40 ;
@@ -12,7 +12,7 @@ function(canvasBuffer,wp){ return {
                                    
     },
     
-    draw: function(context, borders){
+    draw: function({context, borders}){
         
         //copy borders on canvas
         context.putImageData(borders.west, 0, 0);

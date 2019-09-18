@@ -2,7 +2,7 @@ define(["bibs/cellularAutomaton", "bibs/stepper"], function(automaton, stepper){
     var aut; 
     var stp = stepper();
     return {
-        setup: function(context){
+        setup: function({context}){
             aut = automaton(75, context);
         },
         colorGameOfLife: function(neighborColors){
@@ -26,7 +26,7 @@ define(["bibs/cellularAutomaton", "bibs/stepper"], function(automaton, stepper){
             });
             return extremeColor;
         },
-        draw: function(context, borders){
+        draw: function({context, borders}){
             if(stp.wantsPause()){
                 return;
             }

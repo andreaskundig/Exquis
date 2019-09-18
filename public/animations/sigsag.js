@@ -1,12 +1,12 @@
 define(["bibs/imageDataUtils","bibs/wanderingPoint"], function(idu,wp){return {
-    setup: function (context){
+    setup: function({context}){
         var limit = [2 , 148 ];
         this.w = wp.makeWanderer([[0 , 9 ], [2 , 148 ]], null, null,1);
         this.w2 = wp.makeWanderer([ [2 , 148 ]], null, null,2);
         //context.fillStyle = "rgb(165,255,255)";
         //context.fillRect(0, 0, context.canvas.width, context.canvas.height);
     },
-    draw: function (context, borders){
+    draw: function({context, borders}){
         this.w.move();
         this.w2.move();
 

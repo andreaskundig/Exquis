@@ -1,5 +1,5 @@
 define(["bibs/wanderingPoint","bibs/imageDataUtils"], function(wp,idu){return {
-    setup: function (context){
+    setup: function({context}){
         // setup wandering point
         const limit = [-context.canvas.width -5, context.canvas.height + 5];
         const direction = [1, .9];
@@ -9,7 +9,7 @@ define(["bibs/wanderingPoint","bibs/imageDataUtils"], function(wp,idu){return {
         this.copyHorizontal = true;
         this.copyDirection = Math.sign(this.w.direction[0]);
     },
-    draw: function (context, borders){
+    draw: function({context, borders}){
         const dirBefore = this.w.direction.slice();
         this.w.move();
         const switched = this.w.direction.reduce((sw,d,i)=>{

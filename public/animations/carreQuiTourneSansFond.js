@@ -1,8 +1,8 @@
 define({
-        setup: function (context){
+        setup: function({context}){
             this.rotation = 0;
         },
-        draw: function (context, borders){
+        draw: function({context, borders}){
             context.fillStyle = "rgba(200,255,0,0)";
 
             context.clearRect(0, 0, context.canvas.width, context.canvas.height);

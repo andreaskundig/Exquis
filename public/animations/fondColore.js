@@ -1,5 +1,5 @@
 define(["bibs/wanderingPoint"], function(wp){ return {
-        setup: function (context){
+        setup: function({context}){
             var limit = [0 , 255 ];
             var limits = [limit, limit, limit];
             var direction = [8, 5, 1];
@@ -7,7 +7,7 @@ define(["bibs/wanderingPoint"], function(wp){ return {
             var speed = 0.5  ;
             this.w = wp.makeWanderer(limits, direction, startPoint, speed);
         },
-        draw: function (context, borders){
+        draw: function({context, borders}){
             this.w.move();
             var red = Math.round(this.w.coordinates[0]);
             var green = Math.round(this.w.coordinates[1]);

@@ -1,5 +1,5 @@
 define(["bibs/gameOfLife"], function(gameLife){
-    return {setup: function(context){
+    return {setup: function({context}){
                 var width = context.canvas.width / 2;
                 var height = context.canvas.height / 2;
                 //var gameLife = lib.gameLife; 
@@ -10,7 +10,7 @@ define(["bibs/gameOfLife"], function(gameLife){
 
                 this.cells = [];
             },
-            draw: function(context, borders){
+            draw: function({context, borders}){
                 // paste current image one pixel down
 
                 // east

@@ -1,10 +1,10 @@
 define({
-  setup: function (context, animationState) {
+  setup: function({context, animationState}) {
     if (!animationState.hasOwnProperty('rotation')) {
       animationState.rotation = 0;
     }
   },
-  draw: function (context, borders, animationState) {
+  draw: function({context, borders, animationState}) {
     const size = {w: context.canvas.width, h: context.canvas.height};
     context.fillStyle = "rgb(" + this.params.red.value + ",250,0)";
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);

@@ -5,7 +5,7 @@ function(noise, paper, idu, shapes){
                         index % squaresPerSide];
 
     return {
-        setup: function (context){ 
+        setup: function({context}){ 
             this.squares = [];
             this.i = 0;
             this.j = 42;
@@ -33,7 +33,7 @@ function(noise, paper, idu, shapes){
             } 
 
         },
-        draw: function (context, borders){
+        draw: function({context, borders}){
             this.squares.forEach((square,index) =>{
                 const [x,y] = xy(index),
                       rotNoise = noise.simplex2(x/10 + this.i, y/10 + this.i),

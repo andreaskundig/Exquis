@@ -2,9 +2,9 @@
 define(["bibs/imageDataUtils"],  
 function(idu){
     return {
-        setup: function(context){
+        setup: function({context}){
         },
-        draw: function(context, borders){
+        draw: function({context, borders}){
            var speed = 2;
 
            var vertical = true;

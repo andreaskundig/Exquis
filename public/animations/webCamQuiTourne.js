@@ -1,10 +1,10 @@
 define(["bibs/webCam"], function(webCam){
     return {
-        setup: function(context){
+        setup: function({context}){
             this.webCam = webCam.makeWebCam();
             this.rotation = 0;
         },
-        draw: function(context, borders){
+        draw: function({context, borders}){
             
             context.save();
             context.translate(75, 75);

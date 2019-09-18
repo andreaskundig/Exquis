@@ -1,7 +1,7 @@
 // define(["bibs/paper-core"], function(paper){
 define(["paper"], function(paper){
     return {
-        setup: function(context){
+        setup: function({context}){
             //context.canvas.setAttribute('resize','true');
             this.paper = new paper.PaperScope();
             this.paper.setup(context.canvas);
@@ -21,7 +21,7 @@ define(["paper"], function(paper){
             this.paper.view.draw();
             
         },
-        draw: function(context, borders){
+        draw: function({context, borders}){
             this.path.rotate(2);
             this.paper.view.draw();
         }};

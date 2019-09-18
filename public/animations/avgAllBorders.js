@@ -1,7 +1,7 @@
 define(["bibs/imageDataUtils"], 
 function(imageDataUtils){
     return {
-        draw: function (context, borders){
+        draw: function({context, borders}){
             var averages = [imageDataUtils.averageColor(borders.north),
                             imageDataUtils.averageColor(borders.east),
                             imageDataUtils.averageColor(borders.south),
@@ -20,7 +20,7 @@ function(imageDataUtils){
             //context.putImageData(currentImage, 0, 1);
             
         },
-        setup: function (context){
+        setup: function({context}){
         }
     };
 });

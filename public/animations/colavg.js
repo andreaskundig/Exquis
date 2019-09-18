@@ -19,10 +19,10 @@ function(idu, shapes){
    rect;
 
   return {
-      setup: function(context){
+      setup: function({context}){
          rect = idu.rectangle(0, 0, context.canvas.width, context.canvas.height);
       },
-      draw: function (context, borders){
+      draw: function({context, borders}){
           var currentAvgCol = {},
               distAndCardi = [];
           Object.keys(borders).forEach(function(cardi){

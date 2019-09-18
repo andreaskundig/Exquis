@@ -25,10 +25,10 @@ function(idu, shapes){
     rect;
 
   return {
-      setup: function(context){
+      setup: function({context}){
           rect = idu.rectangle(0, 0, context.canvas.width, context.canvas.height);
       },
-      draw: function (context, borders){
+      draw: function({context, borders}){
           //console.log(Math.sqrt(colSqDistance([255,255,255],[0,0,0])));
           var currentAvgCol = {},
           // [[dist, cardi],...]

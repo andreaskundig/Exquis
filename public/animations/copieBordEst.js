@@ -1,8 +1,8 @@
 define(
 {
-    setup: function(context){
+    setup: function({context}){
     },
-    draw: function(context, borders){
+    draw: function({context, borders}){
 
         // paste current image one pixel down
 

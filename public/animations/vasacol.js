@@ -74,7 +74,7 @@ function(noise, paper, idu, shapes){
     const theScaler = new Scaler(); 
 
     return {
-        setup: function (context){
+        setup: function({context}){
             this.squares = [];
             this.calculatedColors = [];
             
@@ -101,7 +101,7 @@ function(noise, paper, idu, shapes){
             }
 
         },
-        draw: function (context, borders){
+        draw: function({context, borders}){
 
             let colors = Object.keys(borders).reduce((acc, dir) => {
                 let avg = idu.averageColor(borders[dir]);

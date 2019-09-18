@@ -1,7 +1,7 @@
 define(["bibs/imageDataUtils"],function(idu){
     return {
  
-	setup: function(context){
+	setup: function({context}){
 	    this.step = 0;
 	    this.sweeps = 4; 
 	    this.increments = 20; 
@@ -10,7 +10,7 @@ define(["bibs/imageDataUtils"],function(idu){
 	    this.borderNames = ['north', 'east', 'south','west']; 
 	    this.bords = this.borderNames.length; 
 	},
-	draw: function(context, borders){
+	draw: function({context, borders}){
 		const incI = this.step % this.increments;
 		const bordI = Math.floor(this.step/this.increments ) % this.bords;
 		const swI = Math.floor(this.step/this.increments/this.bords) % this.sweeps;

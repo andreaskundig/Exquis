@@ -1,9 +1,9 @@
 define(["bibs/wanderingPoint"], function(wp){return {
-    setup: function (context){
+    setup: function({context}){
         var limit = [-context.canvas.width - 5 , context.canvas.width + 5 ];
         this.w = wp.makeWanderer([limit, limit]);
     },
-    draw: function (context, borders){
+    draw: function({context, borders}){
         context.fillStyle = "rgb(165,255,255)";
         context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 

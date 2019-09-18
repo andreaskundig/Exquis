@@ -1,13 +1,13 @@
 define(["bibs/imageDataUtils", "bibs/shapes"], 
 function(idu, shapes){
   return {
-      setup: function (context){
+      setup: function({context}){
           this.side = context.canvas.width;
           this.depth = context.canvas.width * 112 / 150;
           this.breadth = this.side - this.depth;
           this.speed = 3;
       },
-      draw: function (context, borders){
+      draw: function({context, borders}){
           
           var topLeft = idu.rectangle(0, 0, this.depth, this.breadth),
               topRight = idu.rectangle(this.depth, 0,

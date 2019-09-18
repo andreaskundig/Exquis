@@ -1,6 +1,6 @@
 define(["bibs/babyExquis", "bibs/stepper"], function(babyExquis, stepper){
     return {
-        setup: function(context){
+        setup: function({context}){
             this.ex = babyExquis.create(context, 3, 5);
         
             this.babyDraw =  function(context, borders, x, y){
@@ -21,7 +21,7 @@ define(["bibs/babyExquis", "bibs/stepper"], function(babyExquis, stepper){
 
             this.stp = stepper();
         },
-        draw: function(context, borders){
+        draw: function({context, borders}){
             if(this.stp.wantsPause()){
                 return;
             }

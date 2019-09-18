@@ -1,5 +1,5 @@
 define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
-    setup: function(context){
+    setup: function({context}){
         this.toRadians =  Math.PI / 180; 
         this.rotation = 1 ;
         this.halfSize = context.canvas.width / 2;
@@ -7,7 +7,7 @@ define(["bibs/canvasBuffer"], function(canvasBuffer){ return {
                                               context.canvas.height);
     },
     
-    draw: function(context, borders){
+    draw: function({context, borders}){
         //copy borders on canvas
         context.putImageData(borders.west, 0, 0);
         context.putImageData(borders.east, context.canvas.width -1, 0);

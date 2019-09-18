@@ -1,5 +1,5 @@
 define({
-setup: function(context){
+setup: function({context}){
     this.TO_RADIANS = Math.PI/180; 
  
     this.buffer = document.createElement('canvas');
@@ -11,7 +11,7 @@ setup: function(context){
     this.framecount=0;
     
 },
-draw: function(context, borders, lib){
+draw: function({context, borders, lib}){
     this.framecount++;
     //put west border on the left etc..
     context.putImageData(borders.west, 0, 0);
